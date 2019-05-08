@@ -1,0 +1,258 @@
+<app-header></app-header>
+
+<form>
+  <!-- Content Box -->
+  <div class="content-box">
+    <app-sub-header></app-sub-header>
+    <div class="h-tab-content">
+      <div class="t-head-box">
+        <div class="t-head-heading panel-icon c-pointer" (click)="cs.back();">
+          <h2><i class="icon-arrow-left"></i> {{textMeg}} Question</h2>
+        </div>
+      </div>
+      <!-- <div class="t-head-box">
+        <div class="t-head-heading panel-icon">
+          <h2>Add Question</h2>
+        </div>
+      </div> -->
+      <!-- overview page-->
+      <div class="overview-tab new-panel t-table-box ">
+        <form #qesForm="ngForm">
+          <div class="row">
+            <div class="col-3">
+              <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="questionCategoryList"
+                [(ngModel)]="quesobj.panel_question_category_id" label="Categories" name="panel_question_category_id"
+                required id="categories">
+              </ng-select>
+              <div id="panel_question_category_idd" class="validation-message d-none">
+                <div>Required</div>
+              </div>
+              <div id="panel_question_category_id" class="display-none"></div>
+            </div>
+            <div class="col-3">
+              <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="typeOptions"
+                [(ngModel)]="quesobj.question_type" label="Type" name="question_type" required id="categories">
+              </ng-select>
+              <div id="question_typee" class="validation-message d-none">
+                <div>Required</div>
+              </div>
+              <div id="question_type" class="display-none"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="input-box">
+                <label class="inp-label">Question Name</label>
+                <input type="text" placeholder="eg. mumbai ux group" class="inp-field" #quesname="ngModel" id="qtName"
+                  [(ngModel)]="quesobj.name" name="name" required>
+                <div *ngIf="quesname.touched && !quesname.valid">
+                  <div class="validation-message2" *ngIf="quesname.errors.required">Required</div>
+                </div>
+                <div id="name" class="display-none"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="input-box">
+                <label class="inp-label">Question Text</label>
+                <input type="text" placeholder="eg. mumbai ux group" class="inp-field" id="qtText"
+                  [(ngModel)]="quesobj.text" name="text" #qestext="ngModel" required>
+                <div *ngIf="qestext.touched && !qestext.valid">
+                  <div class="validation-message2" *ngIf="qestext.errors.required">Required</div>
+                </div>
+                <div id="text" class="display-none"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="input-box">
+                <label class="inp-label">Native Text</label>
+                <input type="text" placeholder="eg. mumbai ux group" class="inp-field" id="nativetext"
+                  [(ngModel)]="quesobj.native_text" name="native_text" #nativetext="ngModel" required>
+                <div *ngIf="nativetext.touched && !nativetext.valid">
+                  <div class="validation-message2" *ngIf="nativetext.errors.required">Required</div>
+                </div>
+                <div id="native_text" class="display-none"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <div class="input-box">
+                <label class="inp-label">Sort Order</label>
+                <input type="number" placeholder="eg. mumbai ux group" class="inp-field" id="sortOrder"
+                  [(ngModel)]="quesobj.display_order" #sortorder="ngModel" [min]="1" name="display_order" required>
+                <p *ngIf="sortorder.errors?.min" class="cust-error">Please enter valid sort order.</p>
+                <div *ngIf="sortorder.touched && !sortorder.valid">
+                  <div class="validation-message2" *ngIf="sortorder.errors.required">Required</div>
+                </div>
+                <div id="display_order" class="display-none"></div>
+              </div>
+            </div>
+            <div class="col-4 add-ansbtn">
+              <div class="exclusive-chkbx">
+                <div class="custom-checkbox only-checkbox">
+                  <input type="checkbox" id="chk1" [(ngModel)]="qesForm.is_mandatory" #isman="ngModel"
+                    name="is_mandatory">
+                  <label for="chk1"><span>Is Mandatory</span></label>
+                </div>
+                <div *ngIf="isman.touched && !isman.valid">
+                  <div class="validation-message2" *ngIf="isman.errors.required">Required</div>
+                </div>
+                <div id="is_mandatory" class="display-none"></div>
+              </div>
+              <!-- <button href="javascript:void(0);" [disabled]="!qesForm.valid" class="button1 nav-btn" data-toggle="modal"
+                data-target="#addAnswers">Add Answer</button> -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button href="javascript:void(0);" type="button" [disabled]="!qesForm.valid" class="button3 nav-btn"
+                (click)="addAnswer();f.reset();">Add Answer</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group filter-heading card">
+                <h3>Or Import Answer</h3>
+                <label class="custom-file" id="customFile1" [hidden]="answers.length != 0">
+                  <input type="file" class="custom-file-input" id="exampleInputFile1" (change)="getCsvFile($event);"
+                    aria-describedby="fileHelp" required>
+                  <span class="custom-file-control form-control-file">{{fileName}}</span>
+                </label>
+                <label class="custom-file" id="customFile1" [hidden]="answers.length == 0">
+                  <input type="button" class="custom-file-input" id="exampleInputFile" (click)="checkVideo();"
+                    (change)="getCsvFile($event);" aria-describedby="fileHelp" required>
+                  <span class="custom-file-control form-control-file">{{fileName}}</span>
+                </label>
+                <a href="assets/variable_upload_example.csv" class="f-14" download>Download Example File</a>
+                <div id="file" class="display-none"></div>
+                <button class="button1 nav-btn" (click)="uploadCsvFn(qesForm, 'confirmtxtidd', 'confirmlodImgg')"
+                  style="width:150px;margin-top: 10px;" *ngIf="fileName != 'No file choosen'">
+                  <span id="confirmtxtidd">Submit</span>
+                  <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImgg" class="loderImg"></button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="answer-box">
+        <hr class="h-rule">
+        <h3 class="d-inline-block">Answers</h3>
+        <button href="javascript:void(0);" type="button" *ngIf="answers.length > 0" class="button3 nav-btn float-right"
+          (click)="uploadCsvFn(qesForm, 'confirmtxtidd', 'confirmlodImgg')">Save Question</button>
+        <div class="t-table-box bg-white">
+          <div class="h-tab-content">
+            <div class="myTable pl-center">
+              <div class="myTableHead">
+                <div class="row">
+                  <div class="col"><span>S.no <i class="ico-moon icon-sort"></i></span></div>
+                  <div class="col"> <span>Variable Text <i class="ico-moon icon-sort"></i></span> </div>
+                  <div class="col"><span>Native Text <i class="ico-moon icon-sort"></i></span></div>
+                  <div class="col"><span>Sort Order <i class="ico-moon icon-sort"></i></span></div>
+                  <div class="col more"><span>&nbsp;</span></div>
+                  <div class="col more"><span>&nbsp;</span></div>
+                </div>
+              </div>
+              <div class="myTableBody bg-color-gry" *ngFor="let answer of answers; let i = index">
+                <div class="row">
+                  <div class="col"><span>{{i}}</span></div>
+                  <div class="col"><span>{{answer.text}}</span></div>
+                  <div class="col"><span>{{answer.native_text}}</span></div>
+                  <div class="col"><span>{{answer.sort_order}}</span></div>
+                  <!-- <div class="col more" (click)="edit(answer, f);"><span><i class="ico-moon icon-pencil blue"></i></span></div> -->
+                  <div class="col more" (click)="remove(i);"><span><i class="ico-moon icon-trash red"></i></span></div>
+                </div>
+              </div>
+            </div>
+            <!-- Table Ends -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modalpopup -->
+  <div class="modal fade bd-example-modal-sm" id="addAnswers" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" (click)="close();" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+          </button>
+        </div>
+        <div class="modal-body new-exclusion">
+          <h2>Add Answer</h2>
+          <div class="row">
+            <form class="w-100" #f="ngForm" (ngSubmit)="onSubmitFn(f);">
+              <div class="col-12">
+                <div class="input-box">
+                  <label class="inp-label">Variable Text</label>
+                  <input type="text" class="inp-field" id="varText" [(ngModel)]="ansObj.text" name="text"
+                    #ansname="ngModel" required>
+                  <div *ngIf="ansname.touched && !ansname.valid">
+                    <div class="validation-message2" *ngIf="ansname.errors.required">Required</div>
+                  </div>
+                  <div id="text" class="display-none"></div>
+                </div>
+                <div class="input-box">
+                  <label class="inp-label">Native Text</label>
+                  <input type="text" class="inp-field" id="nativeText" [(ngModel)]="ansObj.native_text"
+                    name="native_text" #anstext="ngModel" required>
+                  <div *ngIf="anstext.touched && !anstext.valid">
+                    <div class="validation-message2" *ngIf="anstext.errors.required">Required</div>
+                  </div>
+                  <div id="native_text" class="display-none"></div>
+                </div>
+                <!-- <div class="sortorder-popup"> -->
+                <div class="input-box">
+                  <label class="inp-label">Sort Order</label>
+                  <input type="number" class="inp-field" id="sortOrderAns" [(ngModel)]="ansObj.sort_order"
+                    name="sort_order" #ansorder="ngModel" [min]="1" required>
+                  <p *ngIf="ansorder.errors?.min" class="cust-error">Please enter valid sort order.</p>
+                  <div *ngIf="ansorder.touched && !ansorder.valid">
+                    <div class="validation-message2" *ngIf="ansorder.errors.required">Required</div>
+                  </div>
+                  <div id="sort_order" class="display-none"></div>
+                </div>
+                <div class="clear"></div>
+                <!-- </div> -->
+                <div class="input-box exclusive-chkbx">
+                  <div class="custom-checkbox only-checkbox">
+                    <input type="checkbox" id="chk2" [(ngModel)]="ansObj.is_exclusive" name="is_exclusive">
+                    <label for="chk2"><span>is_exclusive</span></label>
+                  </div>
+                </div>
+                <button class="button3 mt-3">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="discardModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+          </button>
+        </div>
+        <div class="modal-body confirm-box">
+          <h2>Discard</h2>
+          <p *ngIf="fileName != 'No file choosen'">Uploaded Csv will be discarded are you sure you want to continue ?
+          </p>
+          <p *ngIf="answers.length > 0">All the added answers will be discarded are you sure you want to continue ?</p>
+          <button class="button2" (click)="confirm(qesForm, 'confirmtxtid', 'confirmlodImg');">
+            <span id="confirmtxtid">Confirm</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+          <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modalpopup -->
+
+</form>

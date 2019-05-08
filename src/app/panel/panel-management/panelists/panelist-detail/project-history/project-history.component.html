@@ -1,0 +1,131 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+
+  <!-- overview page-->
+  <div class="card ">
+    <ul class="overview-links six-links">
+      <li><a routerLink="/panel/panel-management/panelists/overview">Overview</a></li>
+      <li class="active"><a routerLink="/panel/panel-management/panelists/project-history">Project History</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/point-history">Point History</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/redemption-history">Redemption History</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/referral-history">Referral History</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/profile-completion">Profile Completion</a></li>
+    </ul>
+    <div class="t-head-box">
+      <div class="t-head-heading"></div>
+      <div class="t-head-action">
+        <ul>
+          <li>
+            <div class="searchAdv">
+              <input type="text" placeholder="Search" name="searchTxt" class="searchFld shadow1" #questionInput>
+              <button class="srchBtn"></button>
+              <div class="srch-popup" style="display: none;">
+                <form (ngSubmit)="search(form,'txtId','inlodImg')" ngNativeValidate #form="ngForm">
+                  <div class="row">
+                    <div class="col-12">
+                      <h2>Advance Search</h2>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-box">
+                        <label class="inp-label" style="margin-bottom: 13px;">Project ID</label>
+                        <input type="number" placeholder="eg. mumbai ux group" name="project_name"
+                          [(ngModel)]="projectname" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="datepicker-box w-100">
+                        <label class="inp-label">Launch Date</label>
+                        <div class="input-group date" data-date-format="dd-mm-yyyy">
+                          <input class="form-control" type="text" (change)="getDate();" id="datetimepicker2" />
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                      </div>
+                      <!-- <div class="input-box">
+                        <label class="inp-label">Launch Date</label>
+                        <input type="text" placeholder="eg. India" name="launch_date" [(ngModel)]="launchdate" class="inp-field">
+                      </div> -->
+                    </div>
+                    <div class="col-12">
+                      <div class="btnSec d-flex justify-content-between align-content-center">
+                        <button class="button2" type="submit">
+                          <span id="txtId">Search</span>
+                          <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+                        </button>
+                        <a class="btnReset" (click)="reset();form.reset();">Reset</a>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="t-table-box">
+      <div class="myTable">
+        <div class="myTableHead">
+          <div class="row">
+            <div class="col"><span (click)="sortData('project_id')">Project ID<i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col"><span (click)="sortData('project_name')">Project Name<i
+                  class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span (click)="sortData('actual_loi')">LOI<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span (click)="sortData('points')">Points<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span (click)="sortData('launch_date')">Started<i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col"><span (click)="sortData('finish_date')">Finished<i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col"><span (click)="sortData('estimated_loi')">Field LOI<i
+                  class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span (click)="sortData('status')">Status<i class="ico-moon icon-sort"></i></span></div>
+          </div>
+        </div>
+        <!--myTableBody  -->
+        <div *ngIf="getProjectHistoryLists != ''">
+          <div class="myTableBody"
+            *ngFor="let p of getProjectHistoryLists | paginate: { itemsPerPage: pageSize, currentPage: cPage, totalItems: total }; let i = index;">
+            <div class="row">
+              <div class="col"><span>{{p?.project_id}}</span></div>
+              <div class="col"><span>{{p?.project_name}}</span></div>
+              <div class="col"><span>{{p?.actual_loi}}</span></div>
+              <div class="col"><span>{{p?.points}}</span></div>
+              <div class="col"><span>{{p?.launch_date | date :'dd-MM-yyyy'}}</span></div>
+              <div class="col"><span>{{p?.finish_date | date :'dd-MM-yyyy'}}</span></div>
+              <div class="col"><span>{{p?.estimated_loi}}</span></div>
+              <div class="col"><span>{{p?.status}}</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="message error centererror" *ngIf="getProjectHistoryLists?.length === 0">No Panelist Project
+          Available
+        </div>
+      </div>
+      <!-- Table Ends -->
+    </div>
+  </div>
+</div>
+<div class="paginationBox"
+  *ngIf="getProjectHistoryLists != '' && (getProjectHistoryLists | filterBy: searchTxt)?.length != 0">
+  <div class="pagination justify-content-center">
+    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  </div>
+  <div class="rowsBox"
+    *ngIf="getProjectHistoryLists != '' && (getProjectHistoryLists | filterBy: searchTxt)?.length != 0">
+    <div class="actionBox">
+      <select class="select-box-class" (change)="perPage(perpage);" [(ngModel)]="perpage" name="perpage">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>

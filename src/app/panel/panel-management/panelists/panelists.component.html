@@ -1,0 +1,406 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2 id="headname">Panelists</h2>
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li>
+          <a class="button2" routerLink="check-import"><span>Check Imports</span></a>
+          <a href="javascript:void(0);" (click)="is_exist = false" class="button3" data-toggle="modal"
+            data-target="#exampleModal1"><span>Set
+              Status</span></a>
+          <a href="javascript:void(0);" (click)="is_exist = false" class="button3" data-toggle="modal"
+            data-target="#exampleModal2"><span>Upload
+              Points</span></a>
+        <li>
+          <div class="searchAdv"><input type="text" placeholder="Search" class="searchFld" #questionInput><button
+              class="srchBtn"></button>
+            <div class="srch-popup">
+              <form (ngSubmit)="search(form,'txtId','inlodImg')" ngNativeValidate #form="ngForm">
+                <div class="row">
+                  <div class="col-12">
+                    <h2>Advance Search</h2>
+                  </div>
+                  <div class="col-4">
+                    <div class="input-box">
+                      <label class="inp-label">ID</label>
+                      <input type="number" placeholder="eg. 123654" class="inp-field" name="id" [(ngModel)]="id">
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="input-box">
+                      <label class="inp-label">First name</label>
+                      <input type="text" placeholder="eg. XYZ" class="inp-field" name="first_name"
+                        [(ngModel)]="first_name">
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="input-box">
+                      <label class="inp-label">Last name</label>
+                      <input type="text" placeholder="eg. PQR" class="inp-field" name="last_name"
+                        [(ngModel)]="last_name">
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="input-box">
+                      <label class="inp-label">Phone</label>
+                      <input type="number" placeholder="eg. 9868562569" class="inp-field" name="phone"
+                        [(ngModel)]="phone">
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="input-box">
+                      <label class="inp-label">Email</label>
+                      <input type="email" placeholder="eg. ABC@XYZ.com" class="inp-field" name="email"
+                        [(ngModel)]="email">
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="input-box">
+                      <label class="inp-label">Postal code</label>
+                      <input type="number" placeholder="eg. 400067" class="inp-field" name="postalcode"
+                        [(ngModel)]="postalcode">
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="input-box">
+                      <label class="inp-label">Source</label>
+                      <input type="text" placeholder="eg. Compaign/Direct" class="inp-field" name="reg_source"
+                        [(ngModel)]="reg_source">
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <label class="inp-label">Status</label>
+                    <select class="rch-ind drop-select advdrop" style="padding: 0 0px 9px 0;" name="status" id="status"
+                      [(ngModel)]="status">
+                      <option value="">Select</option>
+                      <option value="1">Active</option>
+                      <option value="2">Bad Email</option>
+                      <option value="3">Deleted</option>
+                      <option value="4">Not Validated</option>
+                      <option value="5">Sleeping</option>
+                      <option value="6">Banned</option>
+                      <option value="7">Unsubscribed</option>
+                      <option value="8">Spam</option>
+                      <option value="9">UTC</option>
+                      <option value="10">Inactive</option>
+                    </select>
+                  </div>
+                  <div class="col-4">
+                    <label class="inp-label">Gender</label>
+                    <select class="rch-ind drop-select advdrop" style="padding: 0 0px 9px 0;" name="gender" id="gender"
+                      [(ngModel)]="gender">
+                      <option value="">Select</option>
+                      <option value="1">Male</option>
+                      <option value="2">Female</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <div class="btnSec d-flex justify-content-between align-content-center">
+                      <button class="button2" type="submit">
+                        <span id="txtId">Search</span>
+                        <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+                      </button>
+                      <a class="btnReset" (click)="reset();form.reset();">Reset</a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </li>
+        <!-- <li class="actionBox">
+          <div class="actionBtn">Action</div>
+          <ul class="action-popup action-popup-width">
+            <li><a href="javascript:void(0);"><i class="ico-moon icon-pencil blue"></i> View Panelist</a></li>
+            <li><a href="javascript:void(0);"><i class="ico-moon icon-pencil blue"></i> Import Panelists</a></li>
+            <li><a href="javascript:void(0);"><i class="ico-moon icon-right green"></i> Set Status</a></li>
+            <li><a href="javascript:void(0);"><i class="ico-moon icon-right green"></i>Upload Points</a></li>
+          </ul>
+        </li> -->
+      </ul>
+    </div>
+  </div>
+  <div class="t-table-box">
+    <div class="myTable">
+      <div class="myTableHead">
+        <div class="row">
+          <div class="col more padd-r0">
+            <span>
+              <div class="custom-checkbox only-checkbox">
+                <input type="checkbox" id="chk0" [checked]="selectedDatas?.length == getPanelists?.length && getPanelists?.length > 0"
+                  (click)="selectAll($event.target.checked);" />
+                <label for="chk0"></label>
+              </div>
+            </span>
+          </div>
+          <div class="col flxhf"> <span (click)="sortData('id')">ID<i class="ico-moon icon-sort"></i></span> </div>
+          <div class="col flx2"><span (click)="sortData('first_name')">Name<i class="ico-moon icon-sort"></i></span>
+          </div>
+          <div class="col flx2"><span (click)="sortData('email')">Email<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col flxhf"><span>Gender<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col flxhf"><span (click)="sortData('postalcode')">Pincode<i class="ico-moon icon-sort"></i></span>
+          </div>
+          <div class="col flxhf"><span (click)="sortData('year_of_birth')">YOB<i class="ico-moon icon-sort"></i></span>
+          </div>
+          <div class="col"><span>Source<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('created_at')">Date<i class="ico-moon icon-sort"></i></span></div>
+          <!-- <div class="col more"><span>&nbsp;</span></div> -->
+        </div>
+      </div>
+      <div class="message error centererror" *ngIf="(getPanelists | filterBy: panelFilter)?.length === 0 && is_visible">No
+        Panelist Found</div>
+      <div *ngIf="getPanelists != ''">
+        <div class="myTableBody"
+          *ngFor="let p of getPanelists | filterBy: panelFilter | orderBy: order : reverse : true | paginate: { itemsPerPage: pageSize, currentPage: cPage, totalItems: total }; let i = index;">
+          <div class="row">
+            <div class="col more padd-r0">
+              <span>
+                <div class="custom-checkbox only-checkbox">
+                  <input type="checkbox" type="checkbox" id="chk{{p.id}}"
+                    (click)="selectData(p, $event.target.checked);" />
+                  <label for="chk{{p.id}}"></label>
+                </div>
+              </span>
+            </div>
+            <div class="col flxhf"> <span>{{p?.id}}</span> </div>
+            <div class="col flx2" *ngIf="p?.first_name != null || p?.last_name != null"><span>{{p?.first_name}}
+                {{p?.last_name}}</span></div>
+            <div class="col flx2" *ngIf="p?.first_name === null && p?.last_name === null"><a
+                (click)="details(p.id)"><span>-</span></a></div>
+            <div class="col flx2"><span><a href="javascript:void(0);" (click)="details(p.id)">{{p?.email}}</a></span>
+            </div>
+            <div class="col flxhf">
+              <span *ngIf="p.gender == 1">Male</span>
+              <span *ngIf="p.gender == 2">Female</span>
+            </div>
+            <div class="col flxhf" *ngIf="p?.postalcode != null"><span>{{p?.postalcode}}</span></div>
+            <div class="col flxhf" *ngIf="p?.postalcode === null"><span>-</span></div>
+            <div class="col flxhf"><span>{{p?.year_of_birth}}</span></div>
+            <div class="col" *ngIf="p?.reg_source === 1"><span>Direct</span></div>
+            <div class="col" *ngIf="p?.reg_source === 2"><span>Referral</span></div>
+            <div class="col" *ngIf="p?.reg_source === 3"><span>Campaign</span></div>
+            <div class="col" *ngIf="p?.reg_source === 4"><span>Imported</span></div>
+            <div class="col" *ngIf="p?.reg_source === 5"><span>Created</span></div>
+            <div class="col" *ngIf="p?.reg_source === null"><span>-</span></div>
+            <div class="col"><span>{{p?.created_at | date: 'yyyy-MM-dd'}}</span></div>
+            <!-- <div class="col more">
+              <span><i class="ico-moon icon-more"></i></span>
+              <ul class="action-popup action-popup-width"> -->
+            <!-- <li><a href="javascript:void(0);"><i class="ico-moon icon-pencil blue"></i> View Panelist</a></li>
+                <li><a href="javascript:void(0);"><i class="ico-moon icon-pencil blue"></i> Import Panelists</a></li>
+                <li><a href="javascript:void(0);"><i class="ico-moon icon-right green"></i> Set Status</a></li>
+                <li><a href="javascript:void(0);"><i class="ico-moon icon-right green"></i>Upload Points</a></li> -->
+            <!-- </ul>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Table Ends -->
+  </div>
+
+</div>
+
+<div class="paginationBox" *ngIf="getPanelists != '' && (getPanelists | filterBy: panelFilter)?.length != 0">
+  <div class="pagination justify-content-center">
+    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  </div>
+  <div class="rowsBox" *ngIf="getPanelists != '' && (getPanelists | filterBy: panelFilter)?.length != 0">
+    <div class="actionBox">
+      <select class="select-box-class" (change)="perPage(perpage);" [(ngModel)]="perpage" name="perpage">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+
+<!-- modalpopup -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2>Set Status</h2>
+        <table class="table table-bordered custom-table">
+          <tr>
+            <td class="tabpurple" style="width: 110px;">Change
+              From
+              To
+            </td>
+            <td class="tabpurple">1</td>
+            <td class="tabpurple">2</td>
+            <td class="tabpurple">3</td>
+            <td class="tabpurple">4</td>
+            <td class="tabpurple">5</td>
+            <td class="tabpurple">6</td>
+            <td class="tabpurple">7</td>
+            <td class="tabpurple">8</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td class="tabgray">-</td>
+            <td class="tabred">No</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabred">No</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabgreem">Yes</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="tabred">No</td>
+            <td class="tabgray">-</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabred">No</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabgray">-</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabred">No</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabred">No</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabgray">-</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabred">No</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabred">No</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabred">No</td>
+            <td class="tabgray">-</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabred">No</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabgray">-</td>
+            <td class="tabgreem">Yes</td>
+            <td class="tabred">No</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabgray">-</td>
+            <td class="tabred">No</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabred">No</td>
+            <td class="tabgray">-</td>
+          </tr>
+        </table>
+        <div class="uniqe-urllink mt-0">
+          <a href="assets/uploadstatus.csv" download>Download Example File
+          </a>
+        </div>
+        <label class="f-14 mb-0">Upload CSV File to Upload Status In Bulk</label>
+        <form #f="ngForm" (ngSubmit)="uploadStatus('txtIdstatus', 'loderId');">
+          <label class="custom-file" id="customFile">
+            <input type="file" class="custom-file-input" id="exampleInputFile" (change)="getCsvFile($event);"
+              aria-describedby="fileHelp" required />
+            <span class="custom-file-control form-control-file">{{fileName}}</span>
+          </label>
+          <div id="file" class="display-none mb-2"></div>
+          <div *ngIf="is_exist" class="cust-error mb-2">file is required</div>
+          <button class="button2" type="submit">
+            <span id="txtIdstatus">Set Status</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderId" class="loderImg">
+          </button>
+          <a href="{{csvpath}}" *ngIf="csvpath != ''" style="display: inline-block;margin-left: 15px;">Download Sample
+            File</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modalpopup -->
+
+<!-- modalpopup -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2>Upload Points</h2>
+        <div class="uniqe-urllink mt-0">
+          <a href="assets/points.csv" download>Download Example File
+          </a>
+        </div>
+        <label class="f-14 mb-0">Upload CSV File to Upload Points In Bulk</label>
+        <form #f="ngForm" (ngSubmit)="uploadPoints('txtIdpoints', 'loderIdpoints');">
+          <label class="custom-file" id="customFile">
+            <input type="file" class="custom-file-input" id="exampleInputFile" (change)="getCsvFile($event);"
+              aria-describedby="fileHelp" required />
+            <span class="custom-file-control form-control-file">{{fileName}}</span>
+          </label>
+          <div id="file" class="display-none mb-2"></div>
+          <div *ngIf="is_exist" class="cust-error mb-2">file is required</div>
+          <button class="button2" type="submit">
+            <span id="txtIdpoints">Upload Points</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderIdpoints" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modalpopup -->

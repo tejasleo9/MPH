@@ -1,0 +1,314 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+    <!-- overview page -->
+    <div class="card ">
+      <ul class="overview-links">
+        <li><a routerLink="/project/overview" [queryParams]="{ action: lastAction}">Overview</a></li>
+        <li class="active">
+          <a>Target Groups <span>({{ proname }})</span></a>
+        </li>
+        <li *ngIf="project_status != '3'"><a routerLink="/project/scheduling"
+            [queryParams]="{ action: lastAction}">Scheduling</a></li>
+      </ul>
+      <div class="target-tab">
+        <div class="target-heading">
+          <h3 class="heading-1" routerLink="/project/target-groups" [queryParams]="{ action: lastAction}">
+            <i class="icon-arrow-left"></i> target group
+          </h3>
+        </div>
+        <div class="profile-left w-100">
+          <div class="nav-pills">
+            <app-left-menu></app-left-menu>
+          </div>
+          <div class="tab-conten profiletab-content">
+            <div class="row">
+              <div class="col-4">
+                <div class="select-question sset">
+                  <h3 class="inp-label">Create Include/Exclude Group</h3>
+                  <p>Include/Exclude specific panelist or respondents from other projects</p>
+                  <div class="List-Project">
+                    <div class="switch switch--horizontal switch--myRedio">
+                      <input id="radio-o" type="radio" name="tptSwitch" value="tptOn" checked="checked"
+                        class="redio-four" (click)="getData('list')" />
+                      <label for="radio-o" class="first-lab">List</label>
+                      <input id="radio-0f" type="radio" name="tptSwitch" value="tptOff" class="redio-four"
+                        (click)="getData('project')" />
+                      <label for="radio-0f" class="off ">Project</label>
+                      <span class="toggle-outside redio-four"><span class="toggle-inside"></span></span>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="tptCheckingBox">
+                    <div class="exclusion-tab">
+                      <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item ">
+                          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                            aria-controls="home" aria-selected="true" (click)="getExclusionType(0)">Include</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                            aria-controls="profile" aria-selected="false" (click)="getExclusionType(1)">Exclude</a>
+                        </li>
+                      </ul>
+                      <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                          <div class="searchAdv w-100">
+                            <input type="text" placeholder="Search" class="searchFld" [(ngModel)]="exlFilter.name" />
+                          </div>
+                          <ul class="accordion-ul overflow-auto" *ngIf="!isShow">
+                            <li *ngFor="let exList of (exclusionList| filterBy: exlFilter)">
+                              <div class="custom-checkbox only-checkbox" [hidden]="exList.type == 'exclude'">
+                                <input type="checkbox" id="{{exList.id}}" [disabled]="is_disabled" value="{{exList.id}}"
+                                  name="{{exList.id}}" [checked]="exList.is_selected == 1"
+                                  (click)="selectData(exList, $event.target.checked)" />
+                                <label for="{{exList.id}}"
+                                  [ngClass]="(is_disabled) ? 'grayscls':''"><span>{{ exList.name }}</span></label>
+                              </div>
+                            </li>
+                          </ul>
+                          <ul class="accordion-ul overflow-auto" *ngIf="isShow">
+                            <li *ngFor="let exList of (projectList| filterBy: exlFilter)" [hidden]="exList.is_visible">
+                              <div class="custom-checkbox only-checkbox" [hidden]="exList.type == 'exclude'">
+                                <input type="checkbox" id="{{exList.id}}" [disabled]="is_disabled" value="{{exList.id}}"
+                                  name="{{exList.id}}" [checked]="exList.is_selected == 1"
+                                  (click)="selectData(exList, $event.target.checked)" />
+                                <label for="{{exList.id}}"
+                                  [ngClass]="(is_disabled) ? 'grayscls':''"><span>{{ exList.name }}</span></label>
+                              </div>
+                            </li>
+                          </ul>
+                          <!-- *ngIf="!is_disabled" -->
+                          <ng-select *ngIf="isShow && !is_disabled" class="rch-ind multiple-drp drop-select"
+                            name="category" placeholder="Select Option" [options]="projectStatus"
+                            [(ngModel)]="includestatus" [multiple]="true" (selected)="onIncludeSelected($event, true)"
+                            (deselected)="onIncludeSelected($event, false)" label="Response Status" name="catid"
+                            required id="catid">
+                          </ng-select>
+                          <button class="button2" (click)="saveExclusion('txtId', 'inlodImg')">
+                            <span id="txtId">Include</span>
+                            <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+                          </button>
+                          <div class="message error" style="margin-left:10px;" *ngIf="ifError"> <span> Oh snap! </span>
+                            {{errorMessage}}.</div>
+                          <div class="message success" style="margin-left:10px;" *ngIf="ifSucc"> <span> Succussfull!
+                            </span> {{successMessage}}.</div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                          <div class="searchAdv w-100">
+                            <input type="text" placeholder="Search" class="searchFld" [(ngModel)]="exlFilter.name" />
+                          </div>
+                          <ul class="accordion-ul" *ngIf="!isShow">
+                            <li *ngFor="let exList of (exclusionList| filterBy: exlFilter)">
+                              <div class="custom-checkbox only-checkbox" [hidden]="exList.type == 'include'">
+                                <input type="checkbox" id="ex{{ exList.id }}" [disabled]="is_disabled"
+                                  value="{{ exList.id }}" name="ex{{ exList.id }}" [checked]="exList.is_selected == 1"
+                                  (click)="selectData(exList, $event.target.checked)" /><label for="ex{{exList.id}}"
+                                  [ngClass]="(is_disabled) ? 'grayscls':''"><span>{{ exList.name }}</span></label>
+                              </div>
+                            </li>
+                          </ul>
+                          <ul class="accordion-ul" *ngIf="isShow">
+                            <li *ngFor="let exList of (projectList| filterBy: exlFilter)" [hidden]="exList.is_visible">
+                              <div class="custom-checkbox only-checkbox" [hidden]="exList.type == 'include'">
+                                <input type="checkbox" id="ex{{ exList.id }}" [disabled]="is_disabled"
+                                  value="{{ exList.id }}" name="ex{{ exList.id }}" [checked]="exList.is_selected == 1"
+                                  (click)="selectData(exList, $event.target.checked)" /><label for="ex{{exList.id}}"
+                                  [ngClass]="(is_disabled) ? 'grayscls':''"><span>{{ exList.name }}</span></label>
+                              </div>
+                            </li>
+                          </ul>
+                          <ng-select *ngIf="isShow && !is_disabled" class="rch-ind multiple-drp drop-select"
+                            name="category" placeholder="Select Option" [options]="projectStatus"
+                            [(ngModel)]="excluderesstatus" [multiple]="true"
+                            (selected)="onExcludeSelected($event, true)" (deselected)="onExcludeSelected($event, false)"
+                            label="Response Status" name="catid" required id="catid">
+                          </ng-select>
+                          <button class="button2" (click)="saveExclusion('extxtId', 'exlodImg')">
+                            <span id="extxtId">Exclude</span>
+                            <img src="assets/img/loading.gif" alt="loderImg" id="exlodImg" class="loderImg">
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- tptCheckingBox -->
+
+                  <div class="tptCheckingBox2">
+                    <div class="exclusion-tab">
+                      <ul class="nav nav-tabs" id="myTab2" role="tablist">
+                        <li class="nav-item ">
+                          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home2" role="tab"
+                            aria-controls="home" aria-selected="true">Include</a>
+                        </li>
+                        <li class="nav-item ">
+                          <a class="nav-link " id="profile-tab" data-toggle="tab" href="#profile2" role="tab"
+                            aria-controls="profile" aria-selected="false">Exclude</a>
+                        </li>
+                      </ul>
+                      <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home-tab">
+                          <div class="searchAdv w-100">
+                            <input type="text" placeholder="Search" class="searchFld searchFld-include" />
+                          </div>
+                          <div class="datepicker-box datepicker-exclude">
+                            <div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
+                              <input class="form-control" type="text" />
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                          </div>
+                          <div class="clear"></div>
+                          <button class="button2">Exclude</button>
+                        </div>
+                        <div class="tab-pane fade" id="profile2" role="tabpanel" aria-labelledby="profile-tab">
+                          <div class="searchAdv w-100">
+                            <input type="text" placeholder="Search" class="searchFld shadow1" />
+                          </div>
+                          <button class="button2">Exclude</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- tptCheckingBox -->
+                </div>
+              </div>
+              <!-- col-8 -->
+              <div class="col-5">
+                <div *ngIf="includeOrExclude && !isShow">
+                  <div class="selected-box">
+                    <h3 class="inp-label">Selected Include</h3>
+                    <div class="selected-listname list-box p-0">
+                      <ul class="m-0">
+                        <li *ngFor="let selcItem of selected" class="p-2" [hidden]="selcItem?.type != 'include'">
+                          <p class="m-0">{{ selcItem?.name }}</p>
+                          <a *ngIf="isShow"><img src="assets/img/cross-gry.png" alt="" /></a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="!includeOrExclude && !isShow">
+                  <div class="selected-box">
+                    <h3 class="inp-label">Selected Exclude</h3>
+                    <div class="selected-listname list-box p-0">
+                      <ul class="m-0">
+                        <li *ngFor="let selcItem of selected" class="p-2" [hidden]="selcItem?.type != 'exclude'">
+                          {{ selcItem?.name }} <span *ngFor="let val of selcItem.value">{{val.label}}</span>
+                          <a *ngIf="isShow"><img src="assets/img/cross-gry.png" alt="" /></a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="isShow && includeOrExclude && projectStatuses?.length > 0">
+                  <div class="selected-box">
+                    <h3 class="inp-label">Selected Include</h3>
+                    <div class="selected-listname list-box p-0">
+                      <ul class="m-0">
+                        <!-- <li *ngFor="let selcItem of projectStatuses; let i = index;"
+                          [hidden]="selcItem?.type != 'include'">
+                          <span>{{ selcItem?.name }}</span><span
+                            *ngFor="let value of selcItem.statuses">{{value?.label}}</span>
+                          <a href="javascript:void(0);" *ngIf="!is_disabled" (click)="remove(i, selcItem);"><img
+                              src="assets/img/cross-gry.png" /></a>
+                        </li> -->
+
+                        <li class="m-0" *ngFor="let selcItem of projectStatuses; let i = index;"
+                          [hidden]="selcItem?.type != 'include'">
+                          <div class="prjname">
+                            <span class="p-0">{{ selcItem?.name }}</span>
+                            <a href="javascript:void(0);" *ngIf="!is_disabled" (click)="remove(i, selcItem);"><img
+                                src="assets/img/cross-red.png" alt="" /></a>
+                          </div>
+                          <div>
+                            <span class="prjstat" *ngFor="let value of selcItem.statuses">{{value?.label}}</span>
+                          </div>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="isShow && !includeOrExclude && projectStatuses?.length > 0">
+                  <div class="selected-box">
+                    <h3 class="inp-label">Selected Exclude</h3>
+                    <div class="selected-listname list-box p-0">
+                      <ul>
+                        <!-- <li *ngFor="let selcItem of projectStatuses; let i = index;"
+                          [hidden]="selcItem?.type != 'exclude'">
+                          <div>
+                            <span>{{ selcItem?.name }}</span>
+                            <a href="javascript:void(0);" *ngIf="!is_disabled" (click)="remove(i, selcItem);"><img
+                                src="assets/img/cross-gry.png" alt="" /></a>
+                          </div>
+                          <div>
+                            <span *ngFor="let value of selcItem.statuses">{{value?.label}}</span>
+                          </div>
+                        </li> -->
+                        <li class="m-0" *ngFor="let selcItem of projectStatuses; let i = index;"
+                          [hidden]="selcItem?.type != 'exclude'">
+                          <div class="prjname">
+                            <span class="p-0">{{ selcItem?.name }}</span>
+                            <a href="javascript:void(0);" *ngIf="!is_disabled" (click)="remove(i, selcItem);"><img
+                                src="assets/img/cross-red.png" alt="" /></a>
+                          </div>
+                          <div>
+                            <span class="prjstat" *ngFor="let value of selcItem.statuses">{{value?.label}}</span>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="profile-right">
+                  <h3 class="inp-label" *ngIf="source.length > 0">Suggested Panel Source <img
+                      src="assets/img/loading.gif" alt="loderImg" *ngIf="srcloaded" class="loderImg loaderImgShow"></h3>
+                  <div class="profilecheck" [ngClass]="(item?.is_selected == 1) ? 'radio-box3':'radio-box2'"
+                    *ngFor="let item of source">
+                    <input type="checkbox" id="sugtd-box{{item.panel_id}}" name="sugtd-box{{item?.panel_id}}"
+                      [disabled]="true" [checked]="item?.is_selected == 1" />
+                    <label for="sugtd-box{{item?.panel_id}}">
+                      <span>{{ item?.source }}</span> <br />
+                      Feasible Completes - {{ item?.feasible_completes }} <br />
+                      CPI - {{ item?.CPI }}
+                    </label>
+                  </div>
+                  <!-- <div class="no-source" *ngIf="source?.length == 0">
+                    <p>No Source Found..!</p>
+                  </div> -->
+                </div>
+              </div>
+              <!-- col-4 -->
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="profile-btn">
+          <button class="button3" (click)="previous();">Previous</button>
+          <button class="button1 nav-btn" [disabled]="srcloaded" (click)="next();">
+            <span id="txtId">Next</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+          </button>
+          <button class="button1 cancel-btn" routerLink="/project/target-groups"
+            [queryParams]="{ action: lastAction}">Cancel</button>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</div>

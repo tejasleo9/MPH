@@ -1,0 +1,146 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+    <!-- overview page -->
+    <div class="card ">
+      <ul class="overview-links">
+        <li><a routerLink="/project/overview" [queryParams]="{ action: lastAction}">Overview</a></li>
+        <li class="active">
+          <a href="javascript:void(0);">Target Groups
+            <span>({{ proname }})</span></a>
+        </li>
+        <li *ngIf="project_status != '3'"><a routerLink="/project/scheduling"
+            [queryParams]="{ action: lastAction}">Scheduling</a></li>
+      </ul>
+      <div class="target-tab">
+        <div class="target-heading">
+          <h3 class="heading-1" routerLink="/project/target-groups" [queryParams]="{ action: lastAction}">
+            <i class="icon-arrow-left"></i> target group
+          </h3>
+        </div>
+        <div class="profile-left target-w100">
+          <div class="nav-pills">
+            <app-left-menu></app-left-menu>
+          </div>
+          <div class="tab-conten profiletab-content">
+            <div class="row">
+              <div class="col-7">
+                <div class="select-question sset">
+                  <h2 class="sec-title">URL Type</h2>
+                  <div class="List-Project">
+                    <div class="switch switch--horizontal switch--myRedio">
+                      <input id="urltype1" type="radio" name="tptSwitch" value="tptOn" checked="checked"
+                        class="redio-four" (change)="tptCheck('tptOn')" />
+                      <label for="urltype1" class="first-lab">Unique URL</label>
+                      <input id="urltype2" type="radio" name="tptSwitch" value="tptOff" class="redio-four"
+                        (change)="tptCheck('tptOff')" />
+                      <label for="urltype2" class="off ">Generate URL</label>
+                      <span class="toggle-outside redio-four"><span class="toggle-inside"></span></span>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="tptCheckingBox">
+                    <div class="selected-box">
+                      <div class="form-group filter-heading card uniqe-url">
+                        <h3>File</h3>
+                        <label class="custom-file" id="customFile1">
+                          <input type="file" class="custom-file-input" id="exampleInputFile"
+                            (change)="uploadCsv($event);" aria-describedby="fileHelp">
+                          <span class="custom-file-control form-control-file">{{filename}}</span>
+                          <!-- <span>test</span> -->
+                          <!-- <a href="#" class="cros-red"><img src="img/cross-red.png" alt=""></a> -->
+                        </label>
+                        <button class="button1 nav-btn" style="width:150px;" (click)="saveuploadCsv();">Upload</button>
+                        <div class="uniqe-urllink mb-3 f-14">
+                          <a href="assets/importurls.csv" download>Download Example File
+                          </a>
+                        </div>
+                        <div class="generate-url p-0">
+                          <ul>
+                            <li>[ID] = Respondant GUID (mandatory)</li>
+                            <li>[P] = Panelist ID</li>
+                            <li>[S] = Gender (male = 1 , female = 2)</li>
+                            <li>[AGE] = Age</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- tptCheckingBox -->
+                  <div class="tptCheckingBox2">
+                    <div class="generate-url card">
+                      <span>
+                        <form (ngSubmit)="onSubmitClik(f);" #f="ngForm">
+                          <div class="position-relative">
+                            <input type="text" placeholder="​​​​​​​Enter URL" #generateutl="ngModel"
+                              [(ngModel)]="generate_url" (change)="getData(generate_url);" name="g_url" id="s" required
+                              url />
+                            <div class="d-inline-block" *ngIf="generateutl.touched && !generateutl.valid">
+                              <div class="validation-message custom-message" *ngIf="generateutl.errors.required">
+                                Required</div>
+                            </div>
+                            <button class="button1 nav-btn" style="width:150px;" type="submit">Generate</button>
+                          </div>
+                          <p class="mb-0">
+                            Example: http://www.domain.com/survey.html?ID=[ID]&mem=[M]
+                          </p>
+                          <p class="red m-0 f-12" *ngIf="generateutl.errors?.url">Please enter valid URL</p>
+                        </form>
+                      </span>
+                      <h2>Available Tags</h2>
+                      <ul>
+                        <li>[ID] = Respondant GUID (mandatory)</li>
+                        <li>[P] = Panelist ID</li>
+                        <li>[S] = Gender (male = 1 , female = 2)</li>
+                        <li>[AGE] = Age</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- tptCheckingBox -->
+                </div>
+              </div>
+              <!-- col-8 -->
+              <div class="col-4">
+                <div class="selected-box">
+                  <div class="selected-listname generate-urlbox">
+                    <h3 class="inp-label">URL Generated ({{surveyLinks?.count}})</h3>
+                    <a href="javascript:void(0);" [ngClass]="(surveyLinks?.url == '') ? 'grayscls':''"
+                      (click)="deleteSurveyLink();" class="trash-btn"><i class="icon-trash"></i>
+                      Delete</a>
+                    <div class="clearfix"></div>
+                    <ul>
+                      <li>{{surveyLinks?.url}}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="profile-btn">
+          <button class="button3" (click)="previous();">Previous</button>
+          <button class="button1 nav-btn" (click)="next();">
+            <span id="txtId">Next</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+          </button>
+          <button class="button1 cancel-btn" routerLink="/project/target-groups"
+            [queryParams]="{ action: lastAction}">Cancel</button>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</div>

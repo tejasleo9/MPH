@@ -1,0 +1,148 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box mt-4">
+
+  <!-- <app-sub-header></app-sub-header> -->
+
+  <div class="h-tab-content">
+
+    <div class="t-head-heading">
+      <h2>Add New Panel</h2>
+    </div>
+
+    <!-- overview page-->
+    <div class="overview-tab new-panel mt-4">
+      <form (ngSubmit)="onSubmitClik(form, 'confirmtxtid', 'confirmlodImg')" novalidate #form="ngForm">
+        <div class="row">
+          <div class="col-6">
+            <div class="input-box res-margin mb-4">
+              <label class="inp-label has-float-label">
+                <input type="text" placeholder="eg. mumbai ux group" #panelname="ngModel" maxlength="25"
+                  [(ngModel)]="dataObj.name" class="inp-field" name="name" required>
+                <span>Name</span>
+              </label>
+              <div *ngIf="panelname.touched && !panelname.valid">
+                <div class="validation-message" *ngIf="panelname.errors.required">Required</div>
+              </div>
+              <div id="name" class="display-none"></div>
+            </div>
+            <div class="row">
+              <div class="position-relative col-md-4">
+                <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="countryOptions"
+                  [(ngModel)]="dataObj.country_id" label="Country" name="country_id" id="country">
+                </ng-select>
+                <div id="country_idd" class="validation-message2 d-none">
+                  <div>Required</div>
+                </div>
+                <div id="country_id" class="display-none"></div>
+              </div>
+              <div class="position-relative col-md-4">
+                <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="languageOptions"
+                  [(ngModel)]="dataObj.language_id" label="Language" name="language_id" id="language">
+                </ng-select>
+                <div id="language_idd" class="validation-message2 d-none">
+                  <div>Required</div>
+                </div>
+                <div id="language_id" class="display-none"></div>
+              </div>
+              <div class="position-relative col-md-4">
+                <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="industryOptions"
+                  [(ngModel)]="dataObj.research_industry_id" label="Industry" name="research_industry_id" id="industry"
+                  (selected)="getCategoriesFn(dataObj.research_industry_id)">
+                </ng-select>
+                <div id="research_industry_idd" class="validation-message2 d-none">
+                  <div>Required</div>
+                </div>
+                <div id="research_industry_id" class="display-none"></div>
+              </div>
+            </div>
+            <div class="position-relative">
+              <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="categoriesOptions"
+                [(ngModel)]="dataObj.research_categories" label="Categories" name="research_categories" id="categories"
+                [multiple]="true">
+              </ng-select>
+              <div id="research_categoriess" style="right: 20px;" class="validation-message2 d-none">
+                <div>Required</div>
+              </div>
+              <div id="research_categories" class="display-none"></div>
+            </div>
+            <!-- <div>
+              <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="languageOptions"
+                [(ngModel)]="panelObj.language_id" label="Language" name="language_id" required id="language">
+              </ng-select>
+            </div> -->
+            <!-- <div>
+              <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="countryOptions"
+                [(ngModel)]="panelObj.country_id" label="Country" name="country_id" required id="country">
+              </ng-select>
+            </div> -->
+            <!-- <div>
+              <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="industryOptions"
+                [(ngModel)]="panelObj.research_industry_id" label="Industry" name="research_industry_id" required
+                id="industry" (selected)=getCategoriesFn(panelObj.research_industry_id)>
+              </ng-select>
+            </div> -->
+            <!-- <div class="position-relative">
+              <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="industryOptions"
+                [(ngModel)]="panelObj.research_industry_id" label="Industry" name="research_industry_id" required
+                id="industry" (selected)="getCategoriesFn(panelObj.research_industry_id)">
+              </ng-select>
+              <div *ngIf="rid">
+                <div class="validation-message">required</div>
+              </div>
+            </div> -->
+            <!-- <div>
+              <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="categoriesOptions"
+                [(ngModel)]="panelObj.research_categories" label="Categories" name="research_categories" required
+                id="categories" [multiple]="true">
+              </ng-select>
+            </div> -->
+            <div class="input-box">
+              <label class="inp-label">Choose incentive redemption option</label>
+              <div class="custom-checkbox only-checkbox"> <input type="checkbox" id="chk1" [(ngModel)]="manual"
+                  name="manual" required>
+                <label for="chk1"> Manual</label>
+              </div>
+              <div class="custom-checkbox only-checkbox"> <input type="checkbox" id="chk2" [(ngModel)]="auto"
+                  name="auto" required>
+                <label for="chk2" required> Auto</label>
+              </div>
+              <div *ngIf="incentivered">
+                <div class="validation-message">Required</div>
+              </div>
+            </div>
+            <div class="img-upload position-relative">
+              <input id="fileUpload" class="fileUpload" type="file" [(ngModel)]="logo" name="logo"
+                (change)="detectFiles1($event, logo)" />
+              <label for="fileUpload" class="up-img"><span><img src="assets/img/upload.png"
+                    alt="upload img missing"></span>
+                Upload Logo</label>
+              <span class="thumb-img" *ngIf="url != null">
+                <div class="view-img image-holder"><img [src]="url" alt="img" class="thumb-image" /></div>
+                <a class="btnDelete" (click)="removeImgUploadFn1(url, i)"><img src="assets/img/cross-red.png"
+                    alt="cross image" class="w-100" /></a>
+              </span>
+              <div *ngIf="lg">
+                <div class="validation-message">Required</div>
+              </div>
+              <div id="logo" class="display-none"></div>
+              <div class="clear"></div>
+            </div>
+
+            <div class="input-box mt-3">
+              <label class="inp-label">Note for Super Admin</label>
+              <textarea type="text" placeholder="Notes for super admin" class="inp-field" [(ngModel)]="dataObj.note"
+                name="instructions"></textarea>
+            </div>
+          </div>
+        </div>
+        <button href="javascript:void(0);" appAppNoDblClick class="button1 nav-btn">
+          <span id="confirmtxtid">Next</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+        </button>
+        <button class="button1 nav-btn ml-4" routerLink="/panel">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

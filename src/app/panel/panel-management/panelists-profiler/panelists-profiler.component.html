@@ -1,0 +1,353 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+
+  <app-sub-header></app-sub-header>
+
+  <div class="h-tab-content">
+    <div class="t-head-box">
+      <div class="t-head-heading">
+        <h2 id="headname">Panelists Profiler</h2>
+      </div>
+      <div class="t-head-action">
+        <ul>
+          <li class="profiler-switch">
+            <div class="List-Project">
+              <div class="switch switch--horizontal switch--myRedio">
+                <input id="radio-o" type="radio" name="tptSwitch" value="tptOn" checked="checked" class="redio-four"
+                  (change)="tptCheck('1')">
+                <label for="radio-o" class="first-lab">Global</label>
+                <input id="radio-0f" type="radio" name="tptSwitch" value="tptOff" class="redio-four"
+                  (change)="tptCheck('2')">
+                <label for="radio-0f" class="off ">Panel</label>
+                <span class="toggle-outside redio-four"><span class="toggle-inside"></span></span>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </li>
+          <li class="categories" data-toggle="modal" data-target="#categoryList">
+            <button class="button3">Categories</button>
+          </li>
+          <li class="actionBox">
+            <div class="actionBtn">Add New</div>
+            <ul class="action-popup">
+              <li><a href="javascript:void(0);" class="font-weight-bold" data-toggle="modal" data-target="#addCategory"
+                  (click)="catCheck('a');f.reset();">Category</a></li>
+              <li><a href="javascript:void(0);" class="font-weight-bold" (click)="addQuestion();">Question</a></li>
+            </ul>
+          </li>
+          <li>
+            <div class="searchAdv searchAdv-width">
+              <input type="text" placeholder="Search" name="search" [(ngModel)]="queFilter[from]" class="searchFld">
+            </div>
+          </li>
+          <li class="actionBox">
+            <div class="actionBtn">Action</div>
+            <ul class="action-popup">
+              <li><a href="javascript:void(0)" (click)="copy(null, 'a')" [class.disable]="disablelink==true"><i
+                    class="color-iceblue icon-copy mr-2"></i>Copy</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="t-table-box bg-white">
+      <div class="h-tab-content">
+        <div class="myTable pl-center">
+          <div class="myTableHead">
+            <div class="row">
+              <div class="col more padd-r0">
+
+              </div>
+              <div class="col flx3 padd-l0">
+              </div>
+              <div class="col"></div>
+              <div class="col">
+                <span class="actionBox profiler">
+                  <div class="actionBtn  text-left clr-blue">{{filterByName}}</div>
+                  <ul class="action-popup">
+                    <li><a href="javascript:void(0);" (click)="filterByCat(null);" class="font-weight-bold">All</a></li>
+                    <li *ngFor="let cat of questionCategoryList"><a href="javascript:void(0);"
+                        (click)="filterByCat(cat);" class="font-weight-bold">{{cat.name}}</a></li>
+                  </ul>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="quetype === '1'">
+            <div class="myTableHead">
+              <div class="row">
+                <div class="col more padd-r0">
+                  <span>
+                    <div class="custom-checkbox only-checkbox">
+                      <input type="checkbox" id="chk0"
+                        [checked]="selectedDatas?.length == PanelQuestionList?.length  && PanelQuestionList.length > 0"
+                        (click)="selectAll($event.target.checked);" />
+                      <label for="chk0"></label>
+                    </div>
+                  </span>
+                </div>
+                <div class="col flx3 padd-l0">
+                  <span (click)="sortData('name')">Questions <i class="ico-moon icon-sort"></i></span>
+                </div>
+                <div class="col"><span (click)="sortData('global_question_category_name')">Category <i
+                      class="ico-moon icon-sort"></i></span></div>
+                <div class="col">
+                  <span *ngIf="hideShow">Copy Question <i class="ico-moon icon-sort"></i></span>
+                  <span *ngIf="!hideShow && quetype == '2'">Sort Order
+                    <i class="ico-moon icon-sort"></i></span>
+                </div>
+              </div>
+            </div>
+            <div *ngFor="let p of PanelQuestionList | orderBy: order : reverse : true | filterBy: queFilter ; let i = index;">
+              <div class="myTableBody">
+                <div class="row">
+                  <div class="col more padd-r0">
+                    <span>
+                      <div class="custom-checkbox only-checkbox">
+                        <input type="checkbox" type="checkbox" id="chk{{p.id}}"
+                          (click)="selectData(p, $event.target.checked);" />
+                        <label for="chk{{p.id}}"></label>
+                      </div>
+                    </span>
+                  </div>
+                  <div class="col flx3 padd-l0">
+                    <span>{{p?.name}}</span>
+                  </div>
+                  <div class="col"><span>{{p?.global_question_category_name}}</span></div>
+                  <div class="col">
+                    <span *ngIf="p?.is_copied == 0">
+                      <input class="actionBtn sort-order" placeholder="Sort Order" name="sort_order"
+                        [value]="p.sort_order" *ngIf="p?.is_visible">
+                      <i class="color-iceblue icon-copy" (click)="copy(p, 'i');form.reset();"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="message error centererror" *ngIf="(PanelQuestionList)?.length === 0">No global questions found
+            </div>
+          </div>
+
+          <div *ngIf="quetype === '2'">
+            <div class="myTableHead">
+              <div class="row">
+                <div class="col more padd-r0">
+                  <span>
+                    <div class="custom-checkbox only-checkbox">
+                      <input type="checkbox" id="chk0"
+                        [checked]="selectedDatas?.length == PanelQuestionList?.length  && PanelQuestionList.length > 0"
+                        (click)="selectAll($event.target.checked);" />
+                      <label for="chk0"></label>
+                    </div>
+                  </span>
+                </div>
+                <div class="col flx3 padd-l0">
+                  <span (click)="sortData('text')">Questions <i class="ico-moon icon-sort"></i></span>
+                </div>
+                <div class="col"><span (click)="sortData('panel_question_category')">Category <i class="ico-moon icon-sort"></i></span>
+                </div>
+                <div class="col">
+                  <span *ngIf="hideShow">Copy Question <i class="ico-moon icon-sort"></i></span>
+                  <span *ngIf="!hideShow && quetype == '2'">Sort Order
+                    <i class="ico-moon icon-sort"></i></span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="myTableBody"
+                *ngFor="let p of PanelQuestionList | orderBy: order : reverse : true | filterBy: queFilter; let i = index;">
+                <div class="row">
+                  <div class="col more padd-r0">
+                    <span>
+                      <div class="custom-checkbox only-checkbox">
+                        <input type="checkbox" type="checkbox" id="chk{{p.id}}"
+                          (click)="selectData(p, $event.target.checked);" />
+                        <label for="chk{{p.id}}"></label>
+                      </div>
+                    </span>
+                  </div>
+                  <div class="col flx3 padd-l0">
+                    <span><a href="javascript:void(0);" (click)="editQuestion(p);">{{p?.text}}</a></span>
+                  </div>
+                  <div class="col"><span>{{p?.panel_question_category}}</span></div>
+                  <div class="col">
+                    <span>
+                      <input class="actionBtn sort-order" [disabled]="p?.is_copied == 1" placeholder="Sort Order"
+                        (change)="changeShortorder(p, $event.target.value);" [value]="p.display_order"
+                        *ngIf="p?.is_visible">
+                      <i *ngIf="p?.is_copied == 0" class="color-iceblue icon-copy"
+                        (click)="copy(p, 'i');form.reset();"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="message error centererror" *ngIf="(PanelQuestionList)?.length === 0">No Panel Questions found
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Question -->
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p> {{popupMess}}</p>
+        <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- // Delete Question -->
+<!-- Category List-->
+<div class="modal fade" id="categoryList" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2>Categories <img src="assets/img/loading.gif" alt="loderImg" id="catLoading" class="loderImg"></h2>
+
+        <ul class="qtCatList" id="catData">
+          <li *ngFor="let cat of questionCategoryList">{{cat.name}} <i class="ico-moon icon-pencil blue"
+              (click)="qtCatEdit(cat.id)" *ngIf="quetype == '2'"></i></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Category List -->
+<!-- Add Category -->
+<div class="modal fade" id="addCategory" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2 *ngIf="addCategoryCheck">Add Category</h2>
+        <h2 *ngIf="!addCategoryCheck">Edit Category <img src="assets/img/loading.gif" alt="loderImg" id="editCatLoading"
+            class="loderImg"></h2>
+        <form #f="ngForm" (ngSubmit)="onSubmit(f, 'txtId', 'inlodImg');">
+          <div class="row">
+            <div class="col-6">
+              <div class="input-box">
+                <label class="inp-label">Category Name</label>
+                <input type="text" placeholder="eg. mumbai ux group" class="inp-field" #name="ngModel"
+                  [(ngModel)]="catEdit.name" name="name" id="catName" required>
+                <div *ngIf="name.touched && !name.valid">
+                  <div class="validation-message2" *ngIf="name?.errors?.required">Required</div>
+                </div>
+                <div id="name" class="display-none"></div>
+              </div>
+              <div class="input-box">
+                <label class="inp-label">Bonus Points</label>
+                <input type="number" placeholder="eg. mumbai ux group" class="inp-field"
+                  [(ngModel)]="catEdit.bonus_points" #bonuspoint="ngModel" name="bonus_points" id="catSort" required>
+                <div *ngIf="bonuspoint.touched && !bonuspoint.valid">
+                  <div class="validation-message2" *ngIf="bonuspoint?.errors?.required">Required</div>
+                </div>
+              </div>
+              <div class="region-radio radio-set position-relative">
+                <h3 _ngcontent-c7="" class="inp-label statuslabel">Status</h3>
+                <span>
+                  <input type="radio" name="status" id="reg1" [value]="1" #statusclick="ngModel"
+                    [(ngModel)]="catEdit.status" required>
+                  <label for="reg1">Active</label>
+                </span>
+                <span>
+                  <input type="radio" name="status" id="reg2" [value]="0" [(ngModel)]="catEdit.status" required>
+                  <label for="reg2">Inactive</label>
+                </span>
+                <div *ngIf="statusclick.touched && !statusclick.valid">
+                  <div class="validation-message2" *ngIf="statusclick?.errors?.required">Required</div>
+                </div>
+              </div>
+              <div class="clear"></div>
+              <button class="button2" *ngIf="addCategoryCheck">
+                <span id="txtId">Add</span>
+                <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+              </button>
+              <button class="button2" *ngIf="!addCategoryCheck">
+                <span id="txtId">Update</span>
+                <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+              </button>
+            </div>
+            <div class="col-6">
+              <div class="input-box">
+                <label class="inp-label">Native Text</label>
+                <input type="text" placeholder="eg. mumbai ux group" class="inp-field" [(ngModel)]="catEdit.name_native"
+                  name="name_native" #native="ngModel" id="nativeText" required>
+                <div *ngIf="native.touched && !native.valid">
+                  <div class="validation-message2" *ngIf="native?.errors?.required">Required</div>
+                </div>
+                <div id="name_native" class="display-none"></div>
+              </div>
+
+              <div class="input-box">
+                <label class="inp-label">Sort Order</label>
+                <input type="text" placeholder="eg. mumbai ux group" class="inp-field" [(ngModel)]="catEdit.sort_order"
+                  name="sort_order" #sortorder="ngModel" id="catSort" required>
+                <div *ngIf="sortorder.touched && !sortorder.valid">
+                  <div class="validation-message2" *ngIf="sortorder?.errors?.required">Required</div>
+                </div>
+                <div id="sort_order" class="display-none"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="copyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <form #form="ngForm" (ngSubmit)="onSubmitClik(form, 'confirmtxtidd', 'confirmlodImgg');">
+          <h2>Confirm</h2>
+          <p>You have copied {{selectedDatas.length != 0 ? selectedDatas.length : 1}} questions to copy.</p>
+          <div class="position-relative offset-md-3 col-md-6 text-left">
+            <ng-select class="rch-ind drop-select" placeholder="Select Panel" [options]="panelLists"
+              [(ngModel)]="copyPanelId" label="Panel" name="target_panel_id" id="country">
+            </ng-select>
+            <div id="target_panel_id" class="validation-message d-none">
+              <div>Required</div>
+            </div>
+          </div>
+          <button class="button2">
+            <span id="confirmtxtidd">Confirm</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImgg" class="loderImg"></button>
+          <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- // Add Category -->

@@ -1,0 +1,251 @@
+<app-header></app-header>
+
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content" id="headname">
+    <!-- overview page -->
+    <div class="card ">
+      <ul class="overview-links">
+        <li><a (click)="redirect('ov');" href="javascript:void(0)">Overview</a></li>
+        <li class="active">
+          <a href="javascript:void(0);">Target Groups <span>({{ proname }})</span></a>
+        </li>
+        <li *ngIf="project_status != '3'"><a (click)="redirect('sch');" href="javascript:void(0)" [class.disabled]="disabled ? true : null">Scheduling</a></li>
+      </ul>
+
+      <div class="h-tab-content">
+        <!-- Projects -->
+        <div class="t-head-box">
+          <div class="t-head-heading"></div>
+          <div class="t-head-action">
+            <ul>
+              <li>
+                <a href="javascript:void(0);" (click)="addNew();" class="button1"><i>+</i><span>Add Target Group</span></a>
+              </li>
+              <li>
+                <div class="searchAdv">
+                  <input type="text" placeholder="Search" class="searchFld" name="trgFilter" [(ngModel)]="trgFilter.name" /><button
+                    class="srchBtn"></button>
+                  <div class="srch-popup">
+                    <form (ngSubmit)="search(form,'txtId','inlodImg')" ngNativeValidate #form="ngForm">
+                      <div class="row">
+                        <div class="col-12">
+                          <h2>Advance Search</h2>
+                        </div>
+                        <div class="col-12">
+                          <div class="input-box">
+                            <label class="inp-label">Name</label>
+                            <input type="text" placeholder="eg. target group name" class="inp-field" name="name" id="name"
+                              [(ngModel)]="name" />
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="input-box">
+                            <label class="inp-label">Country</label>
+                            <input type="text" placeholder="eg. india" class="inp-field" name="country" id="country_name"
+                              [(ngModel)]="country_name" />
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="btnSec d-flex justify-content-between align-content-center">
+                            <button class="button2" type="submit">
+                              <span id="txtId">Search</span>
+                              <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+                            </button>
+                            <a class="btnReset" (click)="reset();">Reset</a>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </li>
+              <li class="actionBox">
+                <div class="actionBtn">Action</div>
+                <ul class="action-popup">
+                  <li>
+                    <a href="javascript:void(0)" (click)="changeStatus(null, 1,'a', 'inactive', 'inlodImg')"
+                      [class.disable]="disablelink==true">
+                      <i class="ico-moon icon-right green" id="inactive"></i>
+                      <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+                      Activate
+                    </a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)" (click)="changeStatus(null, 2,'a', 'inpause', 'inlodImgpuse')"
+                      [class.disable]="disablelink==true">
+                      <i class="ico-moon icon-pause yellow" id="inpause"></i>
+                      <img src="assets/img/loading.gif" alt="loderImg" id="inlodImgpuse" class="loderImg">
+                      Pause</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)" (click)="changeStatus(null, 3,'a', 'instop', 'inlodImgstop')"
+                      [class.disable]="disablelink==true">
+                      <i class="ico-moon icon-stop red" id="instop"></i>
+                      <img src="assets/img/loading.gif" alt="loderImg" id="inlodImgstop" class="loderImg">
+                      Close</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)" (click)="delete(null, 'a')" [class.disable]="disablelink==true">
+                      <i class="ico-moon icon-trash orange"></i>
+                      Delete</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="t-table-box">
+          <div class="message error" *ngIf="ifError"> <span> Oh snap! </span> {{errorMessage}}.</div>
+          <div class="message error" *ngIf="ifSucc"> <span> Succussfull! </span> {{successMessage}}.</div>
+          <div class="myTable pl-center">
+            <div class="myTableHead">
+              <div class="row">
+                <div class="col more padd-r0">
+                  <span>
+                    <div class="custom-checkbox only-checkbox">
+                      <input type="checkbox" id="chk0" [checked]="selectedDatas?.length == tgroups?.length && tgroups.length > 0" (click)="selectAll($event.target.checked);" />
+                      <label for="chk0"></label>
+                    </div>
+                  </span>
+                </div>
+                <div class="col flx2">
+                  <span (click)="sortData('name')">Name</span>
+                </div>
+                <div class="col">
+                  <span (click)="sortData('country')">Country <i class="ico-moon icon-sort"></i></span>
+                </div>
+                <div class="col">
+                  <span (click)="sortData('completes')">Completes <i class="ico-moon icon-sort"></i></span>
+                </div>
+                <div class="col">
+                  <span (click)="sortData('actual_loi')" class="loispan">LOI <i class="ico-moon icon-sort"></i></span>
+                </div>
+                <div class="col">
+                  <span (click)="sortData('actual_ir')" class="irspan">IR <i class="ico-moon icon-sort"></i></span>
+                </div>
+                <div class="col more"><span>&nbsp;</span></div>
+              </div>
+            </div>
+            <div class="message error centererror" *ngIf="(tgroups | filterBy: trgFilter)?.length === 0 && isShow">Target Group not found</div>
+            <div *ngIf="tgroups.length > 0">
+              <div class="myTableBody" *ngFor="let t of tgroups | orderBy: order | filterBy: trgFilter; let i = index ">
+                <div class="row">
+                  <div class="col more padd-r0">
+                    <span  [hidden]="t.status == '3' && t.completes != '0'">
+                      <div class="custom-checkbox only-checkbox">
+                        <input type="checkbox" id="chk{{t.id}}" (click)="selectData(t, $event.target.checked);" />
+                        <label for="chk{{t.id}}"></label>
+                      </div>
+                    </span>
+                  </div>
+                  <div class="col flx2">
+                      <!-- 'Draft' => 0,
+                      'Active' => 1,
+                      'Pause' => 2,
+                      'Close' => 3 -->
+                    <a href="javascript:void(0);" (click)="editGroup(t.id, t.name,'edit')">
+                      <span>
+                        <i class="ico-moon" [ngClass]="{
+                        'icon-right green': t.status == '1',
+                        'icon-pause yellow': t.status == '2',
+                        'icon-pencil blue': t.status == '0',
+                        'icon-stop red': t.status == '3'
+                      }"></i>
+                        {{ t.name }}
+                      </span>
+                    </a>
+                  </div>
+                  <div class="col">
+                    <span>{{ t.country }}</span>
+                  </div>
+                  <div class="col">
+                    <span><small>{{ t.completes }}</small></span>
+                  </div>
+                  <div class="col">
+                    <span><small>{{ t.actual_loi }}</small>/<small>{{ t.estimated_loi }}</small></span>
+                  </div>
+                  <div class="col">
+                    <span><small>{{ t.actual_ir }}</small>/<small>{{ t.estimated_ir }}</small></span>
+                  </div>
+                  <div class="col more">
+                    <span [hidden]="t.status == '3' && t.completes != '0'"><i class="ico-moon icon-more"></i></span>
+                    <ul class="action-popup">
+                      <li *ngIf="t.status == '0' || t.status == '2'">
+                        <a href="javascript:void(0);" (click)="changeStatus(t, 1,'i', t.id+'inactive',  t.id+'inlodImg')">
+                          <i class="ico-moon icon-right green" id="{{t.id}}inactive"></i>
+                          <img src="assets/img/loading.gif" alt="loderImg" id="{{t.id}}inlodImg" class="loderImg">
+                          Activate
+                        </a>
+                      </li>
+                      <li *ngIf="t.status == '1' || t.status == '3'">
+                        <a href="javascript:void(0);" (click)="changeStatus(t, 2,'i' , t.id+'inpause',  t.id+'inlodImgpuse')">
+                          <i class="ico-moon icon-pause yellow" id="{{t.id}}inpause"></i>
+                          <img src="assets/img/loading.gif" alt="loderImg" id="{{t.id}}inlodImgpuse" class="loderImg">
+                          Pause</a>
+                      </li>
+                      <li *ngIf="t.status == '1' || t.status == '2'">
+                        <a href="javascript:void(0);" (click)="changeStatus(t, 3,'i' , t.id+'instop',  t.id+'inlodImgstop')">
+                          <i class="ico-moon icon-stop red" id="{{t.id}}instop"></i>
+                          <img src="assets/img/loading.gif" alt="loderImg" id="{{t.id}}inlodImgstop" class="loderImg">
+                          Close</a>
+                      </li>
+                      <li *ngIf="t.status == '0'">
+                        <a href="javascript:void(0);" (click)="delete(t, 'i' , t.id+'inactive',  t.id+'inlodImg')">
+                          <i class="ico-moon icon-trash orange"></i>
+                          Delete</a>
+                      </li>
+                      <li *ngIf="t.status == '3' && t.completes == '0'">
+                        <a href="javascript:void(0);" (click)="delete(t, 'i' , t.id+'inactive',  t.id+'inlodImg')">
+                          <i class="ico-moon icon-trash orange"></i>
+                          Delete</a>
+                      </li>
+                      <li *ngIf="t.status == '1' && t.completes == '0'">
+                        <a href="javascript:void(0);" (click)="delete(t, 'i' , t.id+'inactive',  t.id+'inlodImg')">
+                          <i class="ico-moon icon-trash orange"></i>
+                          Delete</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Table Ends -->
+        </div>
+      </div>
+
+      <div class="modal fade" id="confirmBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+              </button>
+            </div>
+            <div class="modal-body confirm-box">
+              <h2>Confirm</h2>
+              <p> {{popupMess}}</p>
+              <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+                <span id="confirmtxtid">Confirm</span>
+                <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+              </button>
+              <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

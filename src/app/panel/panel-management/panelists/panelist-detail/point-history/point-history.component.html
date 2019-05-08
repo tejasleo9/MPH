@@ -1,0 +1,85 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+
+  <!-- overview page-->
+  <div class="card ">
+    <ul class="overview-links six-links">
+      <li><a routerLink="/panel/panel-management/panelists/overview">Overview</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/project-history">Project History</a></li>
+      <li class="active"><a routerLink="/panel/panel-management/panelists/point-history">Point History</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/redemption-history">Redemption History</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/referral-history">Referral History</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/profile-completion">Profile Completion</a></li>
+    </ul>
+
+    <div class="t-head-box">
+      <div class="t-head-heading"></div>
+      <div class="t-head-action">
+        <ul>
+          <li>
+            <div class="searchAdv">
+              <input type="text" placeholder="Search" #questionInput name="searchTxt" class="searchFld shadow1">
+              <button class="srchBtn"></button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="t-table-box">
+      <div class="myTable">
+        <div class="myTableHead">
+          <div class="row">
+            <div class="col"><span>Project ID<i class="ico-moon icon-sort"></i></span> </div>
+            <div class="col"><span>Project Name<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Points<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Reason<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Completed On<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Project Status<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Response Status<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Date Of Approval<i class="ico-moon icon-sort"></i></span></div>
+          </div>
+        </div>
+        <div class="message error centererror" *ngIf="(getPointHistoryLists | filterBy: searchTxt)?.length === null">No
+          Panelist Points Available
+        </div>
+        <div *ngIf="(getPointHistoryLists | filterBy: searchTxt)?.length != null">
+          <div class="myTableBody"
+            *ngFor="let p of getPointHistoryLists | filterBy : searchTxt | paginate: { itemsPerPage: pageSize, currentPage: cPage, totalItems: total }; let i = index;">
+            <div class="row">
+              <div class="col"><span>{{p?.project_id}}</span></div>
+              <div class="col"><span>{{p?.project_name}}</span></div>
+              <div class="col"><span>{{p?.points}}</span></div>
+              <div class="col"><span>{{p?.reason_to_add}}</span></div>
+              <div class="col"><span>{{p?.created_at}}</span></div>
+              <div class="col"><span>{{p?.project_status}}</span></div>
+              <div class="col"><span>{{p?.response_status_name}}</span></div>
+              <div class="col"><span>{{p?.approval_date}}</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Table Ends -->
+    </div>
+  </div>
+</div>
+<div class="paginationBox" *ngIf="(getPointHistoryLists | filterBy: searchTxt)?.length != null">
+  <div class="pagination justify-content-center">
+    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  </div>
+  <div class="rowsBox" *ngIf="(getPointHistoryLists | filterBy: searchTxt)?.length != null">
+    <div class="actionBox">
+      <select class="select-box-class" (change)="perPage(perpage);" [(ngModel)]="perpage" name="perpage">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+.region-radio{
+    text-align: left;
+}
+
+.active-radio span {
+    margin-left: 15px;
+}
+
+.datepicker-box {
+    width: 100%;
+    text-align: left;
+}
+
+.datepicker-box .form-control{
+    padding: 0px;
+}
+
+.input-box{
+    text-align: left;
+}

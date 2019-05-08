@@ -1,0 +1,223 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+    <!-- overview page -->
+    <form (ngSubmit)="onSubmitClik(form, 'txtId', 'inlodImg')" #form="ngForm">
+      <div class="card ">
+        <ul class="overview-links">
+          <li><a routerLink="/project/overview" [queryParams]="{ action: lastAction}">Overview</a></li>
+          <li class="active">
+            <a href="javascript:void(0);">Target Group <span>( {{proname}} )</span></a>
+          </li>
+          <li *ngIf="project_status != '3'"><a routerLink="/project/scheduling"
+              [queryParams]="{ action: lastAction}">Scheduling</a></li>
+        </ul>
+        <div class="target-tab">
+          <div class="target-heading">
+            <a routerLink="/project/target-groups" [queryParams]="{ action: lastAction}" class="heading-1"><i
+                class="icon-arrow-left"></i>
+              <span>Target group </span>
+            </a>
+          </div>
+          <div class="profile-left">
+            <div class="nav-pills">
+              <app-left-menu></app-left-menu>
+            </div>
+            <div class="tab-content">
+              <div class="row">
+                <div class="col-9">
+                  <ul class="target-form">
+                    <li>
+                      <div class="input-box">
+                        <label for="tname" class="inp-label has-float-label">
+                          <input type="text" [ngClass]="{'on-error' : targetname.touched && !targetname.valid}"
+                            placeholder="eg. mumbai ux group" class="inp-field" (change)="updateField();" tabindex="1"
+                            [(ngModel)]="overObj.name" name="name" id="tname" #targetname="ngModel" required />
+                          <span>Target Group Name *</span>
+                        </label>
+                        <div *ngIf="targetname.touched && !targetname.valid">
+                          <div class="validation-message2" *ngIf="targetname.errors.required">Required</div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="position-relative">
+                      <ng-select required class="rch-ind drop-select" (focus)="true" tabindex="2"
+                        [disabled]="is_disabled" placeholder="Select Option" [options]="country"
+                        [(ngModel)]="country_id" name="country_id" required id="ctyid" label="Country *" required
+                        (selected)="getSourcesData(form)">
+                      </ng-select>
+                      <div id="country_id" class="validation-message d-none">
+                        <div>Required</div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="input-box">
+                        <label for="eloi" class="inp-label has-float-label">
+                          <input type="number" [disabled]="is_disabled"
+                            [ngClass]="{'on-error' : lengthoninterview.touched && !lengthoninterview.valid}"
+                            tabindex="3" class="inp-field" [(ngModel)]="overObj.estimated_loi"
+                            placeholder="Type a number" [min]="1" [max]="60" name="estimated_loi" required id="eloi"
+                            #lengthoninterview="ngModel" [attr.min]="1" (change)="getSourcesData(form)" />
+                          <span>Length of Interview (1 to 60 Minutes) *</span>
+                        </label>
+                        <div *ngIf="lengthoninterview.touched && !lengthoninterview.valid">
+                          <div class="validation-message2" *ngIf="lengthoninterview.errors.required">Required</div>
+                        </div>
+                        <p class="red m-0 f-12" *ngIf="lengthoninterview.errors?.max">Length of Interview should not
+                          greater than 60</p>
+                        <p class="red m-0 f-12" *ngIf="lengthoninterview.errors?.min">Length of Interview should not
+                          less than 1</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="input-box">
+                        <label for="eir" class="inp-label has-float-label">
+                          <input type="number" tabindex="4" [disabled]="is_disabled"
+                            [ngClass]="{'on-error' : estimatedinclude.touched && !estimatedinclude.valid}"
+                            class="inp-field" [(ngModel)]="overObj.estimated_ir" placeholder="Type a number"
+                            name="estimated_ir" required id="eir" #estimatedinclude="ngModel" [min]="1" [max]="100"
+                            (change)="getSourcesData(form)" />
+                          <span>Estimated Incidence (%) *</span>
+                        </label>
+                        <div *ngIf="estimatedinclude.touched && !estimatedinclude.valid">
+                          <div class="validation-message2" *ngIf="estimatedinclude.errors.required">Required</div>
+                        </div>
+                        <p class="red m-0 f-12" *ngIf="estimatedinclude.errors?.max">Max Estimated Incidence is 100</p>
+                        <p class="red m-0 f-12" *ngIf="estimatedinclude.errors?.min">Min Estimated Incidence is 1</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="input-box">
+                        <label for="ex18a" class="inp-label has-float-label">
+                          <input id="ex18a" tabindex="5" [disabled]="is_disabled" type="number" [max]="5000"
+                            placeholder="Type a number"
+                            [ngClass]="{'on-error' : completes_required.touched && !completes_required.valid}"
+                            [(ngModel)]="overObj.completes_required" name="completes_required" [min]="1" required
+                            (change)="getSourcesData(form)" #completes_required="ngModel" />
+                          <span>Completes Required *</span>
+                        </label>
+                        <div *ngIf="completes_required.touched && !completes_required.valid">
+                          <div class="validation-message2" *ngIf="completes_required.errors.required">Required</div>
+                        </div>
+                        <p class="red m-0 f-12" *ngIf="completes_required.errors?.max">Completes Required is less than
+                          5000</p>
+                        <p class="red m-0 f-12" *ngIf="completes_required.errors?.min">Min Completes Required is 1</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="row">
+                        <div class="input-box col-6">
+                          <label for="toage" class="inp-label has-float-label">
+                            <input id="toage" tabindex="6" [disabled]="is_disabled" type="number" [min]="18" [max]="99"
+                              placeholder="Type a number" [ngClass]="{'on-error' : min_age.touched && !min_age.valid}"
+                              [(ngModel)]="overObj.min_age" name="min_age" required (change)="getSourcesData(form)"
+                              #min_age="ngModel" />
+                            <span>Age Range From (Min 18) *</span>
+                            <div *ngIf="min_age.touched && !min_age.valid">
+                              <div class="validation-message2" *ngIf="min_age.errors.required">Required</div>
+                            </div>
+                            <p class="red m-0 f-12" *ngIf="min_age.errors?.min">Min age is 18</p>
+                            <p class="red m-0 f-12" *ngIf="min_age.errors?.max">Max age is 99</p>
+                          </label>
+                        </div>
+
+                        <div class="input-box col-6">
+                          <label for="fromage" class="inp-label has-float-label">
+                            <input id="fromage" tabindex="7" [disabled]="is_disabled" type="number" [max]="99"
+                              [min]="overObj.min_age == '' ? 0 : overObj.min_age"
+                              [ngClass]="{'on-error' : min_age.touched && !min_age.valid}" placeholder="Type a number"
+                              [(ngModel)]="overObj.max_age" name="max_age" required (change)="getSourcesData(form)"
+                              #max_age="ngModel" />
+                            <span>Age Range To (Max 99) *</span>
+                            <div *ngIf="max_age.touched && !max_age.valid">
+                              <div class="validation-message2" *ngIf="max_age.errors.required">Required</div>
+                            </div>
+                            <p class="red m-0 f-12" *ngIf="max_age.errors?.max">Max age is 99</p>
+                            <p class="red m-0 f-12" *ngIf="max_age.errors?.min">Max age is start from
+                              {{overObj.min_age}}</p>
+                          </label>
+                        </div>
+                        <!-- <span id="ex18-label-2b" class="hidden"></span>
+                        <ng5-slider [(value)]="overObj.min_age" [(highValue)]="overObj.max_age" [options]="ageoptions"
+                          [(ngModel)]="agevalue" name="age" required (userChangeEnd)="getSourcesData(form)"></ng5-slider> -->
+                      </div>
+                    </li>
+                    <li>
+                      <div class="gender input-box">
+                        <label for="" class="inp-label without-floting" style="margin-bottom:10px;">Gender *</label>
+                        <div class="device-box">
+                          <input type="checkbox" tabindex="8" [disabled]="is_disabled" id="male" name="male" checked
+                            [(ngModel)]="male" (change)="getSourcesData(form)" />
+                          <label for="male" [ngClass]="(is_disabled) ? 'grayscls':''">
+                            <img src="assets/img/male.png" alt="mphmale">
+                          </label>
+                        </div>
+                        <div class="device-box">
+                          <input type="checkbox" tabindex="9" [disabled]="is_disabled" id="female" name="female"
+                            [(ngModel)]="female" (change)="getSourcesData(form)" />
+                          <label for="female" [ngClass]="(is_disabled) ? 'grayscls':''">
+                            <img src="assets/img/female.png" alt="mphfemale">
+                          </label>
+                        </div>
+                        <p class="loading-txt" *ngIf="srcloaded == true">Fetching Sources Please Wait...</p>
+                        <div *ngIf="coutryId">
+                          <div class="validation-message">Required</div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-3">
+                  <div>
+                    <h3 class="inp-label" *ngIf="source.length > 0">Suggested Panel Source<img
+                        src="assets/img/loading.gif" alt="loderImg" *ngIf="loaded" class="loderImg loaderImgShow"></h3>
+                    <div class="d-block"
+                      [ngClass]="(is_disabled) ? 'radio-box3 profilecheck':'radio-box custom-checkbox'"
+                      *ngFor="let item of source">
+                      <input type="checkbox" id="sugtd-box{{item.panel_id}}" [disabled]="is_disabled"
+                        [checked]="item.is_selected == 1" name="sugtd-box{{item.panel_id}}"
+                        (change)="addToList(item,$event.target.checked)" />
+                      <label for="sugtd-box{{item.panel_id}}">
+                        <span>{{ item.source }}</span> <br />
+                        Feasible Completes - {{ item.feasible_completes }} <br />
+                        CPI - {{ item.CPI }}
+                      </label>
+                    </div>
+                    <!-- <div class="no-source" *ngIf="source?.length == 0 && (loaded || !loaded)">
+                          <p>No Source Found..!</p>
+                        </div> -->
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="profile-btn">
+            <button class="button3" type="button" routerLink="/project/target-groups"
+              [queryParams]="{ action: lastAction}">Previous</button>
+            <button class="button1 nav-btn" [disabled]="srcloaded" type="submit">
+              <span id="txtId">Next</span>
+              <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+            </button>
+            <button class="button1 cancel-btn" routerLink="/project/target-groups"
+              [queryParams]="{ action: lastAction}">Cancel</button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

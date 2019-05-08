@@ -1,0 +1,35 @@
+<div class="login-box card">
+  <h3>Login To <span> MyPanelHub </span></h3>
+  <form (ngSubmit)="onSubmit(f, 'headId', 'loaderId')" #f="ngForm" ngNativeValidate>
+    <div class="input-box">
+      <!-- <span class="log-img"><img src="./assets/img/log01.png" alt=""></span> -->
+      <!-- <i class="ico-moon icon-right green"></i> -->
+      <label for="email" class="inp-label has-float-label">
+        <input type="text" placeholder="eg. Jhon Doe" class="inp-field" [(ngModel)]="email" name="email" type="email"
+          required id="email">
+        <span>Email</span>
+      </label>
+    </div>
+    <div class="input-box">
+      <!-- <span class="log-img"><img src="./assets/img/log02.png" alt=""></span> -->
+      <label for="password" class="inp-label has-float-label">
+        <input type="password" placeholder="****************" class="inp-field" [(ngModel)]="password" name="password"
+          type="password" required id="password">
+        <span>Password</span>
+      </label>
+    </div>
+    <div class="custom-checkbox only-checkbox">
+      <input type="checkbox" id="chk1">
+      <label for="chk1"> &nbsp; Remember Me</label>
+    </div>
+    <a routerLink="/account/forgot-password" class="forg-pass">Forgot Password?</a>
+    <div class="clear"></div>
+    <button class="button2" type="submit">
+      <span id="headId"> Login </span>
+      <img src="assets/img/loading.gif" id="loaderId" class="loderImg" alt="login_loader">
+    </button>
+    <br>
+    <div class="message error w-100" *ngIf="ifError"> <span> Oh snap! </span> {{errorMessage}}.</div>
+    <!-- <p class="agree-para">By login, you agree to MyPanelHub’s <a href="#"> Terms and Conditions </a> & <a href="#"> Privacy Policy </a> </p> -->
+  </form>
+</div>

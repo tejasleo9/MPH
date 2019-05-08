@@ -1,0 +1,192 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <!-- <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/panel">Panel</a></li>
+      <li class="breadcrumb-item"><a routerLink="/panel/recruitment">Recruitment</a></li>
+      <li class="breadcrumb-item active">Campaign</li>
+    </ol>
+  </nav> -->
+
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2>Campaign</h2>
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li>
+          <a href="javascript:void(0);" class="button1" (click)="addNew()"><i>+</i>
+            <span>Add New Campaign</span>
+          </a>
+        </li>
+        <li>
+          <div class="searchAdv">
+            <input type="text" placeholder="Search" class="searchFld" name="trgFilter"
+              [(ngModel)]="comFilter.campaign_name">
+            <button class="srchBtn"></button>
+          </div>
+        </li>
+        <li class="actionBox">
+          <div class="actionBtn">Action</div>
+          <ul class="action-popup">
+            <li><a href="javascript:void(0)" (click)="delete(null, 'a')" [class.disable]="disablelink==true"><i
+                  class="ico-moon icon-trash orange"></i>
+                Delete</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="t-table-box">
+    <div class="myTable ">
+      <div class="myTableHead">
+        <div class="row">
+          <div class="col more padd-r0">
+            <span>
+              <div class="custom-checkbox only-checkbox">
+                <input type="checkbox" id="chk0"
+                  [checked]="selectedDatas?.length == campaignList?.length && campaignList?.length != 0"
+                  (click)="selectAll($event.target.checked);" />
+                <label for="chk0"></label>
+              </div>
+            </span>
+          </div>
+          <div class="col flx3"> <span (click)="sortData('campaign_name')"> Name <i
+                class="ico-moon icon-sort"></i></span> </div>
+          <div class="col flx1"><span (click)="sortData('affiliate_name')">Affiliate <i
+                class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('start_date')">Start <i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('end_date')"> End <i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('target')">Target <i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('hits_received')">Hits <i class="ico-moon icon-sort"></i></span>
+          </div>
+          <div class="col"><span (click)="sortData('registrations')">Registration <i
+                class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('currently_active')">Activation <i
+                class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span>view campaign stats</span></div>
+          <div class="col more"><span>&nbsp;</span></div>
+        </div>
+      </div>
+      <div class="myTableBody"
+        *ngFor="let p of campaignList | orderBy: order : reverse : true | filterBy: comFilter; let i = index;">
+        <div class="row">
+          <div class="col more padd-r0">
+            <span>
+              <div class="custom-checkbox only-checkbox">
+                <input type="checkbox" type="checkbox" id="chk{{p.id}}"
+                  (click)="selectData(p, $event.target.checked);" />
+                <label for="chk{{p.id}}"></label>
+              </div>
+            </span>
+          </div>
+          <div class="col flx3">
+            <span>
+              <a href="javascript:void(0);" (click)="edit(p);">
+                <span>
+                  <i class="ico-moon icon-right green" data-toggle="tooltip" data-placement="left" title="Active"
+                    *ngIf="p.status == 'ACTIVE'"></i>
+                  <i class="ico-moon icon-pencil blue" data-toggle="tooltip" data-placement="left" title=" Draft"
+                    *ngIf="p.status == 'DRAFT'"></i>
+                  <i class="ico-moon icon-stop red" data-toggle="tooltip" data-placement="left" title="Close"
+                    *ngIf="p.status == 'CLOSED'"></i>
+                  {{ p?.name }}
+                </span>
+                {{p?.campaign_name}}
+              </a>
+            </span>
+          </div>
+          <div class="col flx1"><span>{{p?.affiliate_name}}</span></div>
+          <div class="col"><span>{{p?.start_date | date:'dd-MM-yyyy'}}</span></div>
+          <div class="col"><span>{{p?.end_date | date:'dd-MM-yyyy'}}</span></div>
+          <div class="col"><span>{{p?.target}}</span></div>
+          <div class="col"><span>{{p?.hits_received}}</span></div>
+          <div class="col"><span>{{p?.registrations}}</span></div>
+          <div class="col"><span>{{p?.currently_active}}</span></div>
+          <div class="col c-pointer"><img (click)="getStats(p);" *ngIf="p.status != 'DRAFT'" src="assets/img/dash4.png"
+              alt=""></div>
+          <div class="col more">
+            <span><i class="ico-moon icon-more"></i></span>
+            <ul class="action-popup">
+              <li><a href="javascript:void(0)" [class.disable]="p?.registrations > 0" (click)="delete(p, 'i')"><i
+                    class="ico-moon icon-trash orange"></i>
+                  Delete</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="message error centererror" *ngIf="(campaignList | filterBy: comFilter)?.length === 0">No Campaign
+        Found
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="paginationBox">
+  <ul class="pagination justify-content-center">
+    <li class="page-item"><a class="page-link" href="javascript:void(0);"><i class="ico-moon icon-arrow-left"></i></a>
+    </li>
+    <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+    <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+    <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+    <li class="page-item"><a class="page-link" href="javascript:void(0);"><i class="ico-moon icon-arrow-right"></i></a>
+    </li>
+  </ul>
+  <div class="rowsBox">
+    <div class="actionBox">
+      <div class="actionBtn">Rows</div>
+      <ul class="action-popup">
+        <li><a href="javascript:void(0);">10</a></li>
+        <li><a href="javascript:void(0);">20</a></li>
+        <li><a href="javascript:void(0);">30</a></li>
+        <li><a href="javascript:void(0);">50</a></li>
+        <li><a href="javascript:void(0);">100</a></li>
+      </ul>
+    </div>
+  </div>
+</div> -->
+
+<!-- modalpopup -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2>Add Panel</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modalpopup -->
+
+<!-- Delete modalpopup -->
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p> {{popupMess}}</p>
+        <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

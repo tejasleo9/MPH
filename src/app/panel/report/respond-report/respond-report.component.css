@@ -1,0 +1,6 @@
+.select-box{position: absolute;right: 0;top: 0;}
+.select-box .custom-checkbox.only-checkbox label{margin-top: 0;}
+.t-head-box{padding-left: 0;}
+.t-head-heading h2{margin-bottom: 15px;}
+.reportdate.input-box{position: static;}
+.records{display: inline-block;padding-left: 20px;}

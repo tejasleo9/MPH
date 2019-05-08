@@ -1,0 +1,163 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+<div class="h-tab-content">
+  <!-- <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/panel">Panel</a></li>
+      <li class="breadcrumb-item"><a routerLink="/panel/engagement">Engagement</a></li>
+      <li class="breadcrumb-item"><a routerLink="/panel/engagement/templates">Templates</a></li>
+      <li class="breadcrumb-item active">Add Template</li>
+    </ol>
+  </nav> -->
+  <div class="t-head-box">
+    <div class="t-head-heading panel-icon c-pointer" (click)="cs.back();">
+      <h2><i class="icon icon-arrow-left"></i> {{textMeg}} Template</h2>
+    </div>
+  </div>
+  <div class="t-table-box new-panel email-section">
+    <form (ngSubmit)="onSubmitClik(form , 'confirmtxtid', 'confirmlodImg', f)" novalidate #form="ngForm">
+      <div class="mb-3">
+        <div class="row">
+          <div class="col-4">
+            <div class="input-box">
+              <label for="" class="inp-label">Template Name</label>
+              <input type="text" placeholder="eg. mumbai ux group" class="inp-field" #tempname="ngModel"
+                id="templateName" [(ngModel)]="addTemp.name" name="name" required>
+              <div *ngIf="tempname.touched && !tempname.valid">
+                <div class="validation-message" *ngIf="tempname.errors.required">Required</div>
+              </div>
+              <div id="name" class="display-none"></div>
+            </div>
+          </div>
+          <div class="col-4">
+            <ng-select class="rch-ind drop-select ngselmargin" [disabled]="is_disabled" placeholder="Select Option"
+              [options]="categoryOptions" [(ngModel)]="addTemp.template_category_id" label="Activity"
+              name="template_category_id" required id="category">
+            </ng-select>
+            <div id="template_category_idd" class="validation-message d-none">
+              <div>Required</div>
+            </div>
+            <div id="template_category_id" class="display-none"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <h3 class="inp-label">Medium</h3>
+          <div class="region-radio radio-set">
+            <span>
+              <input type="radio" name="type" [(ngModel)]="addTemp.type" (change)="clearFun();f.reset();" id="med1" [value]="1" #medium="ngModel">
+              <label for="med1">Email</label>
+            </span>
+            <span>
+              <input type="radio" name="type" [(ngModel)]="addTemp.type" (change)="clearFun();f.reset();" id="med2" [value]="2">
+              <label for="med2">SMS</label>
+            </span>
+            <span>
+              <input type="radio" name="type" [(ngModel)]="addTemp.type" (change)="clearFun();f.reset();" id="med3" [value]="3">
+              <label for="med3">Notification</label>
+            </span>
+            <span>
+              <input type="radio" name="type" [(ngModel)]="addTemp.type" (change)="clearFun();f.reset();" id="med4" [value]="4">
+              <label for="med4">Fax</label>
+            </span>
+          </div>
+          <div *ngIf="medium.touched && !medium.valid">
+            <div class="validation-message" *ngIf="medium.errors.required">Required</div>
+          </div>
+          <div id="type" class="display-none"></div>
+        </div>
+        <div class="col-4">
+          <h3 class="inp-label">Status</h3>
+          <div class="radio-set">
+            <div class="region-radio">
+              <span>
+                <input type="radio" name="is_active" [(ngModel)]="addTemp.is_active" id="statusActive" value="1">
+                <label for="statusActive">Active</label>
+              </span>
+              <span>
+                <input type="radio" name="is_active" [(ngModel)]="addTemp.is_active" id="statusInactive" value="0">
+                <label for="statusInactive">Inactive</label>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-editor">
+        <div class="row">
+          <form action="" class="w-100" #f="ngForm">
+            <div class="col-8">
+              <div class="row">
+                <div class="col-10">
+                  <div class="input-box " *ngIf="addTemp.type == 1 || addTemp.type == 4">
+                    <!-- <div class="input-box"> -->
+                    <label for="" class="inp-label">Subject</label>
+                    <input type="text" placeholder="eg. Temp Subject" class="inp-field" id="subTxt" #subject="ngModel"
+                      [(ngModel)]="addTemp.subject" name="subject" required>
+                    <div *ngIf="subject.touched && !subject.valid">
+                      <div class="validation-message" *ngIf="subject.errors.required">Required</div>
+                    </div>
+                    <div id="subject" class="display-none"></div>
+                  </div>
+                </div>
+                <div class="col-2 text-center" *ngIf="addTemp.type == 1">
+                  <a href="javascript:void(0);" (click)="previewTemplate();">Preview</a>
+                </div>
+              </div>
+              <!-- <div [innerHTML]="tempData"></div> -->
+              <div [hidden]="!flag">
+                <div class="position-relative" [hidden]="addTemp.type != 1">
+                  <label for="" class="inp-label">Content</label>
+                  <div id="summernote"></div>
+                  <div id="contentt" style="top: 60%;" class="validation-message3 d-none">
+                    <div>Required</div>
+                  </div>
+                  <div id="content" class="display-none"></div>
+                </div>
+                <div class="position-relative" [hidden]="addTemp.type == 1">
+                  <label for="" class="inp-label">Content</label>
+                  <textarea name="content" style="border: 1px solid #e5e6eb;" #tempcontent="ngModel"
+                    class="w-100 mt-2 p-2" [(ngModel)]="addTemp.content" rows="5"
+                    required>{{addTemp.content}}</textarea>
+                  <div *ngIf="tempcontent.touched && !tempcontent.valid">
+                    <div class="validation-message3" *ngIf="tempcontent.errors.required">Required</div>
+                  </div>
+                  <div id="content" class="display-none"></div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <br>
+      <!-- <div class="error-message"> <span> Oh snap! </span> Change a few things up and try submitting again.</div> -->
+      <button href="javascript:void(0);" class="button1 nav-btn">
+        <span id="confirmtxtid">Submit</span>
+        <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="previewModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Preview</h2>
+        <div class="word-wrapp" [innerHTML]="sanitizer.bypassSecurityTrustHtml(addTemp.content)"></div>
+        <!-- <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+            <span id="confirmtxtid">Confirm</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+          <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button> -->
+      </div>
+    </div>
+  </div>
+</div>

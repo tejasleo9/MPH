@@ -1,0 +1,30 @@
+.custom-width {
+  width: 190px;
+}
+
+.modal-dialog {
+    max-width: 500px;
+}
+
+.gender-table .table-body .col{word-break:break-word;font-size: 14px;}
+.inner-profile p{padding: 10px 15px;}
+
+.inner-profile .custom-checkbox {
+  float: left;
+  width: 3%;
+  margin: 0;
+}
+
+.inner-profile h3{
+  margin-left: 15px;
+  width: auto;
+  margin-top: 4px;
+}
+
+.textareaclass{
+  font-size: 14px;
+}
+
+.custom-padding{
+  padding: 0 15px;
+}

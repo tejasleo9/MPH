@@ -1,0 +1,15 @@
+.timeline-panel{
+    margin-bottom: 0px;
+    margin-top: 25px;
+}
+
+.timeline-panel .t-head-box {
+  padding-bottom: 10px;
+}
+
+.topheader {
+  width: 100%;
+  display: block;
+  text-align: center;
+  margin-bottom: 15px;
+}

@@ -1,0 +1,97 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+
+  <app-sub-header></app-sub-header>
+
+  <div class="h-tab-content">
+    <!-- <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/panel">Panel</a></li>
+        <li class="breadcrumb-item"><a routerLink="/panel/recruitment">Recruitment</a></li>
+        <li class="breadcrumb-item"><a routerLink="/panel/recruitment/affiliate">Affiliate</a></li>
+        <li class="breadcrumb-item active" *ngIf="!affiliateEdit">Add New</li>
+        <li class="breadcrumb-item active" *ngIf="affiliateEdit">Edit Affiliate</li>
+      </ol>
+    </nav> -->
+    <div class="t-head-box">
+      <div class="t-head-heading panel-icon c-pointer" (click)="cs.back();">
+        <h2><i class="icon-arrow-left"></i> {{textMeg}} Affiliate</h2>
+      </div>
+    </div>
+    <!-- overview page-->
+    <div class="overview-tab new-panel t-table-box">
+      <form #f="ngForm" (ngSubmit)="validateFun(f, 'confirmtxtid', 'confirmlodImg');">
+        <div class="row">
+          <div class="col-4">
+            <div class="input-box">
+              <label class="inp-label">Name</label>
+              <input type="text" placeholder="eg. mumbai ux group" class="inp-field" #affName="ngModel"
+                [(ngModel)]="affObj.name" name="name" minlength="10" required>
+              <div *ngIf="affName.touched && !affName.valid">
+                <div *ngIf="affName.errors.required" class="validation-message">Required</div>
+                <div *ngIf="affName.errors.minlength" class="validation-message">Minimum 10 character</div>
+              </div>
+              <div id="name" class="display-none"></div>
+            </div>
+          </div>
+          <!-- <div class="col-4">
+            <div class="input-box" *ngIf="isShow">
+              <label class="inp-label">Tracking Code</label>
+              <input type="text" placeholder="eg. 636d3cf5-4ec1" [disabled]="true" class="inp-field"
+                [(ngModel)]="affObj.code" name="code">
+            </div>
+          </div> -->
+        </div>
+        <div class="row">
+          <!-- <div class="col-4">
+            <ng-select class="rch-ind drop-select" name="tracking_type" style="margin: 5px 0 0px;"
+              placeholder="Tracking Type" [options]="trackingTypeOptions" [(ngModel)]="affObj.tracking_type"
+              label="Tracking Type" required id="trackingType">
+            </ng-select>
+          </div> -->
+          <!-- <div class="col-4" *ngIf="affObj.tracking_type == '2' || affObj.tracking_type == '3'">
+            <ng-select class="rch-ind drop-select" name="trackingMethod" placeholder="Tracking Method"
+              [options]="trackingMethodOptions" [(ngModel)]="affObj.trackingMethod" label="Tracking Method" required
+              id="trackingMethod">
+            </ng-select>
+          </div> -->
+        </div>
+        <!-- <div class="row">
+          <div class="col-4">
+            <div class="input-box">
+              <label class="inp-label">Pixel Code / URL</label>
+              <input type="text" placeholder="eg. mumbai ux group" class="inp-field" [(ngModel)]="affObj.tracking_code"
+                name="tracking_code" id="pixelCode">
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="affObj.tracking_type == '3'">
+          <div class="col-4">
+            <div class="input-box">
+              <label class="inp-label">Parameters</label>
+              <textarea type="text" placeholder="eg. mumbai ux group" class="inp-field" [(ngModel)]="affObj.params"
+                name="params" id="params"></textarea>
+            </div>
+          </div>
+          <div class="w-100 ml-3">
+            <label> keywords as:</label>
+            <ul class="ulclass">
+              <li>[REGISTERSOURCE]</li>
+              <li>[EXTRAPARAMS]</li>
+              <li>[TRANSACTIONID]</li>
+              <li>[PANELISTID]</li>
+            </ul>
+          </div>
+        </div> -->
+        <!-- <a href="javascript:void(0);" class="button1 nav-btn">Add Answer</a> -->
+        <!-- <button class="button3 trsp-btn">Import Answer</button> -->
+        <button class="button1 nav-btn mt-3">
+          <span id="confirmtxtid">Submit</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

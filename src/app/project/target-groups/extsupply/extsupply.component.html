@@ -1,0 +1,540 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+    <!-- overview page-->
+    <div class="card ">
+      <ul class="overview-links">
+        <li><a routerLink="/project/overview" [queryParams]="{ action: lastAction}">Overview</a></li>
+        <li class="active">
+          <a>Target Groups <span>({{proname }})</span></a>
+        </li>
+        <li *ngIf="project_status != '3'"><a routerLink="/project/scheduling"
+            [queryParams]="{ action: lastAction}">Scheduling</a></li>
+      </ul>
+      <div class="target-tab">
+        <div class="target-heading">
+          <h3 class="heading-1" routerLink="/project/target-groups" [queryParams]="{ action: lastAction}"><i
+              class="icon-arrow-left"></i>
+            target group</h3>
+        </div>
+        <div class="profile-left target-w100">
+          <div class="nav-pills">
+            <app-left-menu></app-left-menu>
+          </div>
+          <div class="tab-conten profiletab-content">
+            <div class="row">
+              <div class="col-12">
+                <div class="select-question sset">
+                  <div class="schedule-tab external-suppliers">
+                    <div class="tab-content" id="myTabContent">
+                      <div class="tab-pane fade show active" id="sch1" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="h-tab-content">
+                          <div class="t-head-box sched-border">
+                            <div class="t-head-heading">
+                              <div class="message error" *ngIf="ifError"> <span> Oh snap! </span> {{errorMessage}}.
+                              </div>
+                              <div class="message success" *ngIf="ifSucc"> <span> Succussfull!
+                                </span>{{successMessage}}.</div>
+                            </div>
+                            <!-- <div class="t-head-action">
+                              <div class="serch-action">
+
+                                <div class="actionBox">
+                                  <div class="actionBtn">Action</div>
+                                  <ul class="action-popup">
+                                    <li>
+                                      <a href="javascript:void(0)" (click)="delete(null, 'a')">
+                                        <i class="ico-moon icon-trash orange"></i>Delete
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div> -->
+                          </div>
+                          <div class="t-table-box">
+                            <div class="myTable">
+                              <div class="mytablehead mytablehead-sched">
+                                <div class="row">
+                                  <div class="col"><span>Supplier</span></div>
+                                  <div class="col"><span>Total Participants</span></div>
+                                  <div class="col"><span>Current Completes</span></div>
+                                  <!-- <div class="col more"><span></span></div> -->
+                                </div>
+                              </div>
+                              <div class="message error centererror" *ngIf="externalSuppliers?.length === 0">No Data
+                                Found</div>
+                              <div class="">
+                                <div class="myTableBody" *ngFor="let externalSupplier of externalSuppliers">
+                                  <div class="row">
+                                    <div class="col titletext sched">
+                                      <a href="javascript:void(0);" (click)="editProject(externalSupplier)">
+                                        <span>{{externalSupplier.name}}</span>
+                                      </a>
+                                    </div>
+                                    <div class="col"> <span>{{externalSupplier.total_participants}}</span></div>
+                                    <div class="col"><span>{{externalSupplier.current_completes}}</span></div>
+                                    <!-- <div class="col more">
+                                      <span><i class="ico-moon icon-more"></i></span>
+                                      <ul class="action-popup">
+                                        <li>
+                                          <a href="javascript:void(0);" (click)="delete(externalSupplier, 'i' , externalSupplier.id+'inactive',  externalSupplier.id+'inlodImg')">
+                                            <i class="ico-moon icon-trash orange"></i>
+                                            Delete</a>
+                                        </li>
+                                      </ul>
+                                    </div> -->
+                                  </div> <!-- row -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- col-12 -->
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="profile-btn">
+          <button class="button3" (click)="previous();">Previous</button>
+          <button class="button1 nav-btn" (click)="next();">
+            <span id="txtId">Next</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+          </button>
+          <button class="button1 cancel-btn" routerLink="/project/target-groups"
+            [queryParams]="{ action: lastAction}">Cancel</button>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ext sup -->
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-custom modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="onSubmitClik(f, 'textId', 'loderId')" #f="ngForm">
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <h4>Edit Supplier</h4>
+                <div class="col-6">
+                  <div class="input-box m-0">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Supplier Name" [(ngModel)]="supplier.name" class="inp-field"
+                        name="name" [ngClass]="{'on-error' : sname.touched && !sname.valid}" #sname="ngModel" required>
+                      <span>Supplier Name</span>
+                    </label>
+                    <div *ngIf="sname.touched && !sname.valid">
+                      <div class="validation-message r-zero" *ngIf="sname.errors.required">required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="URL Parameters" class="inp-field"
+                        [(ngModel)]="supplier.url_params" name="url_params" id="pname">
+                      <span>URL Parameters</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <h4> Supplier URLs </h4>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Complete URL" class="inp-field"
+                        [(ngModel)]="supplier.complete_url" name="complete_url" id="pname">
+                      <span>Complete URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Screenout URL" class="inp-field"
+                        [(ngModel)]="supplier.screenout_url" name="screenout_url" id="pname">
+                      <span>Screenout URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Quotafull URL" class="inp-field"
+                        [(ngModel)]="supplier.quotafull_url" name="quotafull_url" id="pname">
+                      <span>Quotafull URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box mb-3">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Tracking URL" class="inp-field" name="tracking_url" id="pname"
+                        [(ngModel)]="supplier.tracking_url">
+                      <span>Tracking URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="ttypes"
+                    [(ngModel)]="supplier.tracking_type" placeholder="Select Type" label="Tracking Type"
+                    name="tracking_type" id="ttpye">
+                  </ng-select>
+                </div>
+                <div class="col-6  shed-drop" *ngIf="supplier.tracking_type == 2">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="tmethods"
+                    [(ngModel)]="supplier.tracking_method" placeholder="Select Method" label="Tracking Method"
+                    name="tracking_method" id="tmethod">
+                  </ng-select>
+                </div>
+                <div class="col-12" *ngIf="supplier.tracking_type == 2">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Screenout URL" class="inp-field"
+                        [(ngModel)]="supplier.screenout_url" name="screenout_url" id="pname">
+                      <span>PixelCode / URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-12" *ngIf="supplier.tracking_method == 1">
+                  <div class="filter-heading m-0">
+                    <span style="font-size: 13px;font-weight: 500;">Tracking URL</span>
+                    <textarea name="post_params" [(ngModel)]="supplier.post_params" name="post_params" cols="20"
+                      rows="7"></textarea>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <h4> Quotas </h4>
+                <div class="q-box col-12" *ngIf="quotas?.length > 0">
+                  <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                    <div class="col-4">
+                      <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                    </div>
+                    <div class="col-4">
+                      <input type="text" [value]="quota?.required_completes - quota?.current_completes" name="quota_req"
+                        (change)="changeReq(quota, $event.target.value, 's');">
+                    </div>
+                    <div class="col-4">
+                      <small>Max: {{quota?.required_completes - quota?.current_completes}}</small>
+                      <div (click)="remove(quota,i)" class="cross-class">
+                        <img src="assets/img/cross-red.png" alt="" class="w-100">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" [disabled]="is_disabled" [class.disable]="is_disabled" type="submit">
+            <span id="textId">Update</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderId" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- edit sup -->
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-custom modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="onSubmitClik(f, 'textId', 'loderId')" #f="ngForm">
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <h4>Edit Supplier</h4>
+                <div class="col-6">
+                  <div class="input-box m-0">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Supplier Name" [(ngModel)]="supplier.name" placeholder=""
+                        class="inp-field" name="name" [ngClass]="{'on-error' : sname.touched && !sname.valid}"
+                        #sname="ngModel" required>
+                      <span>Supplier Name</span>
+                    </label>
+                    <div *ngIf="sname.touched && !sname.valid">
+                      <div class="validation-message r-zero" *ngIf="sname.errors.required">required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="URL Parameters" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.url_params" name="url_params" id="pname">
+                      <span>URL Parameters</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Complete URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.complete_url" name="complete_url" id="pname">
+                      <span>Complete URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Screenout URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.screenout_url" name="screenout_url" id="pname">
+                      <span>Screenout URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Quotafull URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.quotafull_url" name="quotafull_url" id="pname">
+                      <span>Quotafull URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box mb-3">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Tracking URL" class="inp-field" name="tracking_url" id="pname"
+                        [(ngModel)]="supplier.tracking_url">
+                      <span>Tracking URL</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <h4> Pixel Tracking </h4>
+                <div class="col-6  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="ttypes"
+                    [(ngModel)]="supplier.tracking_type" placeholder="Select Type" label="Tracking Type"
+                    name="tracking_type" id="ttpye">
+                  </ng-select>
+                </div>
+                <div class="col-6  shed-drop" *ngIf="supplier.tracking_type == 2">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="tmethods"
+                    [(ngModel)]="supplier.tracking_method" placeholder="Select Method" label="Tracking Method"
+                    name="tracking_method" id="tmethod">
+                  </ng-select>
+                </div>
+                <div class="col-12" *ngIf="supplier.tracking_method == 1">
+                  <div class="filter-heading m-0">
+                    <span style="font-size: 13px;font-weight: 500;">Tracking URL</span>
+                    <textarea name="post_params" [(ngModel)]="supplier.post_params" name="post_params" cols="20"
+                      rows="5"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <h4> Quotas </h4>
+                <div class="q-box col-12" *ngIf="quotas?.length > 0">
+                  <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                    <div class="col-4">
+                      <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                    </div>
+                    <div class="col-4">
+                      <input type="text" [value]="quota?.req" name="quota_req"
+                        (change)="changeReq(quota, $event.target.value, 's');" required>
+                    </div>
+                    <div class="col-4">
+                      <small>Max: {{quota?.completes_required}}</small>
+                      <div (click)="remove(quota,i)" class="cross-class">
+                        <img src="assets/img/cross-red.png" alt="" class="w-100">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" type="submit" [class.disable]="is_disabled" [disabled]="is_disabled">
+            <span id="textId">Add</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderId" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-custom modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="onSubmitClik(f, 'textId', 'loderId')" #f="ngForm">
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <h4>Edit Supplier</h4>
+                <!-- <div class="col-12"><input type="text" placeholder="Supplier Name"></div> -->
+                <div class="col-6">
+                  <div class="input-box m-0">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Supplier Name" [(ngModel)]="supplier.name" placeholder=""
+                        class="inp-field" name="name" [ngClass]="{'on-error' : sname.touched && !sname.valid}"
+                        #sname="ngModel" required />
+                      <span>Supplier Name</span>
+                    </label>
+                    <div *ngIf="sname.touched && !sname.valid">
+                      <div class="validation-message r-zero" *ngIf="sname.errors.required">Required</div>
+                    </div>
+                    <div id="name" class="display-none"></div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="URL Parameters" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.url_params" name="url_params" id="pname">
+                      <span>URL Parameters</span>
+                    </label>
+                    <div id="url_params" class="display-none"></div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Complete URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.complete_url" name="complete_url" id="pname">
+                      <span>Complete URL</span>
+                    </label>
+                    <div id="complete_url" class="display-none"></div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Screenout URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.screenout_url" name="screenout_url" id="pname">
+                      <span>Screenout URL</span>
+                    </label>
+                    <div id="screenout_url" class="display-none"></div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Quotafull URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.quotafull_url" name="quotafull_url" id="pname">
+                      <span>Quotafull URL</span>
+                    </label>
+                    <div id="quotafull_url" class="display-none"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <h4> Pixel Tracking </h4>
+                <div class="col-6  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="ttypes"
+                    [(ngModel)]="supplier.tracking_type" (selected)="supplier.post_params = null" placeholder="Select Type" label="Tracking Type"
+                    name="tracking_type" id="ttpye">
+                  </ng-select>
+                  <div id="tracking_type" class="display-none"></div>
+                </div>
+                <div class="col-6  shed-drop" *ngIf="supplier.tracking_type == 2">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="tmethods"
+                    [(ngModel)]="supplier.tracking_method" (selected)="supplier.post_params = null" placeholder="Select Method" label="Tracking Method"
+                    name="tracking_method" id="tmethod">
+                  </ng-select>
+                  <div id="tracking_method" class="display-none"></div>
+                </div>
+                <div class="col-12">
+                  <div class="input-box mb-3">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Tracking URL" class="inp-field" name="tracking_url" id="pname"
+                        [(ngModel)]="supplier.tracking_url">
+                      <span>Tracking URL</span>
+                    </label>
+                    <div id="tracking_url" class="display-none"></div>
+                  </div>
+                </div>
+                <div class="col-12" *ngIf="supplier.tracking_method == 1 && supplier.tracking_type == 2">
+                  <div class="filter-heading m-0">
+                    <label class="inp-label f-12">POST Parameters</label>
+                    <textarea name="post_params" class="textareaclass m-0" [(ngModel)]="supplier.post_params" cols="20"
+                      rows="3"></textarea>
+                      <div id="post_params" class="display-none"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <h4> Quotas </h4>
+                <div class="q-box col-12" *ngIf="quotas?.length > 0">
+                  <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                    <div class="col-4">
+                      <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                    </div>
+                    <div class="col-4">
+                      <input type="text" [value]="quota?.required_completes - quota?.current_completes" name="quota_req"
+                        (change)="changeReq(quota, $event.target.value, 's');" required>
+                    </div>
+                    <div class="col-4">
+                      <small>Max: {{quota?.required_completes - quota?.current_completes}}</small>
+                      <div (click)="remove(quota,i)" class="cross-class">
+                        <img src="assets/img/cross-red.png" alt="" class="w-100">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="quotas" class="display-none ml-3"></div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" type="submit" [class.disable]="is_disabled" [disabled]="is_disabled">
+            <span id="textId">Edit</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderId" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

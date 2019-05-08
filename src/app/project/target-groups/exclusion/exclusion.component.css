@@ -1,0 +1,32 @@
+.accordion-ul {
+  height: 185px;
+  overflow-y: scroll;
+}
+
+.multiple-drp .above .multiple .option {
+  background-color: #fff !important;
+  border: 1px solid #4c84ff !important;
+  border-radius: 4px;
+  color: #333;
+  cursor: default;
+  display: inline-block;
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 22px;
+  margin: 3px 5px 10px 0 !important;
+  padding: 0px 8px;
+}
+
+.multiple-drp .above .multiple {
+  padding: 0 !important;
+}
+
+.selected-listname{
+  box-shadow: none;
+}
+
+.selected-listname li{
+  border: 1px solid #dee2ed !important;
+  margin: 0;
+  padding: 5px 10px;
+}

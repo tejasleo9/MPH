@@ -1,0 +1,174 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+
+    <!-- <div class="dash-overdue">
+      <h2>Projects Overdue 12</h2>
+      <p>These projects are active over a month. Expedite closure</p>
+    </div> -->
+
+    <div class="dashDatepicker">
+      <div class="datepicker-box">
+        <div class="input-group date" data-date-format="dd-mm-yyyy">
+          <input class="form-control" type="text" (change)="getDate();" id="datetimepicker1" />
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+      </div>
+      <div class="date-range-to">to</div>
+      <div class="datepicker-box">
+        <div class="input-group date" data-date-format="dd-mm-yyyy">
+          <input class="form-control" type="text" (change)="getDate();" id="datetimepicker2" />
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+      </div>
+      <button _ngcontent-c3="" class="button1 nav-btn from-to-btn" (click)="getDate();">Get</button>
+    </div>
+
+    <div class="dashDisplayBox">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="dashDisplay">
+            <div class="dashDispImg"><img src="../../../assets/img/dash1.png" alt="img" /></div>
+            <p>Total Projects Launched</p>
+            <h2>{{projectStats.total_projects_launched == null ? '0' : projectStats.total_projects_launched}}</h2>
+            <div style="clear:both"></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="dashDisplay">
+            <div class="dashDispImg"><img src="../../../assets/img/dash2.png" alt="img" /></div>
+            <p>Completes Required</p>
+            <h2>{{projectStats.total_completes_required == null ? '0' : projectStats.total_completes_required}}</h2>
+            <div style="clear:both"></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="dashDisplay">
+            <div class="dashDispImg"><img src="../../../assets/img/dash3.png" alt="img" /></div>
+            <p>Completes Achieved</p>
+            <h2>{{projectStats.completes_achieved == null ? '0' : projectStats.completes_achieved}}</h2>
+            <div style="clear:both"></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="dashDisplay">
+            <div class="dashDispImg"><img src="../../../assets/img/dash4.png" alt="img" /></div>
+            <p>Completion Rate</p>
+            <h2>{{projectStats.completion_rate == null ? '0' : projectStats.completion_rate}}</h2>
+            <div style="clear:both"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="dashChartBox">
+            <div class="dashChartHead">
+              <p>Project Summary</p>
+            </div>
+            <div class="pieBox">
+              <canvas id="pie" width="200" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="dashChartBox">
+            <div class="dashChartHead">
+              <p>Project Timeline</p>
+              <!-- <p class="color-red">-87% Compared to last month</p> -->
+            </div>
+            <canvas id="myChart1"></canvas>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="dashChartBox">
+            <div class="dashChartHead">
+              <p>Complete Timeline</p>
+              <!-- <p class="color-green">+28% Compared to last month</p> -->
+            </div>
+            <canvas id="myChart2"></canvas>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="dashChartBox">
+            <div class="dashChartHead">
+              <p>Project Cost - Timeline</p>
+              <!-- <p class="color-green">+28% Compared to last month</p> -->
+            </div>
+            <canvas id="myChart3"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="prTabDet">
+      <li>
+        My Active Projects: <span class="color-green">{{proStats?.no_of_active_projects}}</span><br>
+        #Projects: <span class="color-green">156</span><br>
+        #Projects Requires Attention: <span class="color-red">{{proStats?.no_of_projects_need_attention}}</span>
+      </li>
+    </ul>
+    <div class="t-table-box">
+      <div class="myTable">
+        <div class="myTableHead">
+          <div class="row">
+            <div class="col"><span>Project ID <i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Project <i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Start Date <i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Completes Required <i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Completes Achieve <i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Complation Rate% <i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Response<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Rate%<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Termination Rate%<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Quotafull Rate%<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Status<i class="ico-moon icon-sort"></i></span></div>
+          </div>
+        </div>
+        <div class="myTableBody" *ngFor="let project of projects">
+          <div class="row">
+            <div class="col"><span>{{project.project_id}}</span></div>
+            <div class="col"><span>{{project.name}}</span></div>
+            <div class="col"><span>{{project.start_date}}</span></div>
+            <div class="col"><span>{{project.completes_required}}</span></div>
+            <div class="col"><span>{{project.completes}}</span></div>
+            <div class="col"><span>{{project.completion_rate}}%</span></div>
+            <div class="col"><span>{{project.responded}}</span></div>
+            <div class="col"><span>{{project.responded/project.invited}}%</span></div>
+            <div class="col"><span>{{project.screenouts/project.responded}}</span></div>
+            <div class="col"><span>{{project.quotaFulls_rate}}</span></div>
+            <div class="col"><span>NA</span></div>
+          </div>
+        </div>
+        <!-- <div class="myTableBody" *ngFor="let project of projects"> -->
+        <!-- <div class="row">
+            <div class="col"><span>{{project.project_id}}</span></div>
+            <div class="col"><span>{{project.name}}</span></div>
+            <div class="col"><span>{{project.start_date}}</span></div>
+            <div class="col"><span>{{project.completes_required}}</span></div>
+            <div class="col"><span>{{project.completes}}</span></div>
+            <div class="col"><span>{{project.completes_required}}</span></div>
+            <div class="col"><span>{{project.completion_rate}}%</span></div>
+            <div class="col"><span>{{project.quotaFulls_rate}}%</span></div>
+            <div class="col"><span>{{project.completes}}</span></div>
+          </div> -->
+        <!-- </div> -->
+        <div class="message error centererror" *ngIf="projects?.length == 0">No Active Projects Found</div>
+      </div>
+    </div>
+  </div>
+</div>

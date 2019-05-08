@@ -1,0 +1,522 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <!-- <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/panel">Panel</a></li>
+      <li class="breadcrumb-item"><a routerLink="/panel/recruitment">Recruitment</a></li>
+      <li class="breadcrumb-item active">Tracking</li>
+    </ol>
+  </nav> -->
+
+  <div class="row">
+    <div class="col points-card">
+      <div class="color color-lgrn">
+        <h4>{{reqStats?.registration_hits == undefined ? 0: reqStats?.registration_hits}}</h4><span>Registration
+          Hits</span>
+      </div>
+    </div>
+    <div class="col points-card">
+      <div class="color color-lylw">
+        <h4>{{reqStats?.registered_panelists == undefined ? 0: reqStats?.registered_panelists}}</h4><span>Registered
+          Panelists </span>
+      </div>
+    </div>
+    <div class="col points-card">
+      <div class="color color-lprpl1">
+        <h4>{{reqStats?.total_activation == undefined ? 0: reqStats?.total_activation}}</h4><span>Total
+          Activation</span>
+      </div>
+    </div>
+    <div class="col points-card">
+      <div class="color color-lorg">
+        <h4>{{reqStats?.total_unsubscribed == undefined ? 0: reqStats?.total_unsubscribed}}</h4>
+        <span>Unsubscribed</span>
+      </div>
+    </div>
+    <div class="col points-card">
+      <div class="color color-lylw">
+        <h4>{{reqStats?.conversion_rates == undefined ? 0: reqStats?.conversion_rates}}</h4><span>Conversion Rate
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="trac-heading">
+    <h2>Timeline Report</h2>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="dashDatepicker">
+          <div class="datepicker-box" style="margin-right: 20px;width: 130px;">
+            <label class="inp-label" style="text-align: left;line-height: 23px;">Duration</label>
+            <select class="rch-ind advdrop custom-select" name="duration" id="duration"
+              [(ngModel)]="duration">
+              <option value="">Select</option>
+              <option value="date">Date</option>
+              <option value="week">Week</option>
+              <option value="month">Month</option>
+              <option value="year">Year</option>
+            </select>
+          </div>
+          <div class="datepicker-box">
+            <div class="input-group date" data-date-format="dd-mm-yyyy">
+              <input class="form-control" [disabled]="duration == 'year' || duration == 'week'" type="text" id="datetimepicker1" />
+              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+          </div>
+          <div class="date-range-to">to</div>
+          <div class="datepicker-box">
+            <div class="input-group date" data-date-format="dd-mm-yyyy">
+              <input class="form-control" [disabled]="duration == 'year' || duration == 'week'" type="text" id="datetimepicker2" />
+              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+          </div>
+          <button _ngcontent-c3="" class="button1 nav-btn from-to-btn" (click)="getData();">Get</button>
+        </div>
+        <div *ngIf="(timelineStats).length == 0">
+          <p class="data-not-found">Data not found</p>
+        </div>
+        <div [hidden]="(timelineStats).length === 0">
+          <canvas id="myChart1" class="bg-white"></canvas>
+        </div>
+      </div> <!-- bar-chart End -->
+    </div>
+  </div>
+
+  <div class="bg-white overview-source traking-margin">
+    <div class="t-head-box">
+      <div class="t-head-heading">
+        <h2>Overview by source</h2>
+      </div>
+      <div class="t-head-action">
+        <ul>
+          <li>
+            <div class="searchAdv">
+              <input type="text" placeholder="Search" class="searchFld" name="search"
+                [(ngModel)]="overviewBySch.aff_name">
+              <!-- <div class="srch-popup">
+                <div class="row">
+                  <div class="col-12">
+                    <h2>Advance Search</h2>
+                  </div>
+                  <div class="col-12">
+                    <div class="input-box">
+                      <label class="inp-label">Project Name</label>
+                      <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-box">
+                      <label class="inp-label">Project Name</label>
+                      <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="input-box">
+                      <label class="inp-label">Project Name</label>
+                      <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="btnSec d-flex justify-content-between align-content-center">
+                      <button class="button2">Search</button>
+                      <a href="javascript:void(0);" class="btnReset">Reset</a>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!--  -->
+    <div class="t-table-box">
+      <div class="myTable">
+        <div class="myTableHead">
+          <div class="row">
+            <div class="col flex2"><span>Affiliate Name<i class="ico-moon icon-sort"></i></span> </div>
+            <div class="col"><span>No of campaigns<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Total Hits<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Registrations<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Activation<i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Utilization <i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Currently Active <i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span>Conversion Rate <i class="ico-moon icon-sort"></i></span></div>
+          </div>
+        </div>
+        <div class="myTableBody bg-color-gry" *ngFor="let data of disOverSources | filterBy: overviewBySch">
+          <div class="row">
+            <div class="col"><span>{{data?.aff_name}}</span> </div>
+            <div class="col"><span>{{data?.count.campaign_count}}</span></div>
+            <div class="col"><span>{{data?.count.total_hits}}</span></div>
+            <div class="col"><span>{{data?.count.tot_registration}}</span></div>
+            <div class="col"><span>{{data?.count.activation}}</span></div>
+            <div class="col"><span>{{data?.count.utilization}}</span></div>
+            <div class="col"><span>{{data?.count.current_active}}</span></div>
+            <div class="col"><span>{{data?.conversion_rate}}</span></div>
+          </div>
+        </div>
+        <div class="message error centererror" *ngIf="(disOverSources | filterBy: overviewBySch)?.length === 0">No
+          Overview by source Found</div>
+      </div>
+    </div> <!-- Table Ends -->
+
+    <!-- <div class="paginationBox paginationBox-margin">
+      <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="javascript:void(0);"><i
+              class="ico-moon icon-arrow-left"></i></a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);"><i
+              class="ico-moon icon-arrow-right"></i></a></li>
+      </ul>
+      <div class="rowsBox">
+        <div class="actionBox">
+          <div class="actionBtn">Rows</div>
+          <ul class="action-popup">
+            <li><a href="javascript:void(0);">10</a></li>
+            <li><a href="javascript:void(0);">20</a></li>
+            <li><a href="javascript:void(0);">30</a></li>
+            <li><a href="javascript:void(0);">50</a></li>
+            <li><a href="javascript:void(0);">100</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+    <div class="bg-white overview-source traking-margin p-0">
+      <div class="t-head-box">
+        <div class="t-head-heading">
+          <h2>Panel response rate by Affiliate</h2>
+        </div>
+        <div class="t-head-action">
+          <ul>
+            <li>
+              <div class="searchAdv">
+                <input type="text" placeholder="Search" class="searchFld" name="search"
+                  [(ngModel)]="panelResRateAff.affiliate_name">
+                <!-- <div class="srch-popup">
+                  <div class="row">
+                    <div class="col-12">
+                      <h2>Advance Search</h2>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="btnSec d-flex justify-content-between align-content-center">
+                        <button class="button2">Search</button>
+                        <a href="javascript:void(0);" class="btnReset">Reset</a>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!--  -->
+      <div class="t-table-box">
+        <div class="myTable">
+          <div class="myTableHead">
+            <div class="row">
+              <div class="col"><span>Affiliate Name<i class="ico-moon icon-sort"></i></span> </div>
+              <div class="col"><span>Responded<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Invited<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Response rate<i class="ico-moon icon-sort"></i></span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry" *ngFor="let data of disPanelRateByAff | filterBy: panelResRateAff;">
+            <div class="row">
+              <div class="col"><span>{{data?.affiliate_name}}</span> </div>
+              <div class="col"><span>{{data?.responded}}</span></div>
+              <div class="col"><span>{{data?.invited}}</span></div>
+              <div class="col"><span>{{data?.response_rate}}</span></div>
+            </div>
+          </div>
+          <div class="message error centererror" *ngIf="(disPanelRateByAff | filterBy: panelResRateAff)?.length === 0">
+            No Panel response rate by
+            Affiliate Found</div>
+        </div>
+      </div> <!-- Table Ends -->
+
+      <!-- <div class="paginationBox paginationBox-margin">
+      <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="javascript:void(0);"><i
+              class="ico-moon icon-arrow-left"></i></a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);"><i
+              class="ico-moon icon-arrow-right"></i></a></li>
+      </ul>
+      <div class="rowsBox">
+        <div class="actionBox">
+          <div class="actionBtn">Rows</div>
+          <ul class="action-popup">
+            <li><a href="javascript:void(0);">10</a></li>
+            <li><a href="javascript:void(0);">20</a></li>
+            <li><a href="javascript:void(0);">30</a></li>
+            <li><a href="javascript:void(0);">50</a></li>
+            <li><a href="javascript:void(0);">100</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+      <div class="bg-white overview-source traking-margin p-0">
+        <div class="t-head-box">
+          <div class="t-head-heading">
+            <h2>Panel distribution by source</h2>
+          </div>
+          <div class="t-head-action">
+            <ul>
+              <li>
+                <div class="searchAdv">
+                  <input type="text" placeholder="Search" class="searchFld" name="search"
+                    [(ngModel)]="panelDisBySrc.aff_name">
+                  <!-- <div class="srch-popup">
+                    <div class="row">
+                      <div class="col-12">
+                        <h2>Advance Search</h2>
+                      </div>
+                      <div class="col-12">
+                        <div class="input-box">
+                          <label class="inp-label">Project Name</label>
+                          <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="input-box">
+                          <label class="inp-label">Project Name</label>
+                          <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="input-box">
+                          <label class="inp-label">Project Name</label>
+                          <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="btnSec d-flex justify-content-between align-content-center">
+                          <button class="button2">Search</button>
+                          <a href="javascript:void(0);" class="btnReset">Reset</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!--  -->
+        <div class="t-table-box">
+          <div class="myTable">
+            <div class="myTableHead">
+              <div class="row">
+                <div class="col"><span>Source<i class="ico-moon icon-sort"></i></span> </div>
+                <div class="col"><span>App Users<i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>Male <i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>Female<i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>Age 14-35 <i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>35-55<i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>55-75<i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>75-80<i class="ico-moon icon-sort"></i></span></div>
+              </div>
+            </div>
+            <div class="myTableBody bg-color-gry" *ngFor="let data of disPanelDisSources | filterBy: panelDisBySrc;">
+              <div class="row">
+                <div class="col"><span>{{data?.aff_name}}</span> </div>
+                <div class="col"><span>{{data?.sourceData?.app_user}}</span></div>
+                <div class="col"><span>{{data?.sourceData?.male}}</span></div>
+                <div class="col"><span>{{data?.sourceData?.female}}</span></div>
+                <div class="col"><span>{{data?.sourceData?.age_18_25_gp}}</span></div>
+                <div class="col"><span>{{data?.sourceData?.age_36_55_gp}}</span></div>
+                <div class="col"><span>{{data?.sourceData?.age_56_80_gp}}</span></div>
+                <div class="col"><span>{{data?.sourceData?.age_80_gt_gp}}</span></div>
+              </div>
+            </div>
+            <div class="message error centererror" *ngIf="(disPanelDisSources | filterBy: panelDisBySrc)?.length === 0">
+              No Panel distribution by
+              source Found</div>
+          </div>
+        </div> <!-- Table Ends -->
+
+        <!-- <div class="paginationBox paginationBox-margin">
+      <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="javascript:void(0);"><i
+              class="ico-moon icon-arrow-left"></i></a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+        <li class="page-item"><a class="page-link" href="javascript:void(0);"><i
+              class="ico-moon icon-arrow-right"></i></a></li>
+      </ul>
+      <div class="rowsBox">
+        <div class="actionBox">
+          <div class="actionBtn">Rows</div>
+          <ul class="action-popup">
+            <li><a href="javascript:void(0);">10</a></li>
+            <li><a href="javascript:void(0);">20</a></li>
+            <li><a href="javascript:void(0);">30</a></li>
+            <li><a href="javascript:void(0);">50</a></li>
+            <li><a href="javascript:void(0);">100</a></li>
+          </ul>
+        </div>
+      </div>
+    </div> -->
+      </div>
+
+      <div class="bg-white overview-source traking-margin p-0">
+        <div class="t-head-box">
+          <div class="t-head-heading">
+            <h2>Panel distribution by Region</h2>
+          </div>
+          <div class="t-head-action">
+            <ul>
+              <li>
+                <div class="searchAdv">
+                  <input type="text" placeholder="Search" class="searchFld" name="search"
+                    [(ngModel)]="panelDisByReg.aff_name">
+                  <!-- <div class="srch-popup">
+                      <div class="row">
+                        <div class="col-12">
+                          <h2>Advance Search</h2>
+                        </div>
+                        <div class="col-12">
+                          <div class="input-box">
+                            <label class="inp-label">Project Name</label>
+                            <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="input-box">
+                            <label class="inp-label">Project Name</label>
+                            <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="input-box">
+                            <label class="inp-label">Project Name</label>
+                            <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="btnSec d-flex justify-content-between align-content-center">
+                            <button class="button2">Search</button>
+                            <a href="javascript:void(0);" class="btnReset">Reset</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!--  -->
+        <div class="t-table-box">
+          <div class="myTable">
+            <div class="myTableHead">
+              <div class="row">
+                <div class="col"><span>Source<i class="ico-moon icon-sort"></i></span> </div>
+                <div class="col"><span>Central India<i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>East India <i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>Islands<i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>North East India <i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>North India<i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>South India<i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span>West India<i class="ico-moon icon-sort"></i></span></div>
+              </div>
+            </div>
+            <div class="myTableBody bg-color-gry" *ngFor="let data of disPanelDisSources | filterBy: panelDisByReg;">
+              <div class="row">
+                <div class="col"><span>{{data?.aff_name}}</span> </div>
+                <div class="col"><span>{{data?.regionData?.Central_India}}</span></div>
+                <div class="col"><span>{{data?.regionData?.East_India}}</span></div>
+                <div class="col"><span>{{data?.regionData?.Islands}}</span></div>
+                <div class="col"><span>{{data?.regionData?.North_East_India}}</span></div>
+                <div class="col"><span>{{data?.regionData?.North_India}}</span></div>
+                <div class="col"><span>{{data?.regionData?.South_India}}</span></div>
+                <div class="col"><span>{{data?.regionData?.West_India}}</span></div>
+              </div>
+            </div>
+            <div class="message error centererror" *ngIf="(disPanelDisSources | filterBy: panelDisByReg)?.length === 0">
+              No Panel distribution by
+              region Found</div>
+          </div>
+        </div> <!-- Table Ends -->
+
+        <!-- <div class="paginationBox paginationBox-margin">
+        <ul class="pagination justify-content-center">
+          <li class="page-item"><a class="page-link" href="javascript:void(0);"><i
+                class="ico-moon icon-arrow-left"></i></a></li>
+          <li class="page-item"><a class="page-link" href="javascript:void(0);">1</a></li>
+          <li class="page-item"><a class="page-link" href="javascript:void(0);">2</a></li>
+          <li class="page-item"><a class="page-link" href="javascript:void(0);">3</a></li>
+          <li class="page-item"><a class="page-link" href="javascript:void(0);"><i
+                class="ico-moon icon-arrow-right"></i></a></li>
+        </ul>
+        <div class="rowsBox">
+          <div class="actionBox">
+            <div class="actionBtn">Rows</div>
+            <ul class="action-popup">
+              <li><a href="javascript:void(0);">10</a></li>
+              <li><a href="javascript:void(0);">20</a></li>
+              <li><a href="javascript:void(0);">30</a></li>
+              <li><a href="javascript:void(0);">50</a></li>
+              <li><a href="javascript:void(0);">100</a></li>
+            </ul>
+          </div>
+        </div>
+      </div> -->
+      </div>
+    </div> <!-- h-tab-content End-->
+
+    <!-- modalpopup -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+            </button>
+          </div>
+          <div class="modal-body new-exclusion">
+            <h2>Add Panel</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- modalpopup -->

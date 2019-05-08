@@ -1,0 +1,142 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content mt-10">
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2>Tickets</h2>
+    </div>
+    <div class="t-head-action"></div>
+  </div>
+
+  <div class="row">
+    <div class="col points-card">
+      <div class="color color-lorg">
+        <h4>{{ticketCount[0]?.close_ticket}}</h4><span>Close</span>
+      </div>
+    </div>
+    <div class="col points-card">
+      <div class="color color-lgrn">
+        <h4>{{ticketCount[0]?.open_ticket}}</h4><span> Open</span>
+      </div>
+    </div>
+    <div class="col points-card">
+      <div class="color color-lprpl1">
+        <h4>{{ticketCount[0]?.in_process}}</h4><span> In-Progress</span>
+      </div>
+    </div>
+    <div class="col points-card">
+      <div class="color color-lblue1">
+        <h4>{{ticketCount[0]?.total}}</h4><span>Total</span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="t-head-box">
+    <div class="t-head-heading">
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li>
+          <div class="searchAdv"><input type="text" placeholder="Search" class="searchFld" #questionInput><button
+              class="srchBtn"></button>
+          </div>
+        </li>
+        <!-- <li class="actionBox">
+          <div class="actionBtn">Action</div>
+          <ul class="action-popup" style="display: none;">
+            <li><a href="#"><i class="ico-moon icon-pencil blue"></i> Edit</a></li>
+            <li><a href="#"><i class="ico-moon icon-right green"></i> Activate</a></li>
+            <li><a href="#"><i class="ico-moon icon-pause yellow"></i> Pause</a></li>
+            <li><a href="#"><i class="ico-moon icon-stop red"></i> Close</a></li>
+            <li><a href="#"><i class="ico-moon icon-trash orange"></i> Delete</a></li>
+          </ul>
+        </li> -->
+      </ul>
+    </div>
+  </div>
+
+  <div class="t-table-box">
+    <div class="myTable pl-center first-left-align">
+      <div class="myTableHead">
+        <div class="row">
+          <!-- <div class="col more">
+            <span>
+              <div class="custom-checkbox only-checkbox">
+                <input type="checkbox" id="chk0"
+                  [checked]="selectedDatas?.length == getPanelists?.length && getPanelists?.length > 0"
+                  (click)="selectAll($event.target.checked);" />
+                <label for="chk0"></label>
+              </div>
+            </span>
+          </div> -->
+          <div class="col more">
+            <span (click)="sortData('status')"> Status</span>
+          </div>
+          <div class="col"><span (click)="sortData('ticket_number')">Ticket ID <i class="ico-moon icon-sort"></i></span>
+          </div>
+          <div class="col"><span>Date <i class="ico-moon icon-sort"></i></span></div>
+          <div class="col more"><span>&nbsp;</span></div>
+        </div>
+      </div>
+      <div class="message error centererror" *ngIf="(getPanelists | filterBy: panelFilter)?.length === 0">No
+        Support Ticket Found</div>
+      <div *ngIf="getPanelists != ''">
+        <div class="myTableBody"
+          *ngFor="let p of getPanelists | filterBy: panelFilter |  paginate: { itemsPerPage: pageSize, currentPage: cPage, totalItems: total }; let i = index;">
+          <div class="row">
+            <!-- <div class="col more">
+              <span>
+                <div class="custom-checkbox only-checkbox">
+                  <input type="checkbox" type="checkbox" id="chk{{p.id}}"
+                    (click)="selectData(p, $event.target.checked);" />
+                  <label for="chk{{p.id}}"></label>
+                </div>
+              </span>
+            </div> -->
+            <div class="col more">
+              <span *ngIf="p.status == 0" class="greenn" show-delay="100">Open</span>
+              <span *ngIf="p.status == 1" class="redd" show-delay="100">Close</span>
+              <span *ngIf="p.status == 2" class="bluee" show-delay="100">In-Progress</span>
+            </div>
+            <div class="col curPOinter"><span (click)="ticketNo(p.id)"
+                routerLink="./admin-support">{{p?.ticket_number}}</span>
+            </div>
+            <div class="col"><span>{{p?.raised_on | date:'dd-MM-yyyy'}}</span></div>
+            <div class="col more">
+              <span>
+                <a class="curPOinter" (click)="ticketNo(p.id)" tooltip="Replay" placement="top" show-delay="100"
+                  routerLink="./admin-support">
+                  <i class=" ico-moon icon-forword green"></i>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- Table Ends -->
+  </div>
+
+</div>
+<div class="paginationBox" *ngIf="getPanelists != '' && (getPanelists | filterBy: panelFilter)?.length != 0">
+  <div class="pagination justify-content-center">
+    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  </div>
+  <div class="rowsBox" *ngIf="getPanelists != '' && (getPanelists | filterBy: panelFilter)?.length != 0">
+    <div class="actionBox">
+      <select class="select-box-class" (change)="perPage(perpage);" [(ngModel)]="perpage" name="perpage">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>

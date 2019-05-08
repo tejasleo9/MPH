@@ -1,0 +1,113 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <div class="t-head-box">
+    <div class="t-head-heading panel-icon">
+      <h2>Panel Information Report</h2>
+    </div>
+  </div>
+  <!-- overview page-->
+  <div class="overview-tab new-panel t-table-box">
+    <div class="row">
+      <div class="col-6">
+        <form #uform="ngForm">
+          <div class="input-box info-select reportselect">
+            <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="panelList"
+              label="Select Panels" name="panels" id="panelists" name="panel_id" [(ngModel)]="panelsList">
+            </ng-select>
+            <div id="panel_idd" class="validation-message d-none">
+              <div>Required</div>
+            </div>
+            <div id="panel_id" class="display-none"></div>
+            <div class="select-box">
+              <!-- <div class="custom-checkbox only-checkbox"><input type="checkbox" id="chk02" (click)="selectPanelist($event.target.checked);"><label for="chk02"><span>Select All</span></label></div> -->
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="input-box info-select reportselect">
+            <ng-select class="rch-ind drop-select" multiple="true" placeholder="Select Option" [options]="fieldOptions"
+              label="Select Report Fields" name="report_fields" id="reportfield" name="report_fields"
+              [(ngModel)]="reportfields">
+            </ng-select>
+            <div id="report_fieldss" class="validation-message d-none">
+              <div>Required</div>
+            </div>
+            <div id="report_fields" class="display-none"></div>
+            <div class="select-box">
+              <div class="custom-checkbox only-checkbox"><input type="checkbox" id="chk03"
+                  [checked]="reportfields.length === fieldOptions.length"
+                  (click)="selectFields($event.target.checked);"><label for="chk03"><span>Select All</span></label>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="input-box info-select reportdate">
+            <label class="inp-label">Select Date</label>
+            <div class="datepicker-box">
+              <div class="input-group date">
+                <input type="text" placeholder="Pick dates" class="form-control" [(ngModel)]="dateValue"
+                  bsDaterangepicker name="dates" [bsConfig]="{ rangeInputFormat: 'YYYY-MM-DD' }" [(bsValue)]="dateValue"
+                  autocomplete="off" name="start_date">
+                <div id="start_datee" class="validation-message d-none">
+                  <div>Required</div>
+                </div>
+                <div id="start_date" class="display-none"></div>
+                <!-- <input class="form-control" type="text"/> -->
+                <!-- <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span> -->
+              </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="input-box info-select reportselect">
+            <ng-select class="rch-ind drop-select" multiple="true" placeholder="Select Option" [options]="statusOptions"
+              label="Select Status" name="status" [(ngModel)]="paneliststatus">
+            </ng-select>
+            <div id="panelist_statuss" class="validation-message d-none">
+              <div>Required</div>
+            </div>
+            <div id="status" class="display-none"></div>
+            <div class="select-box">
+              <div class="custom-checkbox only-checkbox"><input type="checkbox" id="chk04"
+                  [checked]="paneliststatus.length === statusOptions.length"
+                  (click)="selectStatus($event.target.checked);"><label for="chk04"><span>Select All</span></label>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+
+          <!-- <div class="chek-profile">
+                <div class="custom-checkbox only-checkbox">
+                  <input type="checkbox" id="profile-data"><label for="profile-data"><span>Check Profiling Data (IF Required)</span></label>
+                </div>
+            </div> -->
+          <button class="button1 nav-btn" type="submit" (click)="onSubmitClik(uform, 'updatetxtid', 'updatetxtloader', 'f')"  *ngIf="!recordFound">
+            <span id="updatetxtid">Fetch Record</span>
+            <img src="assets/img/loading.gif" alt="addloderImg" id="updatetxtloader" class="loderImg">
+          </button>
+          <button  class="button1 nav-btn" type="submit" (click)="onSubmitClik(uform, 'updatetxtid', 'updatetxtloader', 'd')"  *ngIf="recordFound">
+            <span id="updatetxtid">Download</span>
+            <img src="assets/img/loading.gif" alt="addloderImg" id="updatetxtloader" class="loderImg">
+          </button>
+          <a class="button3 float-right m-0" (click)="reset();" *ngIf="recordFound">Reset</a>
+          <p class="records" *ngIf="recordFound">{{recordText}}</p>
+        </form>
+      </div>
+      <div class="col-6" *ngIf="downloadList.length > 0">
+        <div class="right-side-report">
+          <h3>Last 10 Downloaded Files</h3>
+          <h4 class="inp-label">File Name</h4>
+          <ul>
+            <li *ngFor="let r of downloadList;">
+              <a href="{{r?.value}}" target="_blank" download>{{r?.label}}</a>
+              <!-- <a href="{{r}}" target="_blank" download>{{r}}</a> -->
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

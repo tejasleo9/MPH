@@ -1,0 +1,121 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2>Imports</h2>
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li>
+          <a routerLink="/panel/panel-management/panelists/import-panelist" class="button1"><i>+</i><span>Import
+              Panelist</span></a>
+        <li>
+          <div class="searchAdv"><input type="text" placeholder="Search" class="searchFld"
+              [(ngModel)]="impSearch.panel_name" name="impSearch">
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="t-table-box">
+    <div class="myTable pl-center">
+      <div class="myTableHead">
+        <div class="row">
+          <div class="col flxhf"> <span (click)="sortData('id')">Batch ID<i class="ico-moon icon-sort"></i></span>
+          </div>
+          <div class="col"><span (click)="sortData('panel_name')">Panel<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('total')">Total Records<i class="ico-moon icon-sort"></i></span>
+          </div>
+          <div class="col"><span (click)="sortData('verified_count')">Valid Records<i
+                class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('non_verified_total')">Invalid Records<i
+                class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('status')">Status <i class="ico-moon icon-sort"></i></span></div>
+          <div class="col more"><span>&nbsp;</span></div>
+        </div>
+      </div>
+
+      <div class="myTableBody"
+        *ngFor="let p of ImportBatchDetails | orderBy: order : reverse : true | filterBy : impSearch; let i = index;">
+        <div class="row">
+          <div class="col flxhf"> <span>{{p?.id}}</span> </div>
+          <div class="col"><span>{{p?.panel_name}}</span></div>
+          <div class="col"><span>{{p?.total}}</span></div>
+          <div class="col"><span>{{p?.verified_count}}</span></div>
+          <div class="col"><span>{{p?.non_verified_total}}</span></div>
+          <div class="col" *ngIf="p?.status === 0"><span>Not processed</span></div>
+          <div class="col" *ngIf="p?.status === 1"><span>In progress</span></div>
+          <div class="col" *ngIf="p?.status === 2"><span>Processed</span></div>
+          <div class="col" *ngIf="p?.status === 3"><span>Imported</span></div>
+          <div class="col more">
+            <span><i class="ico-moon icon-more"></i></span>
+            <ul class="action-popup" *ngIf="p.status === 0">
+              <li>
+                <a href="javascript:void(0);" (click)="refresh(p.id)"><i class="ico-moon icon-refresh green"></i>
+                  Refresh</a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" (click)="delete(p, 'i')"><i
+                    class="ico-moon icon-trash orange"></i>Delete</a>
+              </li>
+            </ul>
+            <ul class="action-popup" *ngIf="p.status === 1">
+              <li><a href="javascript:void(0);" (click)="refresh(p.id)"><i class="ico-moon icon-refresh green"></i> Refresh</a></li>
+            </ul>
+            <ul class="action-popup" *ngIf="p.status === 2">
+              <li *ngIf="p.verified_count > 0"><a href="javascript:void(0);" (click)="action(p , 'im')"><i
+                    class="ico-moon icon-right blue"></i>
+                  Import Data</a></li>
+              <li *ngIf="p.non_verified_total > 0">
+                <a href="javascript:void(0);" (click)="action(p , 'de')"><i class="ico-moon icon-download red"></i>
+                  Download Error</a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" (click)="delete(p, 'i')">
+                  <i class="ico-moon icon-trash orange"></i>Delete</a>
+              </li>
+            </ul>
+            <ul class="action-popup" *ngIf="p.status === 3">
+              <li><a href="javascript:void(0);" (click)="action(p , 'd')"><i class="ico-moon icon-download green"></i>
+                  Download</a></li>
+              <li *ngIf="p.non_verified_total > 0"><a href="javascript:void(0);" (click)="action(p , 'dr')"><i
+                    class="ico-moon icon-download red"></i>
+                  Download Error</a></li>
+              <li><a href="javascript:void(0)" (click)="delete(p, 'i')"><i
+                    class="ico-moon icon-trash orange"></i>Delete</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="message error centererror" *ngIf="(ImportBatchDetails | filterBy: impSearch)?.length === 0">No Imports
+        Found</div>
+    </div>
+    <!-- Table Ends -->
+  </div>
+
+</div>
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+          </button>
+        </div>
+        <div class="modal-body confirm-box">
+          <h2>Confirm</h2>
+          <p> {{popupMess}}</p>
+          <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+            <span id="confirmtxtid">Confirm</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+          <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>

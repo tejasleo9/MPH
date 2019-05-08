@@ -1,0 +1,24 @@
+<a routerLink="/project/target-groups/overview" routerLinkActive="active" [queryParams]="{ action: action}"
+  class="nav-link">Overview <i class="icon-arrow-right"></i></a>
+<a routerLink="/project/target-groups/region" routerLinkActive="active" [queryParams]="{ action: action}"
+  class="nav-link">Region <i class="icon-arrow-right"></i></a>
+<a routerLink="/project/target-groups/profile" routerLinkActive="active" [queryParams]="{ action: action}"
+  class="nav-link">Profile <i class="icon-arrow-right"></i></a>
+<a (click)="getSources(1);" [ngClass]="(cUrl=='/project/target-groups/exclusion')?'active':''"
+  class="nav-link">Refine List
+  <i class="icon-arrow-right"></i></a>
+
+<a (click)="getSources(2);" [ngClass]="(cUrl=='/project/target-groups/quota')?'active':''"
+  class="nav-link">Quota <i class="icon-arrow-right"></i></a>
+
+<a (click)="getSources(3);" [ngClass]="(cUrl=='/project/target-groups/security')?'active':''"
+  class="nav-link">Security Settings <i class="icon-arrow-right"></i></a>
+
+<a (click)="getSources(4);" [ngClass]="(cUrl=='/project/target-groups/survey')?'active':''"
+  class="nav-link">Survey Links <i class="icon-arrow-right"></i></a>
+
+<a (click)="getSources(5);" [ngClass]="(cUrl=='/project/target-groups/schedule')?'active':''"
+  class="nav-link">Scheduling <i class="icon-arrow-right"></i></a>
+
+<a (click)="getSources(6);" [ngClass]="(cUrl=='/project/target-groups/external')?'active':''"
+  class="nav-link">External Suppliers <i class="icon-arrow-right"></i></a>

@@ -1,0 +1,282 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+    <!-- Projects -->
+    <div class="t-head-box">
+      <div class="t-head-heading">
+        <h2>Exclusion List</h2>
+      </div>
+      <div class="t-head-action">
+        <ul>
+          <li>
+            <a href="javascript:void(0);" class="button1" (click)="addExe();f.reset();"><i>+</i><span>Add Exclusion
+                List</span></a>
+          </li>
+          <li>
+            <div class="searchAdv">
+              <input type="text" placeholder="Search" class="searchFld shadow1" name="trgFilter"
+                [(ngModel)]="exlFilter.name" />
+            </div>
+          </li>
+          <li class="actionBox">
+            <div class="actionBtn shadow1">Action</div>
+            <ul class="action-popup">
+              <li>
+                <a href="javascript:void(0);" (click)="delete(null, 'a')" [class.disable]="disablelink==true">
+                  <i class="ico-moon icon-trash orange"></i> Delete
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="t-table-box">
+      <div class="myTable">
+        <div class="myTableHead">
+          <div class="row">
+            <div class="col flx2">
+              <span>
+                <div class="custom-checkbox only-checkbox">
+                  <input type="checkbox" id="chk0"
+                    [checked]="selectedDatas?.length == exclusionList?.length && exclusionList?.length > 0"
+                    (click)="selectAll($event.target.checked)" />
+                  <label for="chk0"></label>
+                </div>
+                <span (click)="sortData('name')">List Name</span>
+              </span>
+            </div>
+            <div class="col"><span>Panel Name <i class="ico-moon icon-sort"></i></span></div>
+            <div class="col">
+              <span (click)="sortData('pulled_panelists_count')">Pulled Panelist Count <i
+                  class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col more"><span>&nbsp;</span></div>
+          </div>
+        </div>
+        <div class="myTableBody" *ngFor="let exclusion of exclusionList | orderBy: order | filterBy: exlFilter ">
+          <div class="row">
+            <div class="col flx2">
+              <span>
+                <div class="custom-checkbox only-checkbox">
+                  <input type="checkbox" id="chk{{ exclusion.id }}"
+                    (click)="selectData(exclusion, $event.target.checked)" />
+                  <label for="chk{{ exclusion.id }}"></label>
+                </div>
+                {{ exclusion?.name }}
+              </span>
+            </div>
+            <div class="col">
+              <span>{{ exclusion?.panel_name}}</span>
+            </div>
+            <div class="col">
+              <span>{{ exclusion?.pulled_panelists_count}}</span>
+            </div>
+            <div class="col more">
+              <span><i class="ico-moon icon-more"></i></span>
+              <ul class="action-popup">
+                <li>
+                  <a href="javascript:void(0);" (click)="delete(exclusion.id, 'i')">
+                    <i class="ico-moon icon-trash orange"></i>
+                    Delete</a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);" (click)="downloadCsv(exclusion)">
+                    <i class="ico-moon icon-download"></i>
+                    Download</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="message error centererror" *ngIf="(exclusionList | filterBy: exlFilter)?.length === 0 && isShow"> No
+          Exclusion
+          Found</div>
+      </div>
+      <!-- Table Ends -->
+    </div>
+  </div>
+  <!-- modalpopup -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt="" /></span>
+          </button>
+        </div>
+        <div class="modal-body new-exclusion">
+          <form #f="ngForm" (ngSubmit)="onSubmit(f, 'txtId', 'loderId');">
+            <h2>Create Exclusion List</h2>
+            <div class="tptCheckingBox">
+              <div class="input-box">
+                <label class="inp-label has-float-label">
+                  <input type="text" placeholder="eg. mumbai ux group" #name="ngModel" class="inp-field"
+                    [(ngModel)]="listname" name="list_name" id="pname" required>
+                  <span>List Name</span>
+                </label>
+                <div *ngIf="name.touched && !name.valid">
+                  <div class="validation-message" *ngIf="name.errors.required">Required</div>
+                </div>
+                <div id="list_name" class="display-none"></div>
+              </div>
+              <div class="row">
+                <div class="searchAdv col">
+                  <label class="inp-label">Panel</label>
+                  <select class="rch-ind drop-select advdrop searchFld" required #panel="ngModel" [(ngModel)]="panel_id"
+                    name="panel_id" id="status">
+                    <option value="" selected>Select Panel</option>
+                    <option *ngFor="let panel of panels" value="{{panel.id}}">{{panel.name}}</option>
+                  </select>
+                  <div *ngIf="panel.touched && !panel.valid">
+                    <div class="validation-message exval" *ngIf="panel.errors.required">Required</div>
+                  </div>
+                  <div id="panel_id" class="display-none"></div>
+                </div>
+                <div class="searchAdv col">
+                  <label class="inp-label">Filter Option</label>
+                  <select class="rch-ind drop-select advdrop searchFld" required #inputcondition="ngModel"
+                    [(ngModel)]="filter_optionn" name="filterOption" id="status">
+                    <option [value]="0" selected>Select Filter Option</option>
+                    <option value="(">(</option>
+                    <option value=")">)</option>
+                    <option value="AND">AND </option>
+                    <option value="OR">OR</option>
+                    <option value="first_name">first_name</option>
+                    <option value="last_name">last_name </option>
+                    <option value="email">email</option>
+                    <option value="panelist_id">panelist_id </option>
+                    <option value="code">code</option>
+                    <option value="postalcode">postalcode </option>
+                    <option value="full_name">full_name</option>
+                  </select>
+                  <div *ngIf="inputcondition.touched && !inputcondition.valid" style="display: initial;">
+                    <div class="validation-message exval" *ngIf="inputcondition.errors.required">Required</div>
+                  </div>
+                  <div id="panel_id" class="display-none"></div>
+                  <a href="javascript:void(0);" class="add-icon" (click)="selectOption(filter_optionn);"><img
+                      src="assets/img/add.png" alt=""></a>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              <div class="filter-heading position-relative">
+                <h3>Filter Criteria</h3>
+                <i class="icon-refresh" (click)="clearFilter();"></i>
+                <div class="clearfix"></div>
+                <ul class="selected-region selected-cat">
+                  <li *ngFor="let cat of filterCat;let i = index">
+                    <span>{{cat}}</span>
+                    <button type="button" class="close region-close" data-dismiss="modal" aria-label="Close"
+                      (click)="removeCat(i);">
+                      <img src="assets/img/cross-red.png" alt="">
+                    </button>
+                  </li>
+                </ul>
+                <div id="filtercate" class="display-none">
+                  <div class="validation-message">Required</div>
+                </div>
+                <!-- <textarea name="input_conditions" [disabled]="true" [(ngModel)]="selectedFilter" name="selectedFilter"
+                  cols="20" rows="7"></textarea> -->
+              </div>
+              <p class="exclutn-para">Download <a href="javascript:void(0);" (click)="getExFile();">Example File </a>
+                based on criteria.
+              </p>
+              <div class="form-group filter-heading position-relative">
+                <h3>File</h3>
+                <label class="custom-file" id="customFile">
+                  <input type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="custom-file-input" id="exampleInputFile" (change)="getCsvFile($event);"
+                    aria-describedby="fileHelp" required />
+                  <span class="custom-file-control form-control-file">{{fileName}}</span>
+                </label>
+                <div style="display: initial;" *ngIf="req">
+                  <div class="validation-message exval">Required</div>
+                </div>
+                <div id="input_file" class="display-none"></div>
+              </div>
+              <div class="row">
+                <div class="datepicker-box col">
+                  <label class="inp-label">From Joining Date</label>
+                  <div class="input-group date" data-date-format="dd-mm-yyyy">
+                    <input class="form-control" type="text" id="datetimepicker1" placeholder="Select date"
+                      (change)="getDate();" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  </div>
+                </div>
+                <div class="datepicker-box col">
+                  <label class="inp-label">To Joining Date</label>
+                  <div id="datepicker2" class="input-group date" data-date-format="dd-mm-yyyy">
+                    <input class="form-control" type="text" id="datetimepicker2" placeholder="Select date"
+                      (change)="getDate();" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div class="switch switch--horizontal switch--horizontall switch--myRedio">
+                <input id="radio-o" type="radio" name="tptSwitch" value="tptOn" checked="checked" class="redio-four"
+                  (change)="tptCheck('tptOn')" />
+                <label for="radio-o" class="first-lab">Include</label>
+                <input id="radio-0f" type="radio" name="tptSwitch" value="tptOff" class="redio-four"
+                  (change)="tptCheck('tptOff')" />
+                <label for="radio-0f" class="off ">Exclude</label>
+                <span class="toggle-outside redio-four"><span class="toggle-inside"></span></span>
+              </div>
+              <div class="clearfix"></div>
+              <div class="row">
+                <div class="col-12  shed-drop">
+                  <ng-select class="rch-ind drop-select ngselmargin" [(ngModel)]="includeexlist" [options]="exList"
+                    label="Exclusion List" name="include_exclude_list" id="inexlist" [multiple]="true">
+                  </ng-select>
+                  <div id="include_exclude_list" class="display-none"></div>
+                </div>
+              </div>
+              <button class="button2 mt-3" type="submit">
+                <span id="txtId">Add Exclusion</span>
+                <img src="assets/img/loading.gif" alt="loderImg" id="loderId" class="loderImg">
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modalpopup -->
+
+  <div class="modal fade" id="confirmBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"><img src="assets/img/cross-red.png" alt="" /></span>
+          </button>
+        </div>
+        <div class="modal-body confirm-box">
+          <h2>Confirm</h2>
+          <p>{{ popupMess }}</p>
+          <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg')">
+            <span id="confirmtxtid">Confirm</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg" />
+          </button>
+
+          <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

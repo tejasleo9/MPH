@@ -1,0 +1,48 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+<div class="h-tab-content">
+  <div class="card ">
+    <ul class="overview-links endpage-navbar">
+      <li><a routerLink="/panel/settings/">Overview</a></li>
+      <li class="active"><a routerLink="communication-template">Communication Templates</a></li>
+      <li><a routerLink="/panel/settings/incentive-model">Incentive Model </a></li>
+      <li><a routerLink="/panel/settings/endpage">End pages</a></li>
+    </ul>
+    <div class="target-tab">
+      <div class="profile-left target-w100">
+        <div class="t-table-box">
+          <div class="myTable">
+            <div class="myTableHead">
+              <div class="row">
+                <div class="col flx3"><span>Iinvitation<i class="ico-moon icon-sort"></i></span> </div>
+                <div class="col flx3"><span>Type<i class="ico-moon icon-sort"></i></span></div>
+                <div class="col flx3">
+                  <div class="searchAdv float-right">
+                    <input type="text" placeholder="Search" class="searchFld" name="trgFilter"
+                      [(ngModel)]="commTemp.name">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="myTableBody bg-color-gry" *ngFor="let data of commTemplateList | filterBy: commTemp;">
+              <div class="row">
+                <div class="col flx3"><span><a href="javascript:void(0);" (click)="editTemplate(data)">{{data.name}}</a></span></div>
+                <div class="col flx3"><span>{{data.medium_type}}</span></div>
+                <div class="col flx3"><span></span></div>
+              </div>
+            </div>
+            <div class="message error centererror" *ngIf="(commTemplateList | filterBy: commTemp)?.length === 0">No
+              Communication Templates
+              Found
+            </div>
+          </div>
+          <!-- Table Ends -->
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>

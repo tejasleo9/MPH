@@ -1,0 +1,361 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <!-- Projects -->
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2>Payment Method</h2>
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li><a href="javascript:void(0);" (click)="form.reset();" class="button1" data-toggle="modal"
+            data-target="#exampleModal"><i>+</i><span>Add New</span></a></li>
+        <li>
+          <div class="searchAdv"><input type="text" placeholder="Search" class="searchFld"
+              [(ngModel)]="redeemFilter.method_name">
+          </div>
+        </li>
+        <li class="actionBox">
+          <div class="actionBtn">Action</div>
+          <ul class="action-popup">
+            <li><a href="javascript:void(0)" (click)="deactivate(null, 'a')" [class.disable]="selectedDatas.length == 0"><i
+                  class="ico-moon icon-stop red"></i>Deactivate</a></li>
+            <li><a href="javascript:void(0)" (click)="delete(null, 'a')" [class.disable]="selectedDatas.length == 0"><i
+                  class="ico-moon icon-trash red"></i>Delete</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="t-table-box">
+    <div class="myTable pl-center">
+      <div class="myTableHead">
+        <div class="row">
+          <div class="col more padd-r0"><span></span></div>
+          <div class="col"><span>Payment Method</span></div>
+          <div class="col"><span>Min-Limit</span></div>
+          <div class="col"><span>Max-Limit </span></div>
+          <div class="col"><span>Unit Cost </span></div>
+          <div class="col"><span>Acknowledge Text </span></div>
+          <div class="col more"><span></span></div>
+        </div>
+      </div>
+      <div class="message error centererror" *ngIf="(redeemlist | filterBy: redeemFilter)?.length === 0 || ifError">No
+        Payment Methods Found</div>
+      <div>
+        <div class="myTableBody" *ngFor="let rlist of redeemlist | filterBy: redeemFilter;">
+          <div class="row">
+            <div class="col more padd-r0">
+              <span>
+                <div class="custom-checkbox only-checkbox">
+                  <input type="checkbox" id="{{'chk1'+rlist.id}}"
+                    (click)="selectData(rlist.id, $event.target.checked);">
+                  <label for="{{'chk1'+rlist.id}}"></label>
+                </div>
+              </span>
+            </div>
+            <div class="col"><span><a href="javascript:void(0);"
+                  (click)="editMethod(rlist.id)">{{rlist?.method_name}}</a></span></div>
+            <div class="col"><span>{{rlist?.min_threshold}}</span></div>
+            <div class="col"><span>{{rlist?.max_threshold}}</span></div>
+            <div class="col"><span>{{rlist?.unit_cost}}</span></div>
+            <div class="col"><span>{{rlist?.acknowledge_text}}</span></div>
+            <div class="col more">
+              <span><i class="ico-moon icon-more"></i></span>
+              <ul class="action-popup">
+                <li><a href="javascript:void(0)" (click)="deactivate(rlist, 'i')"><i
+                      class="ico-moon icon-stop red"></i>Deactivate</a></li>
+                <li><a href="javascript:void(0)" (click)="delete(rlist, 'i')"><i
+                      class="ico-moon icon-trash red"></i>Delete</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Table Ends -->
+  </div>
+</div>
+
+<!-- modalpopup -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2>Add Payment Method</h2>
+        <form (ngSubmit)="onSubmitClik(form, 'addtxtid', 'addtxtloader')" #form="ngForm">
+          <div class="row">
+            <div class="col-12">
+              <div class="input-box">
+                <label class="inp-label">Panel Method Name</label>
+                <input type="text" placeholder="eg. Amazone" class="inp-field" name="method_name"
+                  #methodnameadd="ngModel" [(ngModel)]="method_name" required>
+                <div *ngIf="methodnameadd.touched && !methodnameadd.valid">
+                  <div class="validation-message2" *ngIf="methodnameadd.errors.required">Required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <div class="input-box">
+                <label class="inp-label">Min-Limit</label>
+                <input type="number" placeholder="eg. 10" class="inp-field" #minthadd="ngModel" name="min_threshold"
+                  [(ngModel)]="min_threshold" required>
+                <div *ngIf="minthadd.touched && !minthadd.valid">
+                  <div class="validation-message2" *ngIf="minthadd.errors.required">Required</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="input-box">
+                <label class="inp-label">Max-Limit</label>
+                <input type="number" placeholder="eg. 1000" class="inp-field" name="max_threshold" #maxthadd="ngModel"
+                  [(ngModel)]="max_threshold" required>
+                <div *ngIf="maxthadd.touched && !maxthadd.valid">
+                  <div class="validation-message2" *ngIf="maxthadd.errors.required">Required</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="input-box">
+                <label class="inp-label">Unit Cost</label>
+                <input type="number" placeholder="eg. 5" class="inp-field" name="unit_cost" #unitcostadd="ngModel"
+                  [(ngModel)]="unit_cost" required>
+                <div *ngIf="unitcostadd.touched && !unitcostadd.valid">
+                  <div class="validation-message2" *ngIf="unitcostadd.errors.required">Required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="input-box">
+                <label class="inp-label">Confirmation Message</label>
+                <input type="text" placeholder="Thank you." class="inp-field" name="confirm_text"
+                  [(ngModel)]="confirm_text">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="input-box">
+                <label class="inp-label">Acknowledgement Message</label>
+                <input type="text" placeholder="Got it thanks!" class="inp-field" name="acknowledge_text"
+                  [(ngModel)]="acknowledge_text">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="input-box">
+                <label class="inp-label">Detail</label>
+                <textarea type="text" placeholder="Write details here..." class="inp-field" name="detail"
+                  [(ngModel)]="detail"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="img-upload position-relative">
+                <input id="fileUpload" class="fileUpload" type="file" [(ngModel)]="logo" name="logo"
+                  (change)="detectFiles1($event, logo)" />
+                <label for="fileUpload" class="up-img"><span><img src="assets/img/upload.png"
+                      alt="upload img missing"></span>
+                  Upload Logo</label>
+                <span class="thumb-img" *ngIf="url != null">
+                  <div class="view-img image-holder"><img [src]="url" alt="img" class="thumb-image" /></div>
+                  <a class="btnDelete" (click)="removeImgUploadFn1(url, i)"><img src="assets/img/cross-red.png"
+                      alt="cross image" class="w-100" /></a>
+                </span>
+                <div *ngIf="lg">
+                  <div class="validation-message2">Required</div>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-center">
+              <button href="javascript:void(0);" class="button1 nav-btn">
+                <span id="addtxtid">Add</span>
+                <img src="assets/img/loading.gif" alt="addloderImg" id="addtxtloader" class="loderImg">
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modalpopup -->
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2>Edit Payment Method</h2>
+        <form (ngSubmit)="onUpdateClick(uform, 'updatetxtid', 'updatetxtloader',viewmethod.id)" novalidate
+          #uform="ngForm">
+          <div class="row">
+            <div class="col-12">
+              <div class="input-box">
+                <label class="inp-label">Panel Method Name</label>
+                <input type="text" placeholder="eg. Amazone" class="inp-field" name="method_name" #methodname="ngModel"
+                  [(ngModel)]="viewmethod['method_name']" required>
+                <div *ngIf="methodname.touched && !methodname.valid">
+                  <div class="validation-message2" *ngIf="methodname.errors.required">Required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
+              <div class="input-box">
+                <label class="inp-label">Min-Limit</label>
+                <input type="text" placeholder="eg. Pending" class="inp-field" name="min_threshold" #minth="ngModel"
+                  [(ngModel)]="viewmethod['min_threshold']" required>
+                <div *ngIf="minth.touched && !minth.valid">
+                  <div class="validation-message2" *ngIf="minth.errors.required">Required</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="input-box">
+                <label class="inp-label">Max-Limit</label>
+                <input type="text" placeholder="eg. 1000" class="inp-field" name="max_threshold" #maxth="ngModel"
+                  [(ngModel)]="viewmethod['max_threshold']" required>
+                <div *ngIf="maxth.touched && !maxth.valid">
+                  <div class="validation-message2" *ngIf="maxth.errors.required">Required</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="input-box">
+                <label class="inp-label">Unit Cost</label>
+                <input type="text" placeholder="eg. 10" class="inp-field" name="unit_cost" #unitcost="ngModel"
+                  [(ngModel)]="+viewmethod['unit_cost']" required>
+                <div *ngIf="unitcost.touched && !unitcost.valid">
+                  <div class="validation-message2" *ngIf="unitcost.errors.required">Required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="input-box">
+                <label class="inp-label">Confirmation Message</label>
+                <input type="text" placeholder="eg. 10" class="inp-field" name="confirm_text"
+                  [(ngModel)]="viewmethod['confirm_text']">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="input-box">
+                <label class="inp-label">Acknowledgement Message</label>
+                <input type="text" placeholder="eg. 10" class="inp-field" name="acknowledge_text"
+                  [(ngModel)]="viewmethod['acknowledge_text']">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="input-box">
+                <label class="inp-label">Detail</label>
+                <textarea type="text" placeholder="Write details here..." class="inp-field" name="detail"
+                  [(ngModel)]="viewmethod['detail']"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="img-upload position-relative">
+                <input id="fileUpload" class="fileUpload" type="file" name="logo"
+                  (change)="detectFiles1($event, logo)" />
+                <label for="fileUpload" class="up-img"><span><img src="assets/img/upload.png"
+                      alt="upload img missing"></span>
+                  Upload Logo</label>
+                <span class="thumb-img">
+                  <div class="view-img image-holder"><img src="http://m4-live.mysurveyhub.com/{{viewmethod?.logo}}"
+                      alt="img" class="thumb-image" /></div>
+                  <a class="btnDelete" (click)="removeImgUploadFn1(url, i)"><img src="assets/img/cross-red.png"
+                      alt="cross image" class="w-100" /></a>
+                </span>
+                <div *ngIf="lg">
+                  <div class="validation-message2">Required</div>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-center">
+              <button href="javascript:void(0);" class="button1 nav-btn">
+                <span id="updatetxtid">Update</span>
+                <img src="assets/img/loading.gif" alt="addloderImg" id="updatetxtloader" class="loderImg">
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete modalpopup -->
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p> {{popupMess}}</p>
+        <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Deactivate modalpopup -->
+<div class="modal fade" id="deactconfirmBox" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p> {{popupMess}}</p>
+        <button class="button2" (click)="deactivateData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">De-activate</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

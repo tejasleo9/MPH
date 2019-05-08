@@ -1,0 +1,145 @@
+<app-header></app-header>
+
+<div class="h-tab-content">
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2 id="headname">Panels</h2>
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li><a class="button1" (click)="addNew()">
+            <i>+</i><span>Add Panel</span></a>
+        </li>
+        <li>
+          <div class="searchAdv">
+            <input type="text" placeholder="Search" class="searchFld" [(ngModel)]="medSearch.name" name="medSearch" />
+            <button class="srchBtn"></button>
+            <div class="srch-popup">
+              <form (ngSubmit)="search(form,'txtId','inlodImg')" ngNativeValidate #form="ngForm">
+                <div class="row">
+                  <div class="col-12">
+                    <h2>Advance Search</h2>
+                  </div>
+                  <div class="col-12">
+                    <div class="input-box">
+                      <label class="inp-label">Country Name</label>
+                      <select class="rch-ind drop-select advdrop" name="country_id" id="country_id"
+                        [(ngModel)]="country">
+                        <option value="">Select</option>
+                        <option *ngFor="let cnt of countries" value="{{cnt.id}}">{{cnt.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="input-box">
+                      <label class="inp-label">Panel Name</label>
+                      <input type="text" name="name" placeholder="eg. XYZ" class="inp-field" [(ngModel)]="panel_name">
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="input-box">
+                      <label class="inp-label">Status</label>
+                      <select class="rch-ind drop-select advdrop" name="status" id="status" [(ngModel)]="sts">
+                        <option value="">Select</option>
+                        <option value="1">Available</option>
+                        <option value="2">Unavailable</option>
+                        <option value="3">Invisible</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="btnSec d-flex justify-content-between align-content-center">
+                      <button class="button2" type="submit">
+                        <span id="txtId">Search</span>
+                        <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+                      </button>
+                      <a class="btnReset" (click)="reset(form);">Reset</a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="t-table-box">
+    <div class="myTable">
+      <div class="myTableHead">
+        <div class="row">
+          <div class="col flx2"> <span (click)="sortData('name')"> Name <i class="ico-moon icon-sort"></i></span> </div>
+          <div class="col"><span (click)="sortData('country_name')">Country <i class="ico-moon icon-sort"></i></span>
+          </div>
+          <div class="col"><span (click)="sortData('language_name')">Language <i class="ico-moon icon-sort"></i></span>
+          </div>
+          <div class="col"><span (click)="sortData('active_panelists')"> Active Panelists <i
+                class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('response_rate')">Response Rate <i
+                class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('status')">Status <i class="ico-moon icon-sort"></i></span></div>
+          <div class="col more"><span>&nbsp;</span></div>
+        </div>
+      </div>
+      <div class="myTableBody" *ngFor="let p of panelLists | orderBy: order : reverse : true | filterBy : medSearch">
+        {{rev}}
+        <div class="row">
+          <div class="col flx2"> <span class="curPOinter"><a href="javascript:void(0);"
+                (click)="editProject(p.id, p.name, p.status)"> {{p?.name}}</a></span>
+          </div>
+          <div class="col"><span>{{p?.country_name}}</span></div>
+          <div class="col"><span>{{p?.language_name}}</span></div>
+          <div class="col"><span>{{p?.active_panelists}}</span></div>
+          <div class="col"><span>{{p?.response_rate}}</span></div>
+          <div class="col"><span>{{p?.status}}</span></div>
+          <div class="col more">
+            <span><i class="ico-moon icon-more"></i></span>
+            <ul class="action-popup">
+              <li><a href="javascript:void(0)" (click)="delete(p, 'i')"><i class="ico-moon icon-trash orange"></i>
+                  Delete</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="message error centererror" *ngIf="(panelLists | filterBy: medSearch)?.length === 0 && is_true">No Panel Found
+      </div>
+    </div>
+    <!-- Table Ends -->
+  </div>
+</div>
+
+<!-- modalpopup -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2>Add Panel</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delete modalpopup -->
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p> {{popupMess}}</p>
+        <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

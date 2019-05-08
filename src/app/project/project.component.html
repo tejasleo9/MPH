@@ -1,0 +1,311 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+    <!-- Projects -->
+    <div class="t-head-box">
+      <div class="t-head-heading">
+        <h2 id="headname">Projects</h2>
+      </div>
+      <div class="t-head-action">
+        <ul>
+          <li>
+            <a href="javascript:void(0)" (click)="addNew()" class="button1"><i>+</i><span>Add Project</span></a>
+          </li>
+          <li>
+            <div class="searchAdv">
+              <input type="text" placeholder="Search" class="searchFld" (keyup)="searchname($event.target.value)" />
+              <button class="srchBtn"></button>
+              <div class="srch-popup">
+                <form (ngSubmit)="search(form,'txtId','inlodImg')" #form="ngForm">
+                  <div class="row">
+                    <div class="col-12">
+                      <h2>Advance Search</h2>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" autocomplete="off" placeholder="eg. mumbai" class="inp-field" name="name"
+                          id="name" #projectname="ngModel" [(ngModel)]="name" required/>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <label class="inp-label">Status</label>
+                      <select class="rch-ind drop-select advdrop" style="padding: 0 0px 9px 0;" name="status"
+                        id="status" [(ngModel)]="status" #prjstatus="ngModel" required>
+                        <option value="">Select</option>
+                        <option value="1">Active</option>
+                        <option value="2">Paused</option>
+                        <option value="3">Draft</option>
+                        <option value="4">Closed</option>
+                      </select>
+                    </div>
+                    <div class="col-6">
+                      <div class="datepicker-box w-100">
+                        <label class="inp-label">Start Date</label>
+                        <div class="input-group date" data-date-format="dd-mm-yyyy">
+                          <input class="form-control" type="text" id="datetimepicker1" />
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                      </div>
+                      <!-- <div class="input-box">
+                        <label class="inp-label">Completes</label>
+                        <input type="text" placeholder="eg. 45" class="inp-field" style="padding:5px 0" name="completes_required"
+                          id="completes_required" [(ngModel)]="completes_required" />
+                      </div> -->
+                    </div>
+                    <div class="col-6">
+                      <div class="datepicker-box w-100">
+                        <label class="inp-label">End Date</label>
+                        <div class="input-group date" data-date-format="dd-mm-yyyy">
+                          <input class="form-control" type="text" id="datetimepicker2" />
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="btnSec d-flex justify-content-between align-content-center">
+                        <button class="button2" type="submit">
+                          <span id="txtId">Search</span>
+                          <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+                        </button>
+                        <a class="btnReset" (click)="reset(form);form.reset();">Reset</a>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </li>
+          <li class="actionBox">
+            <div class="actionBtn">Action</div>
+            <ul class="action-popup">
+              <li>
+                <a href="javascript:void(0)" (click)="changeStatus(null, 1,'a', 'inactive', 'inlodImg')"
+                  [class.disable]="disablelink==true || activedis==true">
+                  <i class="ico-moon icon-right green" id="inactive"></i>
+                  <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+                  Activate</a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" (click)="changeStatus(null, 2,'a', 'inpause', 'inlodImgpuse')"
+                  [class.disable]="disablelink==true || pausedis==true">
+                  <i class="ico-moon icon-pause yellow" id="inpause"></i>
+                  <img src="assets/img/loading.gif" alt="loderImg" id="inlodImgpuse" class="loderImg">
+                  Pause</a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" (click)="changeStatus(null, 4,'a', 'instop', 'inlodImgstop')"
+                  [class.disable]="disablelink==true || closedis==true">
+                  <i class="ico-moon icon-stop red" id="instop"></i>
+                  <img src="assets/img/loading.gif" alt="loderImg" id="inlodImgstop" class="loderImg">
+                  Close</a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" (click)="delete(null, 'a')"
+                  [class.disable]="disablelink==true || deletedis==true"><i class="ico-moon icon-trash orange"></i>
+                  Delete</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="t-table-box">
+      <div class="message success" *ngIf="ifSucc"> <span> Succussfull! </span> {{successMessage}}.</div>
+      <div class="myTable">
+        <div class="myTableHead">
+          <div class="row">
+            <div class="col more padd-r0">
+              <span>
+                <div class="custom-checkbox only-checkbox">
+                  <input type="checkbox" id="chk0"
+                    [checked]="selectedDatas?.length == projects?.length && projects?.length > 0"
+                    (click)="selectAll($event.target.checked);" />
+                  <label for="chk0"></label>
+                </div>
+              </span>
+            </div>
+            <div class="col">
+              <span (click)="sortData('id')">ID <i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col flx2 padd-l0"><span (click)="sortData('name')"> Project Name <i
+                  class="ico-moon icon-sort"></i></span></div>
+            <div class="col">
+              <span (click)="sortData('start_date')">Date <i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col">
+              <span (click)="sortData('completes_required')">Completes <i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col">
+              <span (click)="sortData('completion_rate')">Completion rate <i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col">
+              <span (click)="sortData('response_rate')">Response rate <i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col">
+              <span (click)="sortData('screenouts')">Termination rate<i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col">
+              <span (click)="sortData('quotaFulls')">Quota Full <i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col">
+              <span (click)="sortData('status')">Status <i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col more"><span>&nbsp;</span></div>
+          </div>
+        </div>
+        <div class="message error centererror" *ngIf="(projects | filterBy: proFilter)?.length === 0">No
+          Project Found</div>
+        <div *ngIf="projects != ''">
+          <div class="myTableBody"
+            *ngFor="let p of projects | orderBy: order | filterBy: proFilter | paginate: { itemsPerPage: pageSize, currentPage: cPage, totalItems: total }; let i = index">
+            <div class="row">
+              <div class="col more padd-r0">
+                <span
+                  [hidden]="(p.status == '4' && p.completes != '0') || (p.status == '4' && p.screenouts != '0') || (p.status == '4' && p.quotaFulls != '0')">
+                  <div class="custom-checkbox only-checkbox">
+                    <input type="checkbox" type="checkbox" id="chk{{p.id}}"
+                      (click)="selectData(p, $event.target.checked);" />
+                    <label for="chk{{p.id}}"></label>
+                  </div>
+                </span>
+              </div>
+              <!-- Project_id, project name, start_date, completes_required, completes_achieved,completion rate, response rate, termination rate, QF rate, status -->
+              <div class="col">
+                <span>{{ p?.id }}</span>
+              </div>
+              <div class="col flx2 padd-l0 titletext">
+                <a href="javascript:void(0);" (click)="editProject(p.id, p.name, p.status)">
+                  <span>
+                    <i class="ico-moon icon-right green" data-toggle="tooltip" data-placement="left" title="Active"
+                      *ngIf="p.status == '1'"></i>
+                    <i class="ico-moon icon-pause yellow" data-toggle="tooltip" data-placement="left" title="Pause"
+                      *ngIf="p.status == '2'"></i>
+                    <i class="ico-moon icon-pencil blue" data-toggle="tooltip" data-placement="left" title=" Draft"
+                      *ngIf="p.status == '3'"></i>
+                    <i class="ico-moon icon-stop red" data-toggle="tooltip" data-placement="left" title="Close"
+                      *ngIf="p.status == '4'"></i>
+                    {{ p?.name }}
+                  </span>
+                </a>
+              </div>
+              <div class="col">
+                <span>{{ p?.start_date }}</span>
+              </div>
+              <div class="col">
+                <span>{{p?.completes }} / {{p?.completes_required }}</span>
+              </div>
+              <div class="col">
+                <span>{{p?.completion_rate}}</span>
+              </div>
+              <div class="col">
+                <span>{{p?.response_rate}}</span>
+              </div>
+              <div class="col">
+                <span></span>
+              </div>
+              <div class="col">
+                <span>{{p?.quotaFulls}}</span>
+              </div>
+              <div class="col">
+                <span>{{p?.status}}</span>
+              </div>
+              <div class="col more">
+                <span
+                  [hidden]="(p.status == '4' && p.completes != '0') || (p.status == '4' && p.screenouts != '0') || (p.status == '4' && p.quotaFulls != '0')"><i
+                    class="ico-moon icon-more"></i></span>
+                <ul class="action-popup">
+                  <li *ngIf="p.status == '3' || p.status == '2'">
+                    <a href="javascript:void(0);" (click)="changeStatus(p, 1,'i', p.id+'inactive',  p.id+'inlodImg')">
+                      <i class="ico-moon icon-right green" id="{{p.id}}inactive"></i>
+                      <img src="assets/img/loading.gif" alt="loderImg" id="{{p.id}}inlodImg" class="loderImg">
+                      Activate
+                    </a>
+                  </li>
+                  <li *ngIf="p.status == '1'">
+                    <a href="javascript:void(0);"
+                      (click)="changeStatus(p, 2,'i' , p.id+'inpause',  p.id+'inlodImgpuse')">
+                      <i class="ico-moon icon-pause yellow" id="{{p.id}}inpause"></i>
+                      <img src="assets/img/loading.gif" alt="loderImg" id="{{p.id}}inlodImgpuse" class="loderImg">
+                      Pause</a>
+                  </li>
+                  <li *ngIf="p.status == '1' || p.status == '2'">
+                    <a href="javascript:void(0);"
+                      (click)="changeStatus(p, 4,'i' , p.id+'instop',  p.id+'inlodImgstop')">
+                      <i class="ico-moon icon-stop red" id="{{p.id}}instop"></i>
+                      <img src="assets/img/loading.gif" alt="loderImg" id="{{p.id}}inlodImgstop" class="loderImg">
+                      Close</a>
+                  </li>
+                  <li *ngIf="p.status == '3'">
+                    <a href="javascript:void(0);" (click)="delete(p, 'i' , p.id+'inactive',  p.id+'inlodImg')">
+                      <i class="ico-moon icon-trash orange"></i>
+                      Delete</a>
+                  </li>
+                  <li *ngIf="p.status == '2' && p.completes == '0' && p.screenouts == '0' && p.quotaFulls == '0'">
+                    <a href="javascript:void(0);" (click)="delete(p, 'i' , p.id+'inactive',  p.id+'inlodImg')">
+                      <i class="ico-moon icon-trash orange"></i>
+                      Delete</a>
+                  </li>
+                  <li *ngIf="p.status == '4' && p.completes == '0' && p.screenouts == '0' && p.quotaFulls == '0'">
+                    <a href="javascript:void(0);" (click)="delete(p, 'i' , p.id+'inactive',  p.id+'inlodImg')">
+                      <i class="ico-moon icon-trash orange"></i>
+                      Delete</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Table Ends -->
+    </div>
+  </div>
+  <div class="paginationBox" *ngIf="(projects | filterBy: proFilter)?.length > 0">
+    <div class="pagination justify-content-center">
+      <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+    </div>
+    <div class="rowsBox">
+      <div class="actionBox">
+        <!-- <div class="actionBtn">Rows</div> -->
+        <select class="select-box-class" (change)="perPage(perpage);" [(ngModel)]="perpage" name="perpage">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="confirmBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+          </button>
+        </div>
+        <div class="modal-body confirm-box">
+          <h2>Confirm</h2>
+          <p> {{popupMess}}</p>
+          <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+            <span id="confirmtxtid">Confirm</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+          <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

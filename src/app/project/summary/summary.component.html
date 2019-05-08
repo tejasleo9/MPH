@@ -1,0 +1,241 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+    <!-- overview page-->
+    <div class="card ">
+      <ul class="overview-links">
+        <li class="active"><a routerLink="/project/overview">Overview</a></li>
+        <li><a (click)="redirect('tg');" href="javascript:void(0)" [class.disabled]="disabled ? true : null">Target
+            Groups</a></li>
+        <li><a (click)="redirect('sch');" href="javascript:void(0)" [class.disabled]="disabled ? true : null">Scheduling</a></li>
+      </ul>
+      <div class="overview-tab">
+        <div class="h-tab-content">
+          <div class="row sumry-cont">
+            <div class="col-md-4">
+              <div class="sped-grp">
+                <h3 class="bol-title">Brand Awareness Tracker June 2018</h3>
+                <div class="gauge-chart">
+                  <!-- <svg viewBox="0 0 80 40" class="gauge">
+                <circle class="donut-ring" stroke-linecap="round" cx="40" cy="40" r="31.8309886184" fill="transparent" stroke="#f5f6fa" stroke-width="4"></circle>
+                <circle class="donut-segment" stroke-linecap="round" cx="40" cy="40" r="31.8309886184" fill="transparent" stroke="#4c84ff" stroke-width="4" stroke-dasharray="85 135" stroke-dashoffset="-100">
+                  <animate attributeType='XML' attributeName='stroke-dasharray' values='0 200; 20 180 ; 50 150; 65 135; 85 135;' keyTimes='0; 0.4; 0.6; 0.7; 1' dur='2.5s' repeatCount='1'>
+                </circle>
+                <text x="40" y="29.5" class="gauge-text">65%</text>
+                <div class="sped-cont">
+                  <span>252/500</span>
+                  <p>Completes</p>
+                </div>
+              </svg> -->
+                  <div class="spe-det">
+                    <p>ID: <span>789562</span></p>
+                    <p>Market: <span>Single, Multiple</span></p>
+                  </div>
+                </div>
+              </div>
+              <div class="selected-box">
+                <div class="selected-listname generate-urlbox">
+                  <h3 class="bol-title">Redirect Links</h3> <a href="javascript:void(0);" class="trash-btn"><i class="icon-trash"></i>
+                    Delete
+                    All</a>
+                  <div class="clearfix"></div>
+                  <ul>
+                    <li>http://www.google.com</li>
+                    <li>http://www.twitter.com</li>
+                    <li>http://www.yahoo.com</li>
+                    <li>http://www.facebook.com</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="target-tab">
+                <div class="profile-left sum-bor target-w100">
+                  <div class="t-head-box">
+                    <div class="t-head-heading">
+                      <h2 class="bol-title">Pricing Table
+                        <div class="inlineLoader" *ngIf="!pricingTableShow"><img src="assets/img/loading.gif" alt="loderImg"></div>
+                      </h2>
+                    </div>
+                  </div>
+
+                  <div class="t-table-box" *ngIf="pricingTableShow">
+                    <div class="myTable">
+                      <div class="myTableHead">
+                        <div class="row">
+                          <div class="col"><span>Supply Source</span> </div>
+                          <div class="col"><span>CPI</span></div>
+                          <div class="col"><span>Completes</span></div>
+                          <div class="col"><span>Current Cost</span></div>
+                          <div class="col"><span>Estimated Cost</span></div>
+                        </div>
+                      </div>
+                      <div class="myTableBody bg-color-gry" *ngFor="let item of pricingTableRes">
+                        <div class="row">
+                          <div class="col"><span>{{item.supply_source}}</span></div>
+                          <div class="col"><span>$ {{item.cpi}}</span></div>
+                          <div class="col"><span>{{item.current_completes}}</span></div>
+                          <div class="col"><span>$ {{item.current_cost}}</span></div>
+                          <div class="col"><span>$ 1.10</span></div>
+                        </div>
+                      </div>
+                      <div class="myTableBody total-sum">
+                        <div class="row">
+                          <div class="col"><span>Total Cost</span></div>
+                          <div class="col"><span>&nbsp;</span></div>
+                          <div class="col"><span>&nbsp;</span></div>
+                          <div class="col"><span>$ {{total_current_cost}}</span></div>
+                          <div class="col"><span>$ 111.10</span></div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Table Ends -->
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="target-tab">
+                <div class="profile-left sum-bor target-w100">
+                  <div class="t-head-box">
+                    <div class="t-head-heading">
+                      <h2 class="bol-title">Stats
+                        <div class="inlineLoader" *ngIf="!projStatsShow"><img src="assets/img/loading.gif" alt="loderImg"></div>
+                      </h2>
+                    </div>
+                  </div>
+                  <div class="t-table-box" *ngIf="projStatsShow">
+                    <div class="myTable">
+                      <div class="myTableHead">
+                        <div class="row">
+                          <div class="col"><span>&nbsp;</span> </div>
+                          <div class="col"><span>External</span></div>
+                          <div class="col"><span>Internal</span></div>
+                          <div class="col"><span>Total</span></div>
+                        </div>
+                      </div>
+                      <div class="myTableBody bg-color-gry" *ngFor="let stat of projstat">
+                        <div class="row">
+                          <div class="col"><span>{{stat}}</span></div>
+                          <div class="col"><span>{{projStatsRes[stat]['External']}}</span></div>
+                          <div class="col"><span>{{projStatsRes[stat]['Internal']}}</span></div>
+                          <div class="col"><span>{{projStatsRes[stat]['Total']}}</span></div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Table Ends -->
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="target-tab">
+            <div class="profile-lef sum-bor target-w100">
+              <div class="t-head-box">
+                <div class="t-head-heading">
+                  <h2 class="bol-title">Quotas</h2>
+                </div>
+                <div class="actionBox">
+                  <div class="actionBtn">Target Group</div>
+                  <ul class="action-popup">
+                    <li><a href="javascript:void(0);"><i class="ico-moon icon-pencil blue"></i> Edit</a></li>
+                    <li><a href="javascript:void(0);"><i class="ico-moon icon-right green"></i> Download</a></li>
+                    <li><a href="javascript:void(0);"><i class="ico-moon icon-trash orange"></i> Delete</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="t-table-box">
+                <div class="myTable">
+                  <div class="myTableHead">
+                    <div class="row">
+                      <div class="col"><span>Quotast</span> </div>
+                      <div class="col"><span>Label</span></div>
+                      <div class="col"><span>Label</span></div>
+                      <div class="col"><span>Label</span></div>
+                    </div>
+                  </div>
+                  <div class="myTableBody bg-color-gry">
+                    <div class="row">
+                      <div class="col"><span>18-25 - Male - Delhi</span></div>
+                      <div class="col"><span>0</span></div>
+                      <div class="col"><span>Value</span></div>
+                      <div class="col"><span>2001</span></div>
+                    </div>
+                  </div>
+                  <div class="myTableBody bg-color-gry">
+                    <div class="row">
+                      <div class="col"><span>18-25 - Male - Delhi</span></div>
+                      <div class="col"><span>0</span></div>
+                      <div class="col"><span>Value</span></div>
+                      <div class="col"><span>2001</span></div>
+                    </div>
+                  </div>
+                  <div class="myTableBody bg-color-gry">
+                    <div class="row">
+                      <div class="col"><span>18-25 - Male - Delhi</span></div>
+                      <div class="col"><span>0</span></div>
+                      <div class="col"><span>Value</span></div>
+                      <div class="col"><span>2001</span></div>
+                    </div>
+                  </div>
+                  <div class="myTableBody bg-color-gry">
+                    <div class="row">
+                      <div class="col"><span>18-25 - Male - Delhi</span></div>
+                      <div class="col"><span>0</span></div>
+                      <div class="col"><span>Value</span></div>
+                      <div class="col"><span>2001</span></div>
+                    </div>
+                  </div>
+                  <div class="myTableBody bg-color-gry">
+                    <div class="row">
+                      <div class="col"><span>18-25 - Male - Delhi</span></div>
+                      <div class="col"><span>0</span></div>
+                      <div class="col"><span>Value</span></div>
+                      <div class="col"><span>2001</span></div>
+                    </div>
+                  </div>
+                  <div class="myTableBody bg-color-gry">
+                    <div class="row">
+                      <div class="col"><span>18-25 - Male - Delhi</span></div>
+                      <div class="col"><span>0</span></div>
+                      <div class="col"><span>Value</span></div>
+                      <div class="col"><span>2001</span></div>
+                    </div>
+                  </div>
+                  <div class="myTableBody bg-color-gry">
+                    <div class="row">
+                      <div class="col"><span>18-25 - Male - Delhi</span></div>
+                      <div class="col"><span>0</span></div>
+                      <div class="col"><span>Value</span></div>
+                      <div class="col"><span>2001</span></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Table Ends -->
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="profile-btn m-auto">
+            <button class="button2">Edit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <!-- overview page-->
+  <div class="card ">
+    <ul class="overview-links endpage-navbar">
+      <li class="active"><a routerLink="settings">Overview</a></li>
+      <li><a routerLink="/panel/settings/communication-template">Communication Templates</a></li>
+      <li><a routerLink="/panel/settings/incentive-model">Incentive Model </a></li>
+      <li><a routerLink="/panel/settings/endpage">End pages</a></li>
+    </ul>
+    <div class="target-tab custom-target-tab settings-overview">
+      <form #f="ngForm" (ngSubmit)="onSubmitClik(f, 'confirmtxtid', 'confirmlodImg');">
+        <div class="col-6">
+          <div class="w-100">
+            <div class="row">
+              <div class="col-6">
+                <div class="input-box">
+                  <label class="inp-label">Name</label>
+                  <input type="text" placeholder="eg. mumbai ux group" #panelname="ngModel" name="name"
+                    [(ngModel)]="dataObj.name" class="inp-field" required>
+                  <div *ngIf="panelname.touched && !panelname.valid">
+                    <div class="validation-message" *ngIf="panelname.errors.required">required</div>
+                  </div>
+                  <div id="name" class="display-none"></div>
+                </div>
+              </div>
+              <div class="col-6">
+                <ng-select class="rch-ind drop-select ngselmargin" placeholder="Select Option"
+                  [(ngModel)]="dataObj.country_id" label="Country" name="country_id" [options]="countryOptions"
+                  required>
+                </ng-select>
+                <div id="country_idd" class="validation-message d-none">
+                  <div>Required</div>
+                </div>
+                <div id="country_id" class="display-none"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <ng-select class="rch-ind drop-select ngselmargin" placeholder="Select Option"
+                  [(ngModel)]="dataObj.language_id" label="Language" name="language_id" [options]="languageOptions"
+                  required>
+                </ng-select>
+                <div id="language_idd" class="validation-message d-none">
+                  <div>Required</div>
+                </div>
+                <div id="language_id" class="display-none"></div>
+              </div>
+              <div class="col-6">
+                <ng-select class="rch-ind drop-select ngselmargin" placeholder="Select Option"
+                  [options]="industryOptions" [(ngModel)]="dataObj.research_industry_id" label="Industry"
+                  name="research_industry_id" id="industry" (selected)="getCategoriesFn(dataObj.research_industry_id)"
+                  required>
+                </ng-select>
+                <div id="research_industry_idd" class="validation-message d-none">
+                  <div>Required</div>
+                </div>
+                <div id="research_industry_id" class="display-none"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <ng-select class="rch-ind drop-select ngselmargin" [options]="categoriesOptions"
+                  [(ngModel)]="dataObj.research_categories" label="Categories" name="research_categories"
+                  id="categories" [multiple]="true">
+                </ng-select>
+                <div id="research_categoriess" class="validation-message d-none">
+                  <div>Required</div>
+                </div>
+                <div id="research_categories" class="display-none"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-12">
+          <div class="new-panel">
+            <div class="input-box">
+              <label class="inp-label">Choose incentive redemption option</label>
+              <div class="custom-checkbox only-checkbox"> <input type="checkbox" id="chk1" [(ngModel)]="manual"
+                  name="manual"> <label for="chk1">
+                  Manual</label> </div>
+              <div class="custom-checkbox only-checkbox"> <input type="checkbox" id="chk2" [(ngModel)]="auto"
+                  name="auto">
+                <label for="chk2">
+                  Auto</label>
+              </div>
+              <div id="incentive_redemption_options" class="display-none"></div>
+            </div>
+            <div class="img-upload">
+              <input id="fileUpload" class="fileUpload" type="file" [(ngModel)]="logo" name="logo"
+                (change)="detectFiles1($event, logo)" />
+              <label for="fileUpload" class="up-img"><span><img src="assets/img/upload.png"
+                    alt="upload img missing"></span>Upload
+                Logo</label>
+              <span class="thumb-img" *ngIf="dataObj.logo != 'NULL' || dataObj.logo != ''">
+                <div class="image-holder view-img"><img
+                    [src]="url == null ? 'http://m4-live.mysurveyhub.com/'+dataObj.logo : url" class="thumb-image"
+                    alt="">
+                </div>
+                <a href="javascript:void(0);" class="btnDelete" (click)="removeImgUploadFn1(dataObj)"><img
+                    src="assets/img/cross-red.png" alt="cross image" class="w-100" /></a>
+              </span>
+              <div id="logo" class="display-none"></div>
+              <div class="clear"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="input-box copy-box">
+            <label class="inp-label">Login/Signup URL</label>
+            <input type="text" id="myInput" disabled [(ngModel)]="dataObj.login_link" name="login_link"
+              class="inp-field">
+            <a href="javascript:void(0);" ngxClipboard [cbContent]="dataObj.login_link"
+              (cbOnSuccess)="cs.copied($event)" class="copy-url" (cbOnError)="cs.onCopyFailure()"><i
+                class="icon icon-copy"></i>Copy URL</a>
+          </div>
+        </div>
+        <button href="javascript:void(0);" class="button1 nav-btn mt-3 ml-3">
+          <span id="confirmtxtid">Update</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

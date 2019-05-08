@@ -1,0 +1,71 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+
+<div class="h-tab-content">
+
+  <div class="t-head-box">
+    <div class="t-head-heading panel-icon c-pointer" (click)="cs.back();">
+      <h2><i class="icon icon-arrow-left"></i> Import Panelists</h2>
+    </div>
+  </div>
+
+  <!-- overview page-->
+  <div class="overview-tab new-panel t-table-box ">
+    <div class="row">
+      <div class="col-6">
+        <form #f="ngForm" (ngSubmit)="importSubmit(f,'txtIdpoints', 'loderIdpoints');">
+          <!-- <h3 class="inp-label">Import</h3> -->
+          <div class="region-radio radio-set">
+            <span>
+              <input type="radio" name="upload_type" id="reg1" value="1" [(ngModel)]="upload_type" checked="true">
+              <label for="reg1">New Import</label>
+            </span>
+            <span>
+              <input type="radio" name="upload_type" id="reg2" value="2" [(ngModel)]="upload_type">
+              <label for="reg2">Update Existing</label>
+            </span>
+          </div>
+          <hr>
+          <div class="per-status">
+            <h3 class="inp-label">Panelists Status</h3>
+            <div class="List-Project">
+              <div class="switch switch--horizontal switch--myRedio">
+                <input id="radio-o" type="radio" name="panelist_status" value="1" checked="checked" class="redio-four" [(ngModel)]="panelist_status"/>
+                <label for="radio-o" class="first-lab">Active</label>
+                <input id="radio-0f" type="radio" name="panelist_status" value="4" class="redio-four" [(ngModel)]="panelist_status"/>
+                <label for="radio-0f" class="off ">Not Validated</label>
+                <span class="toggle-outside redio-four"><span class="toggle-inside"></span></span>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <hr>
+            <h3 class="inp-label">Download Sample CSV files</h3>
+            <ul class="dowld-templt">
+              <li><small>Template to import new panelists </small><a href="assets/downloads/panelist_Insert_example.csv" download><i class="icon-arrow-down-filled"></i> Download</a></li>
+              <li><small>Vaidate your file to import new panelist </small><a href="assets/downloads/Import_panelist_validated_file.xlsm" download><i class="icon-arrow-down-filled"></i>Download</a></li>
+              <li><small>Update panelists </small><a href="assets/downloads/update_panelist_question.csv" download><i class="icon-arrow-down-filled"></i> Download</a></li>
+            </ul>
+            <hr>
+            <h3 class="inp-label">Upload CSV file</h3>
+            <label class="custom-file" id="customFile">
+              <input type="file" class="custom-file-input" id="exampleInputFile" (change)="getCsvFile($event);" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" aria-describedby="fileHelp" required />
+              <span class="custom-file-control form-control-file">{{fileName}}</span>
+            </label>
+            <div id="file" class="display-none mb-2"></div>
+            <div *ngIf="is_exist" class="cust-error mb-2">file is required</div>
+            <button class="button2" type="submit" [disabled]="is_disable">
+              <span id="txtIdpoints">Import Panelists</span>
+              <img src="assets/img/loading.gif" alt="loderImg" id="loderIdpoints" class="loderImg">
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

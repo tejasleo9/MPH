@@ -1,0 +1,655 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+
+  <app-sub-header></app-sub-header>
+
+  <div class="h-tab-content">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Panel Name</a></li>
+        <li class="breadcrumb-item"><a href="#">Recruitment</a></li>
+        <li class="breadcrumb-item active" aria-current="page"> Tracking</li>
+      </ol>
+    </nav>
+
+    <div class="row">
+      <div class="col points-card">
+        <div class="color color-lgrn">
+          <h4>2523</h4><span>Registration Hits</span>
+        </div>
+      </div>
+      <div class="col points-card">
+        <div class="color color-lylw">
+          <h4>2523</h4><span>Registered Panelists </span>
+        </div>
+      </div>
+      <div class="col points-card">
+        <div class="color color-lprpl1">
+          <h4>2523</h4><span>Total Activation</span>
+        </div>
+      </div>
+      <div class="col points-card">
+        <div class="color color-lorg">
+          <h4>2523</h4><span>Unsubscribed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="trac-heading">
+      <h2>Timeline Report</h2>
+    </div>
+
+    <div class="bar-chart">
+      <div class="date-functn  datepicker-box">
+        <div id="datepicker2" class="input-group date" data-date-format="dd-mm-yyyy">
+          <span class="heading">To</span>
+          <input class="form-control" type="text" />
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+        <div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
+          <span class="heading">From</span>
+          <input class="form-control" type="text" placeholder="dsfasdfas" />
+          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <canvas id="myChart1" class="bg-white"></canvas>
+    </div> <!-- bar-chart End -->
+
+
+    <div class="bg-white overview-source traking-margin">
+      <div class="t-head-box">
+        <div class="t-head-heading">
+          <h2>Overview by source</h2>
+        </div>
+        <div class="t-head-action">
+          <ul>
+            <li>
+              <div class="searchAdv">
+                <input type="text" placeholder="Search" class="searchFld"><button class="srchBtn"></button>
+                <div class="srch-popup">
+                  <div class="row">
+                    <div class="col-12">
+                      <h2>Advance Search</h2>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="btnSec d-flex justify-content-between align-content-center">
+                        <button class="button2">Search</button>
+                        <a href="#" class="btnReset">Reset</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!--  -->
+      <div class="t-table-box">
+        <div class="myTable">
+          <div class="myTableHead">
+            <div class="row">
+              <div class="col flex2"><span>Affiliate Name<i class="ico-moon icon-sort"></i></span> </div>
+              <div class="col"><span>No of campaigns<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Total Hits<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Registrations<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Activation<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Utilization <i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Currently Active <i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Conversion Rate <i class="ico-moon icon-sort"></i></span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>MPS Group Inc.</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Washington Post Co.</span> </div>
+              <div class="col"><span>9</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Watsco Inc</span></div>
+              <div class="col"><span>21</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Expeditors International of Washington Inc.</span></div>
+              <div class="col"><span>21</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Ingles Market Inc</span></div>
+              <div class="col"><span>21</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Kroger Co.</span></div>
+              <div class="col"><span>21</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>AMR Corporation</span></div>
+              <div class="col"><span>21</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Air Products and Chemicals, Inc.</span></div>
+              <div class="col"><span>21</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>PNC Financial Services Group Inc.</span></div>
+              <div class="col"><span>21</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>The Black & Decker Corporation</span></div>
+              <div class="col"><span>21</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+              <div class="col"><span>1550</span></div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- Table Ends -->
+
+      <div class="paginationBox paginationBox-margin">
+        <ul class="pagination justify-content-center">
+          <li class="page-item"><a class="page-link" href="#"><i class="ico-moon icon-arrow-left"></i></a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#"><i class="ico-moon icon-arrow-right"></i></a></li>
+        </ul>
+        <div class="rowsBox">
+          <div class="actionBox">
+            <div class="actionBtn">Rows</div>
+            <ul class="action-popup">
+              <li><a href="#">10</a></li>
+              <li><a href="#">20</a></li>
+              <li><a href="#">30</a></li>
+              <li><a href="#">50</a></li>
+              <li><a href="#">100</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white overview-source traking-margin">
+      <div class="t-head-box">
+        <div class="t-head-heading">
+          <h2>Panel distribution by source</h2>
+        </div>
+        <div class="t-head-action">
+          <ul>
+            <li>
+              <div class="searchAdv">
+                <input type="text" placeholder="Search" class="searchFld"><button class="srchBtn"></button>
+                <div class="srch-popup">
+                  <div class="row">
+                    <div class="col-12">
+                      <h2>Advance Search</h2>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="btnSec d-flex justify-content-between align-content-center">
+                        <button class="button2">Search</button>
+                        <a href="#" class="btnReset">Reset</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!--  -->
+      <div class="t-table-box">
+        <div class="myTable">
+          <div class="myTableHead">
+            <div class="row">
+              <div class="col"><span>Source<i class="ico-moon icon-sort"></i></span> </div>
+              <div class="col"><span>Region<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>North<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>East<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>West<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>South <i class="ico-moon icon-sort"></i></span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>MPS Group Inc.</span> </div>
+              <div class="col"><span>Virginia</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Washington Post Co.</span> </div>
+              <div class="col"><span>Colorado</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Watsco Inc</span></div>
+              <div class="col"><span>Alabama</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Expeditors International of Washington Inc.</span></div>
+              <div class="col"><span>Missouri</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Ingles Market Inc</span></div>
+              <div class="col"><span>Colorado</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Washington Post Co.</span> </div>
+              <div class="col"><span>Colorado</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Watsco Inc</span></div>
+              <div class="col"><span>Alabama</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Expeditors International of Washington Inc.</span></div>
+              <div class="col"><span>Missouri</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Ingles Market Inc</span></div>
+              <div class="col"><span>Colorado</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+              <div class="col"><span>25</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div> <!-- Table Ends -->
+
+      <div class="paginationBox paginationBox-margin">
+        <ul class="pagination justify-content-center">
+          <li class="page-item"><a class="page-link" href="#"><i class="ico-moon icon-arrow-left"></i></a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#"><i class="ico-moon icon-arrow-right"></i></a></li>
+        </ul>
+        <div class="rowsBox">
+          <div class="actionBox">
+            <div class="actionBtn">Rows</div>
+            <ul class="action-popup">
+              <li><a href="#">10</a></li>
+              <li><a href="#">20</a></li>
+              <li><a href="#">30</a></li>
+              <li><a href="#">50</a></li>
+              <li><a href="#">100</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white overview-source traking-margin">
+      <div class="t-head-box">
+        <div class="t-head-heading">
+          <h2>Panel distribution by source</h2>
+        </div>
+        <div class="t-head-action">
+          <ul>
+            <li>
+              <div class="searchAdv">
+                <input type="text" placeholder="Search" class="searchFld"><button class="srchBtn"></button>
+                <div class="srch-popup">
+                  <div class="row">
+                    <div class="col-12">
+                      <h2>Advance Search</h2>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="input-box">
+                        <label class="inp-label">Project Name</label>
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="btnSec d-flex justify-content-between align-content-center">
+                        <button class="button2">Search</button>
+                        <a href="#" class="btnReset">Reset</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!--  -->
+      <div class="t-table-box">
+        <div class="myTable">
+          <div class="myTableHead">
+            <div class="row">
+              <div class="col"><span>Source<i class="ico-moon icon-sort"></i></span> </div>
+              <div class="col"><span>App Users<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Gender <br> Male <i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Female<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>Age <br> 14-35 <i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>35-55<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>55-75<i class="ico-moon icon-sort"></i></span></div>
+              <div class="col"><span>75-80<i class="ico-moon icon-sort"></i></span></div>
+            </div>
+          </div>
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>MPS Group Inc.</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Washington Post Co.</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Watsco Inc</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Expeditors International Inc.</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Ingles Market Inc</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Kroger Co.</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>AMR Corporation</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>Air Products and Chemicals, Inc.</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>PNC Financial Services Group Inc.</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+          <div class="myTableBody bg-color-gry">
+            <div class="row">
+              <div class="col"><span>The Black & Decker Corporation</span> </div>
+              <div class="col"><span>5</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+              <div class="col"><span>45</span></div>
+            </div>
+          </div> <!-- myTableBody End-->
+
+        </div>
+      </div> <!-- Table Ends -->
+
+      <div class="paginationBox paginationBox-margin">
+        <ul class="pagination justify-content-center">
+          <li class="page-item"><a class="page-link" href="#"><i class="ico-moon icon-arrow-left"></i></a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#"><i class="ico-moon icon-arrow-right"></i></a></li>
+        </ul>
+        <div class="rowsBox">
+          <div class="actionBox">
+            <div class="actionBtn">Rows</div>
+            <ul class="action-popup">
+              <li><a href="#">10</a></li>
+              <li><a href="#">20</a></li>
+              <li><a href="#">30</a></li>
+              <li><a href="#">50</a></li>
+              <li><a href="#">100</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

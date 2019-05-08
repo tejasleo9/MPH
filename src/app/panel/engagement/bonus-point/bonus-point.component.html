@@ -1,0 +1,57 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <!-- <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/panel">Panel</a></li>
+      <li class="breadcrumb-item"><a routerLink="/panel/engagement">Engagement</a></li>
+      <li class="breadcrumb-item active">Bonus Point</li>
+    </ol>
+  </nav> -->
+
+  <div class="t-head-heading panel-icon">
+    <h2>Bonus Point</h2>
+  </div>
+  <div class="t-table-box new-panel bonus-input">
+    <div class="row">
+      <div class="col-6 border-right">
+        <form (ngSubmit)="onSubmit(form, 'confirmtxtid', 'confirmlodImg')" ngNativeValidate #form="ngForm">
+          <div class="row">
+            <div class="input-box col-6" *ngFor="let b of bonusPoints;let i = index;">
+              <label for="" class="inp-label">{{b?.key}}</label>
+              <input type="number" placeholder="eg. mumbai ux group" class="inp-field" value="{{b?.value}}"
+                name="{{b?.keyname}}" id="{{b?.keyname}}" [(ngModel)]="b.value">
+            </div>
+            <div class="add-temp col">
+              <button href="javascript:void(0);" appAppNoDblClick class="button1 nav-btn">
+                <span id="confirmtxtid">Update</span>
+                <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-6 padding-left">
+        <div class="bonus-para">
+          <h3>Registration - Web</h3>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+            scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
+            into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+            release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
+            software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+        </div>
+        <div class="bonus-para">
+          <h3>Registration - App</h3>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+            industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+            scrambled it to make a type specimen book. </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

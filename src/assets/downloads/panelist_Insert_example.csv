@@ -1,0 +1,3 @@
+Member_ID;EmailAddress;Phone Number;Phone Number Secondary;Sex;PostalCode;YearOfBirth;EmailAddress 2;First Name;Middle Name;Last Name;Fax;Fax Secondary;Address;2600;2601
+dddddd91;123.member1@panel.com;1231198938;4321918938;1;560040;1983;432.member1.sec@panel.com;firstname;middlename;lastname;1233223123;1231212312;Address;57527;57528
+eeeew2;432.member2@panel.com;989111114;9898999992;2;560040;1989;32member2.sec@panel.com;firstname;middlename;lastname;1231232144;9899234672;Address;57527;57529|57528

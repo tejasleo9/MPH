@@ -1,0 +1,174 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <!-- <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/panel">Panel</a></li>
+      <li class="breadcrumb-item"><a routerLink="/panel/incentive">Incentive</a></li>
+      <li class="breadcrumb-item active">Instant Redemption</li>
+    </ol>
+  </nav> -->
+  <!-- Projects -->
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2> Instant Redemption </h2>
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li>
+          <div class="searchAdv">
+            <input type="text" placeholder="Search" class="searchFld" [(ngModel)]="redeemFilter.method_name">
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="t-table-box">
+    <div class="myTable">
+      <div class="myTableHead">
+        <div class="row">
+          <div class="col"><span (click)="sortData('method_name')">Payment Method</span></div>
+          <div class="col"><span (click)="sortData('monthdate')">Month</span></div>
+          <div class="col"><span (click)="sortData('total_points')">Total Points <i
+                class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('total_transactions')">Total Transaction <i
+                class="ico-moon icon-sort"></i></span></div>
+          <div class="col more"><span>&nbsp;</span></div>
+        </div>
+      </div>
+      <div class="message error centererror" *ngIf="(redeemlist | filterBy: redeemFilter)?.length === 0">No Redemption
+        Payment Found</div>
+      <div>
+        <div class="myTableBody"
+          *ngFor="let rlist of redeemlist | paginate: { itemsPerPage: pageSize, currentPage: cPage, totalItems: total } | orderBy: order : reverse : true | filterBy: redeemFilter;">
+          <div class="row">
+            <div class="col"><span>{{rlist?.method_name}}</span></div>
+            <div class="col"><span>{{rlist?.monthdate}}</span></div>
+            <div class="col"><span>{{rlist?.total_points}}</span></div>
+            <div class="col"><span>{{rlist?.total_transactions}}</span></div>
+            <div class="col more"><span> <a href="javascript:void(0)" [href]="rlist?.url" download><i
+                    class="ico-moon icon-download blue"></i></a></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="paginationBox" *ngIf="(redeemlist | filterBy: redeemFilter)?.length != 0">
+  <div class="pagination justify-content-center">
+    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  </div>
+  <div class="rowsBox" *ngIf="(redeemlist | filterBy: redeemFilter)?.length != 0">
+    <div class="actionBox">
+      <!-- <div class="actionBtn">Rows</div> -->
+      <select class="select-box-class" (change)="perPage(perpage);" [(ngModel)]="perpage" name="perpage">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- modalpopup -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2>Add Exclusion List</h2>
+        <div class="switch switch--horizontal switch--myRedio">
+          <input id="radio-o" type="radio" name="tptSwitch" value="tptOn" checked="checked" class="redio-four"
+            onchange="tptCheck('tptOn')" />
+          <label for="radio-o" class="first-lab">Include</label>
+          <input id="radio-0f" type="radio" name="tptSwitch" value="tptOff" class="redio-four"
+            onchange="tptCheck('tptOff')" />
+          <label for="radio-0f" class="off ">Exclude</label>
+          <span class="toggle-outside redio-four"><span class="toggle-inside"></span></span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="tptCheckingBox">
+          <div class="searchAdv">
+            <input type="text" placeholder="Select Filter Option" class="searchFld">
+            <button class="srchBtn"></button>
+            <a href="#" class="add-icon"><img src="./assets/img/add.png" alt=""></a>
+          </div>
+
+          <div class="clearfix"></div>
+          <div class="filter-heading">
+            <h3>Filter Criteria </h3> <i class="icon-refresh"><span> Clear</span></i>
+            <div class="clearfix"></div>
+            <textarea name="" id="" cols="20" rows="7"></textarea>
+          </div>
+
+          <p class="exclutn-para">Download <a href="#">Example File </a> based on criteria.
+            <span>Example: Lorem ipsum dolor sit amet, (consectetur) adipiscing elit. (Aliquam) at porttitor sem.
+            </span></p>
+
+          <div class="form-group filter-heading">
+            <h3>File</h3>
+            <label class="custom-file" id="customFile">
+              <input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp">
+              <span class="custom-file-control form-control-file"></span>
+            </label>
+          </div>
+
+          <div class="datepicker-box">
+            <div id="datepicker" class="input-group date" data-date-format="dd-mm-yyyy">
+              <input class="form-control" type="text" />
+              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+          </div>
+          <button class="button2">Add Exclusion</button>
+        </div>
+        <div class="tptCheckingBox2">
+          <div class="searchAdv">
+            <input type="text" placeholder="Select Filter Option" class="searchFld">
+            <button class="srchBtn"></button>
+            <a href="#" class="add-icon"><img src="./assets/img/add.png" alt=""></a>
+          </div>
+
+          <div class="clearfix"></div>
+          <div class="filter-heading">
+            <h3>Filter Criteria 2</h3> <i class="icon-refresh"><span> Clear</span></i>
+            <div class="clearfix"></div>
+            <textarea name="" id="" cols="20" rows="7"></textarea>
+          </div>
+
+          <p class="exclutn-para">Download <a href="#">Example File </a> based on criteria.
+            <span>Example: Lorem ipsum dolor sit amet, (consectetur) adipiscing elit. (Aliquam) at porttitor sem.
+            </span></p>
+
+          <div class="form-group filter-heading">
+            <h3>File</h3>
+            <label class="custom-file" id="customFile">
+              <input type="file" class="custom-file-input" id="exampleInputFile" aria-describedby="fileHelp">
+              <span class="custom-file-control form-control-file"></span>
+            </label>
+          </div>
+
+          <div class="datepicker-box">
+            <div id="datepicker2" class="input-group date" data-date-format="dd-mm-yyyy">
+              <input class="form-control" type="text" />
+              <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+            </div>
+          </div>
+          <button class="button2">Add Exclusion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modalpopup -->

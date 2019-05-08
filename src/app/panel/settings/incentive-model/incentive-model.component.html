@@ -1,0 +1,74 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+<div class="h-tab-content">
+  <div class="card ">
+    <ul class="overview-links endpage-navbar">
+      <li><a routerLink="/panel/settings/">Overview</a></li>
+      <li><a routerLink="/panel/settings/communication-template">Communication Templates</a></li>
+      <li class="active"><a routerLink="/panel/settings/incentive-model">Incentive Model </a></li>
+      <li><a routerLink="/panel/settings/endpage">End pages</a></li>
+    </ul>
+    <div class="target-tab">
+      <div class="t-table-box target-w100">
+        <div class="myTable">
+          <div class="myTableHead">
+            <div class="row">
+              <div class="col"><span>LOI Range</span></div>
+              <!-- <div class="col col-7"><button class="button1 nav-btn" [disabled]="is_disabled"
+                  (click)="addIncentives();">Add +</button> </div> -->
+            </div>
+          </div>
+          <div class="myTableBody">
+            <form #f="ngForm" (ngSubmit)="onSubmitClik(f, 'confirmtxtid', 'confirmlodImg');">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="row" *ngFor="let incetive of incetives; let i=index">
+                    <div class="col-md-3">
+                      <div class="input-box">
+                        <label class="inp-label">From</label>
+                        <input type="number" [disabled]="true" [value]="incetive.from" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="input-box  ml-1">
+                        <label class="inp-label">To</label>
+                        <input type="number" [value]="incetive.to" max="0" [disabled]="incetive.is_disabled" (change)="changeVal(incetive, $event.target.value);"
+                          class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="input-box">
+                        <label class="inp-label"> Points</label>
+                        <input type="number" [value]="incetive.points" max="1"
+                          (change)="pointsValidatin(incetive, $event.target.value);" class="inp-field">
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <a *ngIf="incetives.length== i+1" class="add-btn addbtn c-pointer" (click)="addIncentives();"><i
+                          class="icon-plus blue"></i></a>
+                      <i class="icon-trash red c-pointer ml-3" *ngIf="incetives.length== i+1" (click)="remove(i)"></i>
+                    </div>
+                  </div>
+                  <a *ngIf="incetives.length == 0" class="add-btn c-pointer"><i class="icon-plus blue"
+                      (click)="addIncentives();"></i></a>
+                </div>
+                <div class="col-md-8">
+
+                </div>
+              </div>
+              <button href="javascript:void(0);" [disabled]="is_disabled" [class.disable]="is_disabled" class="button1 nav-btn mt-3">
+                <span id="confirmtxtid">Update</span>
+                <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+                <!-- <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"> -->
+              </button>
+            </form>
+          </div>
+        </div>
+      </div> <!-- Table Ends -->
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>

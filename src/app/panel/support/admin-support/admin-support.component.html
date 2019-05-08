@@ -1,0 +1,121 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content mt-10">
+  <div class="target-heading">
+    <h3 class="heading-1"><i class="icon-arrow-left c-pointer" (click)="cs.back();"></i>View Ticket</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="support-view">
+        <div class="support-heading">
+          <div class="row heading-01">
+            <div class="col">Status</div>
+            <div class="col">Ticket ID</div>
+            <div class="col">Date</div>
+            <div class="col">Panel Name</div>
+          </div>
+          <div class="row heading-02">
+            <div class="col">
+              <span *ngIf="sd.status == 0">Open</span>
+              <span *ngIf="sd.status == 1">Close</span>
+              <span *ngIf="sd.status == 2">In-Progress</span>
+            </div>
+            <div class="col">{{sd?.ticket_number}}</div>
+            <div class="col">{{sd?.datetime?.date}}</div>
+            <div class="col">{{panelDet?.name}}</div>
+          </div>
+        </div>
+        <div class="subject">
+          <ul>
+            <li>
+              <div class="sub-head">
+                <h3>Subject</h3>
+                <p>{{sd?.subject}}</p>
+              </div>
+            </li>
+          </ul>
+          <div class="clear"></div>
+          <div class="sub-head">
+            <h3>Description</h3>
+            <p>{{sd?.message}}</p>
+          </div>
+          <div class="sub-head">
+            <h3 *ngIf="file_path.length != 0">Attached FIles</h3>
+            <div class="attch-gallry" *ngIf="file_path.length != 0">
+              <ul>
+                <li *ngFor="let item of file_path; let i = index"><img src="{{item}}" alt=""></li>
+              </ul>
+            </div>
+            <div class="reply-btn" *ngIf="!reply">
+              <a class="button1 curPOinter" (click)="replayy();">Reply</a>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="post-commt" *ngIf="reply">
+            <h4>Post Comment <span class="reply-close" (click)="reply = false"><img src="./assets/img/cross-red.png"
+                  alt="img" /></span></h4>
+            <form (ngSubmit)="submitComment(form)" novalidate #form="ngForm">
+              <div class="row">
+                <div class="col-md-5">
+                  <ng-select class="rch-ind drop-select" (selected)="disableMessage()" placeholder="Select Option"
+                    label="Status" name="status" [(ngModel)]="dt.status" [options]="statusOptions" required>
+                  </ng-select>
+                  <div id="statusd" class="validation-message d-none">
+                    <div>Required</div>
+                  </div>
+                  <div id="status" class="display-none"></div>
+
+                </div>
+                <div class="col-md-5">
+                  <div class="input-box">
+                    <h3 class="attachFile">Attach</h3>
+                    <input type="file" name="file-1" id="fileUpload1" class="inputfile inputfile-1"
+                      (change)="uploadFile($event)" accept="image/*" multiple="multiple" />
+                    <label for="fileUpload1" class="attach-img custom-class">Choose File</label>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div id="image-holder1" class="prop-pho-hei"> </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="input-box descp-textarea">
+                    <textarea rows="3" placeholder="Write Your Description Here..." name="message"
+                      [(ngModel)]="dt.message" #message1="ngModel" required></textarea>
+                    <ul class="validation-message" *ngIf="message1.invalid && (message1.dirty || message1.touched)">
+                      <li *ngIf="message1.errors.required">Message is required..!</li>
+                    </ul>
+                    <div id="message" class="display-none"></div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <button class="button1"><span>Reply</span></button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="comment-box" *ngIf="comment.length != 0">
+            <h4>Comments</h4>
+          </div>
+          <div class="comment-box" *ngFor="let item of comment; let i = index">
+            <h5>{{item?.user_name}}</h5>
+            <span>
+              <b *ngIf="item.reply_from_type == 0">Panelist</b>
+              <b *ngIf="item.reply_from_type == 1">User</b>
+              | {{item?.created_at}}</span>
+            <div class="attch-gallry" *ngIf="item.file_path.length != 0">
+              <ul>
+                <li *ngFor="let item of item.file_path; let i = index"><img src="{{item}}" alt=""></li>
+              </ul>
+            </div>
+            <p [innerHTML]="item?.message"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

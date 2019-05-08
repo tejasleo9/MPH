@@ -1,0 +1,809 @@
+<app-header></app-header>
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+    <!-- overview page-->
+    <div class="card">
+      <ul class="overview-links">
+        <li><a routerLink="/project/overview" [queryParams]="{ action: action}">Overview</a></li>
+        <li><a routerLink="/project/target-groups" [queryParams]="{ action: action}">Target Groups</a></li>
+        <li class="active"><a routerLink="/project/scheduling" [queryParams]="{ action: action}">Scheduling <span> (
+              {{proname}} )</span></a></li>
+      </ul>
+      <div class="schedule-tab">
+        <ul class="nav nav-tabs tab-bgshdw" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#sch1" role="tab" aria-controls="home"
+              aria-selected="true" (click)="clickFun('qu');">Quotas/Batches</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#sch2" role="tab" aria-controls="profile"
+              aria-selected="false" (click)="clickFun('in');">Invitation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#sch3" role="tab" aria-controls="contact"
+              aria-selected="false" (click)="clickFun('r1');">Reminder 1</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#sch4" role="tab" aria-controls="contact"
+              aria-selected="false" (click)="clickFun('r2');">Reminder 2</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="t-head-box sched-border" style="margin-top: 10px;">
+            <div class="t-head-heading loader-box">
+              <div class="searchAdv custom-adv-width">
+                <ng-select name="industry" label="Target Group" (selected)="getInterlockQuota($event)"
+                  placeholder="Select Option" [options]="tgroups" [(ngModel)]="indid"></ng-select>
+              </div>
+              <div class="searchAdv custom-adv-width">
+                <ng-select name="industry" label="Source" placeholder="Select Option" [options]="sources"
+                  [(ngModel)]="srcId"></ng-select>
+              </div>
+              <!-- <div class="actionBox color-black mph-dropdown">
+                <div class="input-box">
+                  <select class="rch-ind drop-select advdrop" name="status" id="status" [(ngModel)]="src">
+                    <option value="">Select Source</option>
+                    <option *ngFor="let source of sources" value="{{source.source_id}}">{{source.source_name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="loader-img" *ngIf="loader"><img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg"></div> -->
+            </div>
+            <div class="t-head-action">
+              <ul>
+                <li>
+                  <div class="message error" *ngIf="ifError"> <span> Oh snap! </span> {{errorMessage}}.</div>
+                  <div class="message success" *ngIf="ifSucc"> <span> Succussfull! </span> {{successMessage}}.</div>
+                </li>
+                <li>
+                  <p class="m-0" style="font-size: 14px;color: red;" *ngIf="is_authorized == 0">Project
+                    is not Authorized</p>
+                </li>
+                <li *ngIf="quota"><a href="javascript:void(0);" class="button1" (click)="addSupplier();"
+                    [ngClass]="{'disableee': (selectedDatas.length == 0)}"
+                    [ngClass]="{'disableee': (is_authorized == 0)}"><i>+</i><span>Add
+                      Supplier</span></a></li>
+                <li *ngIf="quota"><a href="javascript:void(0)" (click)="enableRouting();" class="button2 btn-lgrn"
+                    [ngClass]="{'disableee': (selectedDatas.length == 0)}"
+                    [ngClass]="{'disableee': (is_authorized == 0)}">
+                    <img src="assets/img/routing.png" alt="">
+                    Enable Routing </a></li>
+                <li *ngIf="quota"><a href="javascript:void(0)" (click)="schduleQuota();" class="button2 btn-ylw"
+                    [ngClass]="{'disableee': (selectedDatas.length == 0)}"
+                    [ngClass]="{'disableee': (is_authorized == 0)}"><i class="icon-user"></i>
+                    Schedule </a></li>
+                <li *ngIf="rem1"><a href="javascript:void(0);" class="button2 btn-lgrn" (click)="setReminder1();"><i
+                      class="icon-user"></i>
+                    Reminder 1 </a></li>
+                <li *ngIf="rem2"><a href="javascript:void(0);" (click)="setReminder1();" class="button2 btn-lgrn"><i
+                      class="icon-user"></i>
+                    Reminder 2 </a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="tab-pane show active" id="sch1" role="tabpanel" aria-labelledby="home-tab">
+            <div class="h-tab-content sched-content" style="padding: 0;">
+              <div class="t-table-box mt-0">
+                <div class="myTable table-scheduling">
+                  <div class="mytablehead mytablehead-sched">
+                    <div class="row">
+                      <div class="col flx2"> <span> </span> </div>
+                      <div class="col flx2"><span></span></div>
+                      <div class="col"><span> </span></div>
+                      <div class="col"><span> </span></div>
+                      <div class="col"><span> </span></div>
+                      <div class="col">
+                        <!-- <div class="actionBox color-black mph-dropdown">
+                          <div class="input-box">
+                            <select class="rch-ind drop-select advdrop" name="status" id="status" [(ngModel)]="src">
+                              <option value="">Select Source</option>
+                              <option *ngFor="let source of sources" value="{{source.source_id}}">{{source.source_name}}</option>
+                            </select>
+                          </div>
+                        </div> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mytablehead mytablehead-sched">
+                    <div class="row">
+                      <div class="col flx2"><span>Quotas</span></div>
+                      <div class="col flx2"><span>Achieved/Required</span></div>
+                      <div class="col"><span>Invited </span></div>
+                    </div>
+                  </div>
+                  <div class="myTableBody myTableBody-sched mytablehead-sched"
+                    *ngFor="let interlockquota of interlockquotas">
+                    <div class="row">
+                      <div class="col flx2">
+                        <span>
+                          <div class="custom-checkbox only-checkbox">
+                            <input type="checkbox" id="{{'chk1'+interlockquota.quota_id}}"
+                              (click)="selectData(interlockquota, $event.target.checked);">
+                            <label for="{{'chk1'+interlockquota.quota_id}}"></label>
+                          </div>
+                          <img src="assets/img/routing.png" alt="mph_routing" class="mr-1"
+                            *ngIf="interlockquota?.routing_enabled == 1">
+                          {{interlockquota.quota_name}}
+                        </span>
+                      </div>
+                      <div class="col flx2"><span
+                          class="color-black req-num"><small>{{interlockquota.completes_achieved}}</small>/<input
+                            type="text" placeholder="50" value="{{interlockquota.req}}" name="req"
+                            (change)="changeReq(interlockquota, $event.target.value,'l');"></span></div>
+                      <div class="col"><span>{{interlockquota.total_invited}}</span></div>
+                    </div>
+                  </div>
+                  <div class="message error centererror" *ngIf="interlockquotas?.length === 0">No Quota Found</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="sch2" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="h-tab-content sched-content" style="padding: 0;">
+              <div class="t-table-box mt-0">
+                <div class="myTable">
+                  <div class="mytablehead mytablehead-sched">
+                    <div class="row quota-row">
+                      <div class="col more padd-r0"><span></span></div>
+                      <div class="col"><span></span></div>
+                      <div class="col"><span>Panelist Pulled</span></div>
+                      <div class="col"><span>Scheduled at</span></div>
+                      <div class="col"><span>Status</span></div>
+                      <div class="col"><span></span></div>
+                    </div>
+                  </div>
+                  <div class="myTableBody myTableBody-sched mytablehead-sched link-shed-span"
+                    *ngFor="let invite of invities">
+                    <div class="row">
+                      <div class="col more padd-r0">
+                        <span>
+                          <div class="custom-checkbox only-checkbox">
+                            <input type="checkbox" id="{{'invi'+invite.id}}"
+                              (click)="selectData(invite, $event.target.checked);">
+                            <label for="{{'invi'+invite.id}}"></label>
+                          </div>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <span class="supl-name">
+                          Batch ID: {{invite.id}}
+                          <strong> {{invite.name}} </strong>
+                        </span>
+                      </div>
+                      <div class="col"><span>{{invite.total_pulled}}</span></div>
+                      <div class="col"><span>{{invite.scheduled_at}}</span></div>
+                      <div class="col"><span>{{invite.status}}</span></div>
+                      <div class="col">
+                        <span class="editbtn-set" *ngIf="invite.status != 'SENT'">
+                          <img src="assets/img/delete.png" alt="">
+                          <a href="javascript:void(0);" class="d-block" style="font-size:12px;"
+                            (click)="deleteSch(invite, 'i');">Delete</a></span>
+                        <span class="editbtn-set" *ngIf="invite.status != 'SCHEDULED'">
+                          <img src="assets/img/stats.png" alt="">
+                          <a href="javascript:void(0);" class="d-block" style="font-size:12px;"
+                            (click)="getStats(invite);">Stats</a></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="message error centererror" *ngIf="invities?.length == 0">No Scheduled Invities
+                    Found</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="sch3" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="h-tab-content sched-content" style="padding: 0;">
+              <!-- <li><a href="javascript:void(0);" (click)="setReminder1();" class="button2 btn-lgrn"><i class="icon-user"></i>
+                  Reminder 2 </a></li> -->
+              <div class="t-table-box mt-0">
+                <div class="myTable">
+                  <div class="mytablehead mytablehead-sched">
+                    <div class="row quota-row">
+                      <div class="col more padd-r0"><span></span></div>
+                      <div class="col"><span></span></div>
+                      <div class="col"><span>Panelist Pulled</span></div>
+                      <div class="col"><span>Scheduled at</span></div>
+                      <div class="col"><span>Status</span></div>
+                      <div class="col"><span></span></div>
+                    </div>
+                  </div>
+                  <div class="myTableBody myTableBody-sched mytablehead-sched link-shed-span"
+                    *ngFor="let invite of reminder1">
+                    <div class="row">
+                      <div class="col more padd-r0">
+                        <span>
+                          <div class="custom-checkbox only-checkbox">
+                            <input type="checkbox" id="{{'rem1'+invite.target_group_batch_id}}"
+                              (click)="selectData(invite, $event.target.checked);">
+                            <label for="{{'rem1'+invite.target_group_batch_id}}"></label>
+                          </div>
+                        </span>
+                      </div>
+                      <div class="col">
+                        <span class="supl-name">
+                          Batch ID: {{invite.id}}
+                          <strong> {{invite.name}} </strong>
+                        </span>
+                      </div>
+                      <div class="col"><span class="text-center">{{invite.total_pulled}}</span></div>
+                      <div class="col"><span>{{invite.scheduled_at}}</span></div>
+                      <div class="col"><span>{{invite.status}}</span></div>
+                      <div class="col">
+                        <span class="editbtn-set" *ngIf="invite.status != 'SENT'" (click)="deleteSch(invite, 'i');">
+                          <img src="assets/img/delete.png" alt="">
+                          <span class="d-block"> Delete</span>
+                        </span>
+                        <span class="editbtn-set" *ngIf="invite.status != 'SCHEDULED'" (click)="getStats(invite);">
+                          <img src="assets/img/stats.png" alt="">
+                          <span class="d-block"> Stats</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="message error centererror" *ngIf="reminder1?.length == 0">No Reminder 1 Found</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="sch4" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="t-table-box mt-0">
+              <div class="myTable">
+                <div class="mytablehead mytablehead-sched">
+                  <div class="row quota-row">
+                    <div class="col more padd-r0"><span></span></div>
+                    <div class="col"><span></span></div>
+                    <div class="col"><span>Panelist Pulled</span></div>
+                    <div class="col"><span>Scheduled at</span></div>
+                    <div class="col"><span>Status</span></div>
+                    <div class="col"><span></span></div>
+                  </div>
+                </div>
+                <div class="myTableBody myTableBody-sched mytablehead-sched link-shed-span"
+                  *ngFor="let invite of reminder2">
+                  <div class="row">
+                    <div class="col more padd-r0">
+                      <span>
+                        <div class="custom-checkbox only-checkbox">
+                          <input type="checkbox" id="{{'rem2'+invite.target_group_batch_id}}"
+                            (click)="selectData(invite, $event.target.checked);">
+                          <label for="{{'rem2'+invite.target_group_batch_id}}"></label>
+                        </div>
+                      </span>
+                    </div>
+                    <div class="col">
+                      <span class="supl-name">
+                        Batch ID: {{invite.id}}
+                        <strong> {{invite.name}} </strong>
+                      </span>
+                    </div>
+                    <div class="col"><span class="text-center">{{invite.total_pulled}}</span></div>
+                    <div class="col"><span>{{invite.scheduled_at}}</span></div>
+                    <div class="col"><span>{{invite.status}}</span></div>
+                    <div class="col">
+                      <span class="editbtn-set" *ngIf="invite.status != 'SENT'" (click)="deleteSch(invite, 'i');">
+                        <img src="assets/img/delete.png" alt="">
+                        <span class="d-block"> Delete</span>
+                      </span>
+                      <span class="editbtn-set" *ngIf="invite.status != 'SCHEDULED'" (click)="getStats(invite);">
+                        <img src="assets/img/stats.png" alt="">
+                        <span class="d-block"> Stats</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="message error centererror" *ngIf="reminder2?.length == 0">No Reminder 2 Found</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="modal fade" id="addSupplier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-custom modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="onSubmitAddSupplier(f, 'textId', 'loderId')" #f="ngForm">
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <h4>Add Supplier</h4>
+                <div class="col-6">
+                  <div class="input-box m-0">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Supplier Name" [(ngModel)]="supplier.name" class="inp-field"
+                        name="name" [ngClass]="{'on-error' : sname.touched && !sname.valid}" #sname="ngModel" required>
+                      <span>Supplier Name</span>
+                    </label>
+                    <div *ngIf="sname.touched && !sname.valid">
+                      <div class="validation-message r-zero" *ngIf="sname.errors.required">Required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="URL Parameters" class="inp-field"
+                        [(ngModel)]="supplier.url_params" name="url_params" id="pname">
+                      <span>URL Parameters</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <h4> Supplier URLs </h4>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Complete URL" class="inp-field"
+                        [(ngModel)]="supplier.complete_url" name="complete_url" id="pname">
+                      <span>Complete URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Screenout URL" class="inp-field"
+                        [(ngModel)]="supplier.screenout_url" name="screenout_url" id="pname">
+                      <span>Screenout URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Quotafull URL" class="inp-field"
+                        [(ngModel)]="supplier.quotafull_url" name="quotafull_url" id="pname">
+                      <span>Quotafull URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box mb-3">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Tracking URL" class="inp-field" name="tracking_url" id="pname"
+                        [(ngModel)]="supplier.tracking_url">
+                      <span>Tracking URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="ttypes"
+                    [(ngModel)]="supplier.tracking_type" placeholder="Select Type" label="Tracking Type"
+                    name="tracking_type" id="ttpye">
+                  </ng-select>
+                </div>
+                <div class="col-6  shed-drop" *ngIf="supplier.tracking_type == 2">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="tmethods"
+                    [(ngModel)]="supplier.tracking_method" placeholder="Select Method" label="Tracking Method"
+                    name="tracking_method" id="tmethod">
+                  </ng-select>
+                </div>
+                <div class="col-12" *ngIf="supplier.tracking_method == 1">
+                  <div class="filter-heading m-0">
+                    <span style="font-size: 13px;font-weight: 500;">Tracking URL</span>
+                    <textarea name="post_params" [(ngModel)]="supplier.post_params" name="post_params" cols="20"
+                      rows="7"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <h4> Quotas </h4>
+                <div class="q-box col-12" *ngIf="quotas?.length > 0">
+                  <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                    <div class="col-4">
+                      <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                    </div>
+                    <div class="col-4">
+                      <input type="text" [value]="quota?.req" name="quota_req"
+                        (change)="changeReq(quota, $event.target.value, 's');">
+                    </div>
+                    <div class="col-4">
+                      <small>Max: {{quota?.completes_required}}</small>
+                      <div (click)="remove(quota,i)" class="cross-class">
+                        <img src="assets/img/cross-red.png" alt="" class="w-100">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" type="submit" [class.disable]="is_disabled" [disabled]="is_disabled">
+            <span id="textId">Add</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderId" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="modal fade" id="addSupplier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-custom modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeMd();">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="onSubmitAddSupplier(f, 'textId', 'loderId')" #f="ngForm" novalidate>
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <h4>Add Supplier</h4>
+                <!-- <div class="col-12"><input type="text" placeholder="Supplier Name"></div> -->
+                <div class="col-6">
+                  <div class="input-box m-0">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Supplier Name" [(ngModel)]="supplier.name" placeholder=""
+                        class="inp-field" name="name" #sname="ngModel" required />
+                      <span>Supplier Name</span>
+                    </label>
+                    <div *ngIf="is_req">
+                      <div class="validation-message r-zero">Required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="URL Parameters" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.url_params" name="url_params" id="pname">
+                      <span>URL Parameters</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Complete URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.complete_url" name="complete_url" id="pname">
+                      <span>Complete URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Screenout URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.screenout_url" name="screenout_url" id="pname">
+                      <span>Screenout URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Quotafull URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.quotafull_url" name="quotafull_url" id="pname">
+                      <span>Quotafull URL</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <h4> Pixel Tracking </h4>
+                <div class="col-6  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="ttypes"
+                    [(ngModel)]="supplier.tracking_type" (selected)="supplier.post_params = null" placeholder="Select Type" label="Tracking Type"
+                    name="tracking_type" id="ttpye">
+                  </ng-select>
+                </div>
+                <div class="col-6  shed-drop" *ngIf="supplier.tracking_type == 2">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="tmethods"
+                    [(ngModel)]="supplier.tracking_method" placeholder="Select Method"
+                    (selected)="supplier.post_params = null" label="Tracking Method" name="tracking_method"
+                    id="tmethod">
+                  </ng-select>
+                </div>
+                <div class="col-12">
+                  <div class="input-box mb-3">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Tracking URL" class="inp-field" name="tracking_url" id="pname"
+                        [(ngModel)]="supplier.tracking_url">
+                      <span>Tracking URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-12" *ngIf="supplier.tracking_method == 1 && supplier.tracking_type == 2">
+                  <div class="filter-heading m-0">
+                    <label class="inp-label f-12">POST Parameters</label>
+                    <textarea name="post_params" class="textareaclass m-0" [(ngModel)]="supplier.post_params" cols="20"
+                      rows="3"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <h4> Quotas </h4>
+                <div class="q-box col-12" *ngIf="quotas?.length > 0">
+                  <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                    <div class="col-4">
+                      <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                    </div>
+                    <div class="col-4">
+                      <input type="text" [value]="quota?.req" name="quota_req"
+                        (change)="changeReq(quota, $event.target.value, 's');" required>
+                    </div>
+                    <div class="col-4">
+                      <small>Max: {{quota?.completes_required}}</small>
+                      <div (click)="remove(quota,i)" class="cross-class">
+                        <img src="assets/img/cross-red.png" alt="" class="w-100">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" type="submit" [class.disable]="is_disabled" [disabled]="is_disabled">
+            <span id="textId">Add</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderId" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="enableRoutings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-custom modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeMd();">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="enRouting(f, 'entextId', 'enloderId')" #f="ngForm">
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <h4>Enable Routing</h4>
+                <div class="col-4  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="schSource"
+                    [(ngModel)]="supplier.routing_type" placeholder="Select Type" label="Routing Type"
+                    name="tracking_type" id="ttpye">
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <h4> Quotas </h4>
+                <div class="q-box col-12" *ngIf="quotas?.length > 0">
+                  <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                    <div class="col-4">
+                      <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                    </div>
+                    <div class="col-4">
+                      <input type="text" [value]="quota?.req" name="reqcomp"
+                        (change)="changeReq(quota, $event.target.value, 'e');">
+                    </div>
+                    <div class="col-4">
+                      <small>Max: {{quota?.completes_required}}</small>
+                      <div (click)="remove(quota,i)" class="cross-class">
+                        <img src="assets/img/cross-red.png" alt="" class="w-100">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" type="submit" [class.disable]="is_disabled" [disabled]="is_disabled">
+            <span id="entextId">Enable Routing</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="enloderId" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="scheduleModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeMd();">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="onSubmitSchedule('textIdd', 'loderIdd')" #f="ngForm" novalidate>
+          <div>
+            <div class="row">
+              <h4>Schedule Quota</h4>
+              <div class="col-12  shed-drop">
+                <div class="switch switch--horizontal switch--myRedio">
+                  <input id="radio-o" type="radio" name="tptSwitch" value="n" [(ngModel)]="tptSwitch" class="redio-four"
+                    (change)="tptCheck(tptSwitch)" />
+                  <label for="radio-o" class="first-lab">Now</label>
+                  <input id="radio-0f" type="radio" name="tptSwitch" value="f" [(ngModel)]="tptSwitch" class="redio-four"
+                    (change)="tptCheck(tptSwitch)" />
+                  <label for="radio-0f" class="off ">Future</label>
+                  <span class="toggle-outside redio-four"><span class="toggle-inside"></span></span>
+                </div>
+              </div>
+              <div class="col-12" [hidden]="future">
+                <div class="input-box">
+                  <label class="inp-label has-float-label">
+                    <input type='text' class="inp-field" id='datetimepicker4' />
+                    <span>Schedule at</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <h4> Quotas </h4>
+            <div class="q-box col-12" *ngIf="quotas?.length > 0">
+              <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                <div class="col-7">
+                  <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                </div>
+                <div class="col-2">
+                  <input type="text" [value]="quota?.req" name="reqcomp"
+                    (change)="changeReq(quota, $event.target.value, 'e');">
+                </div>
+                <div class="col-3">
+                  <small>Max: {{quota?.completes_required}}</small>
+                  <div (click)="remove(quota,i)" class="cross-class">
+                    <img src="assets/img/cross-red.png" alt="" class="w-100">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" type="submit" [class.disable]="is_disabled" [disabled]="is_disabled">
+            <span id="textIdd">Schedule</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderIdd" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="reminder1Model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="onSubmitReminder1('textIddd', 'loderIddd')" #f="ngForm" novalidate>
+          <div>
+            <div class="row">
+              <h4>Set Reminder {{count}}</h4>
+              <div class="col-12  shed-drop">
+                <div class="switch switch--horizontal switch--myRedio">
+                  <input id="radio-o" type="radio" name="tptSwitch" value="tptOn" checked="checked" class="redio-four"
+                    (change)="tptCheck('n')" />
+                  <label for="radio-o" class="first-lab">Now</label>
+                  <input id="radio-0f" type="radio" name="tptSwitch" value="tptOff" class="redio-four"
+                    (change)="tptCheck('f')" />
+                  <label for="radio-0f" class="off ">Future</label>
+                  <span class="toggle-outside redio-four"><span class="toggle-inside"></span></span>
+                </div>
+              </div>
+              <div class="col-12" [hidden]="future">
+                <div class="input-box">
+                  <label class="inp-label has-float-label">
+                    <input type='text' class="inp-field" id='datetimepicker5' />
+                    <span>Schedule at</span>
+                  </label>
+                  <div *ngIf="dateTime">
+                    <div class="validation-message">Required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" type="submit">
+            <span id="textIddd">Schedule</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderIddd" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat.</p>
+        <button class="button2">Confirm</button>
+        <button class="button1 cancel-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p> {{popupMess}}</p>
+        <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" id="stats" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box m-0">
+        <h2 class="text-left mb-3">Stats</h2>
+        <p class="text-left m-0">Scheduled at: <strong>{{schStats.scheduled_at}}</strong></p>
+        <p class="text-left m-0">Status: <strong>{{schStats.status}}</strong></p>
+
+        <p class="text-left m-0" *ngIf="schStats?.mediums != undefined">Email:
+          <strong>{{schStats?.survey_access_type[0]?.accessCnt}}
+            /{{schStats?.mediums[0]?.count}}</strong></p>
+        <p class="text-left m-0" *ngIf="schStats?.mediums != undefined">SMS:
+          <strong>{{schStats?.survey_access_type[1]?.accessCnt}}
+            /{{schStats?.mediums[1]?.count}}</strong></p>
+        <a href="javascript:void(0);" class="button1 mt-3" (click)="downloadReport();">Download Report</a>
+      </div>
+    </div>
+  </div>
+</div>

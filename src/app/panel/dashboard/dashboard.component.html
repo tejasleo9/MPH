@@ -1,0 +1,197 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+
+  <app-sub-header></app-sub-header>
+  <div class="h-tab-content">
+    <div class="dashDisplayBox">
+      <div class="row">
+        <div class="col">
+          <div class="dashDisplay">
+            <div class="dashDispImg"><img src="assets/img/dash1.png" alt="img" /></div>
+            <p>Panelists</p>
+            <h2>{{panelStat?.total_active_panelists == null ? '0' : panelStat?.total_active_panelists}}</h2>
+            <div style="clear:both"></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="dashDisplay">
+            <div class="dashDispImg"><img src="assets/img/dash2.png" alt="img" /></div>
+            <p>Avg. Responce Rate</p>
+            <h2>{{panelStat?.avg_response_rate == null ? '0' : panelStat?.avg_response_rate}}%</h2>
+            <div style="clear:both"></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="dashDisplay">
+            <div class="dashDispImg"><img src="assets/img/dash3.png" alt="img" /></div>
+            <p>Avg. Profiling Depth</p>
+            <h2>{{panelStat?.avg_profiling_depth == null ? '0' : panelStat?.avg_profiling_depth}}%</h2>
+            <div style="clear:both"></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="dashDisplay">
+            <div class="dashDispImg"><img src="assets/img/dash5.png" alt="img" /></div>
+            <p>Avg. Retention Rate</p>
+            <h2>{{panelStat?.avg_retention_rate == null ? '0' : panelStat?.avg_retention_rate}}%</h2>
+            <div style="clear:both"></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="dashDisplay">
+            <div class="dashDispImg"><img src="assets/img/dash6.png" alt="img" /></div>
+            <p>Unsubscribe</p>
+            <h2>{{panelStat?.total_unsubscribes == null ? '0' : panelStat?.total_unsubscribes}}</h2>
+            <div style="clear:both"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8">
+        <div id="chartContainer-dashbord"></div>
+      </div>
+      <div class="col-md-4">
+        <div class="number-box bg-color-blue">
+          <h3>{{panelStat?.unique_completes == null ? '0' : panelStat?.unique_completes}}</h3>
+          <p>
+            Number of Unique Panelists Who have
+            Answered in the past 12 Months</p>
+        </div>
+        <div class="number-box bg-color-grn">
+          <h3> $0.25</h3>
+          <p>
+            AVG. Revenue per panelists
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-10">
+      <h5>Panelist Roadmap</h5>
+      <div class="row">
+        <div class="col-md-8">
+          <canvas id="bar-chart-horizontal4" width="800" height="350"></canvas>
+        </div>
+        <div class="col-md-4">
+          <canvas id="doughnut-chart" width="350" height="200"></canvas>
+          <ul class="doughnut-chart-rate">
+            <li><span>{{panelStat?.avg_retention_rate == null ? '0' : panelStat?.avg_retention_rate}}%</span>Current
+              attrition rate</li>
+            <li><span
+                class="red">{{panelStat?.total_unsubscribes == null ? '0' : panelStat?.total_unsubscribes}}</span>Unsubscribe
+              <img src="assets/img/down.png" alt="down img missing"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <!-- <div class="row">
+      <div class="col-md-8">
+        <div class="dashChartBox">
+          <div class="dashChartHead">
+            <p>Panel Analysis</p>
+          </div>
+          <div id="chartContainer-dashbord"></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="number-box bg-color-blue mt-0">
+          <h3>{{panelStat?.unique_completes == null ? '0' : panelStat?.unique_completes}}</h3>
+          <p>
+            Number of Unique Panelists Who have
+            Answered in the past 12 Months</p>
+        </div>
+        <div class="dashChartBox">
+          <div class="dashChartHead">
+            <p>App Users</p>
+          </div>
+          <canvas id="chart-area" class="mt-4" width="800" height="450"></canvas>
+        </div>
+      </div>
+    </div>-->
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="dashChartBox">
+          <div class="dashChartHead">
+            <p>Panel Usage</p>
+          </div>
+          <canvas id="myChart4" class="mt-4" height="100"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="dashChartBox">
+          <div class="dashChartHead">
+            <p>Response Rate</p>
+          </div>
+          <canvas id="myChart8" class="mt-4" height="100"></canvas>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row">
+
+    </div> -->
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="dashChartBox">
+          <div class="dashChartHead">
+            <p>Complete Timeline</p>
+          </div>
+          <canvas id="myChart2" height="100"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="dashChartBox">
+          <div class="dashChartHead">
+            <p>Profile Depth</p>
+          </div>
+          <canvas id="myChart3" height="100"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-10">
+      <h5>Sales per panel</h5>
+      <div class="row">
+        <div class="col-md-4">
+          <canvas id="bar-chart-horizontal1" width="800" height="300"></canvas>
+        </div>
+        <div class="col-md-4">
+          <canvas id="bar-chart-horizontal2" width="800" height="300"></canvas>
+        </div>
+        <div class="col-md-4">
+          <canvas id="bar-chart-horizontal3" width="800" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="dashChartBox">
+          <div class="dashChartHead">
+            <p>Social Media Followers</p>
+          </div>
+          <canvas id="myChart6"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="dashChartBox">
+          <div class="dashChartHead">
+            <p>Panel Segmentation</p>
+          </div>
+          <canvas id="myChart7"></canvas>
+        </div>
+      </div>
+    </div>
+  </div> -->
+</div>

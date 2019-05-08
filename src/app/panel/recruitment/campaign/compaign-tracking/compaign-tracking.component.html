@@ -1,0 +1,84 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <div class="h-tab-content">
+    <!-- <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Panel Name</a></li>
+        <li class="breadcrumb-item"><a href="#">Recruitment</a></li>
+        <li class="breadcrumb-item active" aria-current="page"> Campaign</li>
+      </ol>
+    </nav> -->
+    <div class="t-head-box">
+      <div class="t-head-heading panel-icon c-pointer" (click)="cs.back();">
+        <h2><i class="icon icon-arrow-left"></i> Campaign Tracking</h2>
+      </div>
+      <!-- Download -->
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col points-card">
+          <div class="color color-lgrn">
+            <h4>{{reqStats?.registration_hits == undefined ? 0: reqStats?.registration_hits}}</h4><span>Registration
+              Hits</span>
+          </div>
+        </div>
+        <div class="col points-card">
+          <div class="color color-lylw">
+            <h4>{{reqStats?.registered_panelists == undefined ? 0: reqStats?.registered_panelists}}</h4><span>Registered
+              Panelists </span>
+          </div>
+        </div>
+        <div class="col points-card">
+          <div class="color color-lprpl1">
+            <h4>{{reqStats?.total_activation == undefined ? 0: reqStats?.total_activation}}</h4><span>Total
+              Activation</span>
+          </div>
+        </div>
+        <div class="col points-card">
+          <div class="color color-lorg">
+            <h4>{{reqStats?.total_unsubscribed == undefined ? 0: reqStats?.total_unsubscribed}}</h4>
+            <span>Unsubscribed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bar-chart">
+      <!-- <div class="dashDatepicker">
+        <div class="datepicker-box">
+          <div class="input-group date" data-date-format="dd-mm-yyyy">
+            <input class="form-control" type="text" (change)="getDate();" id="datetimepicker1" />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+        </div>
+        <div class="date-range-to">to</div>
+        <div class="datepicker-box">
+          <div class="input-group date" data-date-format="dd-mm-yyyy">
+            <input class="form-control" type="text" (change)="getDate();" id="datetimepicker2" />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
+        </div>
+        <button _ngcontent-c3="" class="button1 nav-btn from-to-btn" (click)="getDate();">Get</button>
+      </div> -->
+      <div class="message error centererror" *ngIf="comTimeLine?.length == 0 && is_visible">No Campaign timeline details found</div>
+      <!-- <canvas id="myChart" *ngIf="comTimeLine?.length > 0"></canvas> -->
+      <div class="container" [hidden]="comTimeLine?.length === 0">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="dashChartBox">
+              <!-- <div class="dashChartHead">
+                    <p>Panel Usage</p>
+                  </div> -->
+              <canvas id="myChart4" class="mt-4"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

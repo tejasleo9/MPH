@@ -1,0 +1,120 @@
+<header>
+  <div class="left-menu">
+    <div class="logo">
+      <a href="javascript:void(0);" routerLink="/dashboard">MyPanelHub</a>
+    </div>
+    <a href="javascript:void(0);" class="menu-btn">{{modname}}</a>
+    <div class="main-menu" id="menu">
+      <ul>
+        <li>
+          <p data-menu="project" (click)="allProjects()"><span class="project-color">P</span> Project</p>
+        </li>
+        <li>
+          <p data-menu="panel" (click)="allPanels()"><span class="panel-color">P</span> Panel</p>
+        </li>
+        <li>
+          <p data-menu="survey"><span class="survey-color">S</span> Survey</p>
+        </li>
+        <li>
+          <p data-menu="idi"><span class="idi-color">I</span> IDI/FDG</p>
+        </li>
+        <li>
+          <p data-menu="comm"><span class="comm-color">C</span> Community</p>
+        </li>
+        <li>
+          <p data-menu="poll"><span class="poll-color">P</span> Poll</p>
+        </li>
+        <li>
+          <p data-menu="advance"><span class="adv-color">A</span> Advance</p>
+        </li>
+        <li>
+          <p data-menu="ana"><span class="ana-color">A</span> Analytics</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="right-menu">
+    <a href="javascript:void(0)"><img src="assets/img/search.png" alt="mphsearch"></a>
+    <a href="javascript:void(0)"><img src="assets/img/call.png" alt="mphsearch"></a>
+    <a href="javascript:void(0)"><img src="assets/img/bell.png" alt="mphsearch"></a>
+    <!-- <span class="badge">5</span> -->
+    <a class="user c-pointer" d="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <img src="assets/img/person.png" alt="mphsearch"></a>
+    <div class="dropdown-menu drp-menu" aria-labelledby="dropdownMenu2"> 
+      <a class="dropdown-item drp-item" href="javascript:void(0);" routerLink="/accounts">Manage Account</a>
+      <a class="dropdown-item drp-item" href="javascript:void(0);" (click)="logout();">Logout</a>
+    </div>
+  </div>
+</header>
+<div class="sub-menu" id="project">
+  <div class="left-sub">
+    <p class="menu-title">ALL PROJECTS</p>
+    <ul>
+      <li *ngFor="let p of projects"><a href="javascript:void(0);" (click)="editProject(p.id, p.name)">{{ p.name }}</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sub-menu" id="panel">
+  <div class="left-sub">
+    <p class="menu-title">ALL PANELS</p>
+    <ul>
+      <!-- <li><a  href="javascript:void(0);" (click)="allPanels()">All Panels</a></li> -->
+      <li *ngFor="let p of panels"><a href="javascript:void(0);" (click)="editPanel(p.id, p.name)">{{ p.name }}</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- <div class="sub-menu" id="project">
+      <div class="left-sub">
+        <p class="menu-title">MENU</p>
+        <ul>
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Projects</a></li>
+          <li><a href="#">Exclusion List</a></li>
+        </ul>
+      </div>
+      <div class="right-sub">
+        <p class="menu-title">RECENT</p>
+        <ul>
+          <li><a href="#">Project Name</a></li>
+          <li><a href="#">Project Name</a></li>
+          <li><a href="#">Project Name</a></li>
+        </ul>
+      </div>
+    </div> -->
+
+<!-- <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a routerLink="/" class="navbar-brand">My Panel Hub</a>
+    </div>
+
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a routerLink="/panel">Panel</a></li>
+        <li><a routerLink="/project">Project</a></li>
+        <li><a routerLink="/project/exclusion">Exclusion List</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <ng-template [ngIf]="!(authState | async).authenticated">
+          <li><a routerLink="/signup">Register</a></li>
+          <li><a routerLink="/signin">Login</a></li>
+        </ng-template>
+
+        <li><a
+          style="cursor: pointer;"
+          (click)="onLogout()"
+          *ngIf="(authState | async).authenticated">Logout</a></li>
+
+        <li class="dropdown" appDropdown *ngIf="(authState | async).authenticated">
+          <a style="cursor: pointer;" class="dropdown-toggle" role="button">Manage <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a style="cursor: pointer;" (click)="onSaveData()">Save Data</a></li>
+            <li><a style="cursor: pointer;" (click)="onFetchData()">Fetch Data</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+ -->

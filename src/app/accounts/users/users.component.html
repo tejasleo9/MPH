@@ -1,0 +1,196 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <acc-sub-header></acc-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2 id="headname">Users</h2>
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li>
+          <a href="javascript:void(0);" (click)="resetForm();" class="button1" data-toggle="modal"
+            data-target="#exampleModal"><i>+</i>
+            <span>Add New</span>
+          </a>
+        </li>
+        <li>
+          <div class="searchAdv"><input type="text" placeholder="Search" class="searchFld" #questionInput><button
+              class="srchBtn"></button>
+            <div class="srch-popup">
+              <form (ngSubmit)="search(form,'txtId','inlodImg')" ngNativeValidate #form="ngForm">
+                <div class="row">
+                  <div class="col-12">
+                    <h2>Advance Search</h2>
+                  </div>
+                  <div class="col-12">
+                    <div class="input-box">
+                      <label class="inp-label">Name</label>
+                      <input type="text" placeholder="eg. mumbai" class="inp-field" name="name" id="namee"
+                        [(ngModel)]="name" />
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="input-box">
+                      <label class="inp-label">Email</label>
+                      <input type="text" placeholder="xyz@example.com" class="inp-field" name="email" id="emaill"
+                        [(ngModel)]="email" />
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="btnSec d-flex justify-content-between align-content-center">
+                      <button class="button2" type="submit">
+                        <span id="txtId">Search</span>
+                        <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+                      </button>
+                      <a class="btnReset" (click)="reset();form.reset();">Reset</a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="t-table-box">
+    <div class="myTable ">
+      <div class="myTableHead">
+        <div class="row">
+          <div class="col"><span (click)="sortData('name')">Name<i class="ico-moon icon-sort"></i></span> </div>
+          <div class="col"><span (click)="sortData('email')">Email<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('role_name')">Role<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('created_at')">Created At<i class="ico-moon icon-sort"></i></span>
+          </div>
+          <div class="col more"><span>&nbsp;</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="myTableBody"
+          *ngFor="let u of userList | paginate: { itemsPerPage: pageSize, currentPage: cPage, totalItems: total };">
+          <div class="row">
+            <div class="col"><span><a href="javascript:void(0);" (click)="editUser(u);">{{u.name}}</a></span></div>
+            <div class="col"><span>{{u.email}}</span></div>
+            <div class="col"><span>{{u.role_name}}</span></div>
+            <div class="col"><span>{{u.created_at}}</span></div>
+            <div class="col more">
+              <a href="javascript:void(0)" (click)="delete(u, 'i')">
+                <span><i class="ico-moon icon-trash orange"></i></span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="message error centererror" *ngIf="userList?.length === 0">No Users
+          Found</div>
+      </div>
+    </div>
+    <!-- Table Ends -->
+  </div>
+</div>
+
+<div class="paginationBox" *ngIf="userList != '' && (userList | filterBy: userFilter)?.length != 0">
+  <div class="pagination justify-content-center">
+    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  </div>
+  <div class="rowsBox" *ngIf="userList != '' && (userList | filterBy: userFilter)?.length != 0">
+    <div class="actionBox">
+      <select class="select-box-class" (change)="perPage(perpage);" [(ngModel)]="perpage" name="perpage">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- modalpopup -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2>{{text}} User</h2>
+        <form #f="ngForm" (ngSubmit)="onSubmitClik(f,'txtIdpoints', 'loderIdpoints');">
+          <div class="row">
+            <div class="col-12">
+              <div class="input-box">
+                <label class="inp-label">Name</label>
+                <input type="text" placeholder="eg. mumbai ux group" class="inp-field" name="name" #namee="ngModel"
+                  [(ngModel)]="userObj.name" required>
+                <div *ngIf="namee.touched && !namee.valid">
+                  <div class="validation-message" *ngIf="namee.errors.required">Required</div>
+                </div>
+                <div id="name" class="display-none"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="input-box">
+                <label class="inp-label">Email</label>
+                <input type="email" placeholder="eg. mumbai ux group" class="inp-field" name="email" #emaill="ngModel"
+                  [(ngModel)]="userObj.email" required>
+                <div *ngIf="emaill.touched && !emaill.valid">
+                  <div class="validation-message" *ngIf="emaill.errors.required">Required</div>
+                </div>
+                <div id="email" class="display-none"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <ng-select class="rch-ind drop-select" placeholder="Select Option" label="Roles" name="role_id"
+                [(ngModel)]="userObj.role_id" [options]="rolesList" required>
+              </ng-select>
+              <div id="role_id" class="validation-message d-none">
+                <div>Required</div>
+              </div>
+              <div id="role_id" class="display-none"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-center">
+              <button class="button2" type="submit">
+                <span id="txtIdpoints">{{text}} User</span>
+                <img src="assets/img/loading.gif" alt="loderImg" id="loderIdpoints" class="loderImg">
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modalpopup -->
+
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2 class="mb-4">Confirm</h2>
+        <p> Are you sure want to delete?</p>
+        <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modalpopup -->

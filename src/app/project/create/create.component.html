@@ -1,0 +1,276 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+    <!-- overview page-->
+    <div class="card ">
+      <ul class="overview-links">
+        <li class="active"><a routerLink="/project/overview">Overview</a></li>
+        <li><a (click)="redirect('tg');" href="javascript:void(0)" [class.disabled]="disabled ? true : null">Target
+            Groups</a></li>
+        <li *ngIf="project_status != '3'"><a (click)="redirect('sch');" href="javascript:void(0)"
+            [class.disabled]="disabled ? true : null">Scheduling</a></li>
+      </ul>
+      <div class="overview-tab">
+        <div *ngIf="hideShow">
+          <div class="h-tab-content">
+            <form (ngSubmit)="onSubmitClik(form, 'confirmtxtid', 'confirmlodImg')" novalidate #form="ngForm">
+              <div class="row">
+                <div class="col-6">
+                  <div class="input-box">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="eg. mumbai ux group" #name="ngModel"
+                        [disabled]="project_status == 1 ? true: false" class="inp-field" [(ngModel)]="prodetails.name"
+                        name="pname" id="pname" required>
+                      <span>Project Name</span>
+                    </label>
+                    <div *ngIf="name.touched && !name.valid">
+                      <div class="validation-message" *ngIf="name?.errors?.required">Required</div>
+                    </div>
+                  </div>
+                  <div class="position-relative">
+                    <ng-select class="rch-ind drop-select" name="industry"
+                      [disabled]="project_status == 1 ? true: false" placeholder="Select Option"
+                      (selected)="getCategory($event)" [options]="indOpt" [(ngModel)]="indid" label="Research Industry"
+                      name="indid" required id="indid">
+                    </ng-select>
+                    <div *ngIf="rid">
+                      <div class="validation-message">Required</div>
+                    </div>
+                  </div>
+                  <div class="position-relative">
+                    <ng-select class="rch-ind drop-select" name="category"
+                      [disabled]="project_status == 1 ? true: false" placeholder="Select Option" [options]="catOpt"
+                      [(ngModel)]="catid" label="Research Category" name="catid" required id="catid">
+                    </ng-select>
+                    <div *ngIf="cid">
+                      <div class="validation-message">Required</div>
+                    </div>
+                    <div class="loader-img right-side-loader" *ngIf="loader"><img src="assets/img/loading.gif"
+                        alt="loderImg" id="confirmlodImg"></div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div *ngIf="redirectLinks">
+                    <h2 class="sec-title">Redirect Links</h2>
+                    <div class="input-box">
+                      <label class="inp-label has-float-label">
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field"
+                          [(ngModel)]="redirectUrl.screenout" name="sout" disabled>
+                        <span>Screenout</span>
+                      </label>
+                    </div>
+                    <div class="input-box">
+                      <label class="inp-label has-float-label">
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field"
+                          [(ngModel)]="redirectUrl.quota_full" name="qfull" disabled>
+                        <span>Quota Full</span>
+                      </label>
+                    </div>
+                    <div class="input-box">
+                      <label class="inp-label has-float-label">
+                        <input type="text" placeholder="eg. mumbai ux group" class="inp-field"
+                          [(ngModel)]="redirectUrl.complete" name="complete" disabled>
+                        <span>Completes</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button href="javascript:void(0);" (click)="editOverview('summary');" *ngIf="summaryBtn"
+                class="button1 nav-btn" style="margin-right:15px;">
+                <span>Summary</span>
+              </button>
+              <button href="javascript:void(0);" class="button1 nav-btn">
+                <span id="confirmtxtid">Next</span>
+                <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+              </button>
+              <a routerLink="/project" class="button1 cancel-btn">Cancel</a>
+            </form>
+          </div>
+        </div>
+
+        <div *ngIf="!hideShow">
+          <div class="h-tab-content">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="sped-grp">
+                  <h3 class="bol-title">{{proname}}</h3>
+                  <div class="gauge-chart">
+                    <svg viewBox="0 0 80 40" class="gauge">
+                      <circle class="donut-ring" stroke-linecap="round" cx="40" cy="40" r="31.8309886184"
+                        fill="transparent" stroke="#f5f6fa" stroke-width="4">
+                      </circle>
+                      <circle class="donut-segment" stroke-linecap="round" cx="40" cy="40" r="31.8309886184"
+                        fill="transparent" stroke="#4c84ff" stroke-width="4"
+                        stroke-dasharray="prodetails.complete_percentage prodetails.current_completes"
+                        stroke-dashoffset="-100">
+                        <animate attributeType='XML' attributeName='stroke-dasharray'
+                          values='prodetails.complete_percentage prodetails.current_completes'
+                          keyTimes='0; 0.4; 0.6; 0.7; 1' dur='2.5s' repeatCount='1'></animate>
+                      </circle>
+                      <text x="40" y="29.5" class="gauge-text">{{prodetails?.complete_percentage}}%</text>
+                      <text style="font-size:3px;" x="34"
+                        y="35">{{prodetails?.current_completes}}/{{prodetails?.required_completes}}</text>
+                      <text style="font-size:3px;" x="33" y="39">Completes</text>
+                    </svg>
+                    <div class="spe-det mt-3">
+                      <p>ID: <span>789562</span></p>
+                      <p>Market: <span>{{prodetails?.country_name}}</span></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="selected-box">
+                  <div class="selected-listname generate-urlbox">
+                    <h3 class="bol-title">Redirect Links</h3>
+                    <div class="clearfix"></div>
+                    <ul>
+                      <li>{{redirectUrl.screenout}}</li>
+                      <li>{{redirectUrl.quota_full}}</li>
+                      <li>{{redirectUrl.complete}}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="target-tab">
+                  <div class="profile-left sum-bor target-w100">
+                    <div class="t-head-box">
+                      <div class="t-head-heading">
+                        <h2 class="bol-title">Pricing Table
+                          <div class="inlineLoader" *ngIf="!pricingTableShow"><img src="assets/img/loading.gif"
+                              alt="loderImg"></div>
+                        </h2>
+                      </div>
+                    </div>
+
+                    <div class="t-table-box" *ngIf="pricingTableShow">
+                      <div class="myTable">
+                        <div class="myTableHead">
+                          <div class="row">
+                            <div class="col"><span>Supply Source</span> </div>
+                            <div class="col"><span>CPI</span></div>
+                            <div class="col"><span>Completes</span></div>
+                            <div class="col"><span>Current Cost</span></div>
+                            <div class="col"><span>Estimated Cost</span></div>
+                          </div>
+                        </div>
+                        <div class="myTableBody" *ngFor="let item of pricingTableRes">
+                          <div class="row">
+                            <div class="col"><span>{{item.supply_source}}</span></div>
+                            <div class="col"><span>$ {{item.cpi}}</span></div>
+                            <div class="col"><span>{{item.current_completes}}</span></div>
+                            <div class="col"><span>$ {{item.current_cost}}</span></div>
+                            <div class="col"><span>$ 0.00</span></div>
+                          </div>
+                        </div>
+                        <div class="myTableBody total-sum">
+                          <div class="row">
+                            <div class="col"><span>Total Cost</span></div>
+                            <div class="col"><span>&nbsp;</span></div>
+                            <div class="col"><span>&nbsp;</span></div>
+                            <div class="col"><span>$ {{total_current_cost}}</span></div>
+                            <div class="col"><span>$ 0.00</span></div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Table Ends -->
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div class="target-tab">
+                  <div class="profile-left sum-bor target-w100">
+                    <div class="t-head-box">
+                      <div class="t-head-heading">
+                        <h2 class="bol-title">Stats
+                          <div class="inlineLoader" *ngIf="!projStatsShow"><img src="assets/img/loading.gif"
+                              alt="loderImg"></div>
+                        </h2>
+                      </div>
+                    </div>
+                    <div class="t-table-box" *ngIf="projStatsShow">
+                      <div class="myTable">
+                        <div class="myTableHead">
+                          <div class="row">
+                            <div class="col"><span>&nbsp;</span> </div>
+                            <div class="col"><span>External</span></div>
+                            <div class="col"><span>Internal</span></div>
+                            <div class="col"><span>Total</span></div>
+                          </div>
+                        </div>
+                        <div class="myTableBody" *ngFor="let stat of projstat">
+                          <div class="row">
+                            <div class="col"><span>{{stat}}</span></div>
+                            <div class="col"><span>{{projStatsRes[stat]['External']}}</span></div>
+                            <div class="col"><span>{{projStatsRes[stat]['Internal']}}</span></div>
+                            <div class="col"><span>{{projStatsRes[stat]['Total']}}</span></div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Table Ends -->
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="target-tab">
+              <div class="profile-lef sum-bor target-w100">
+                <div class="t-head-box">
+                  <div class="t-head-heading">
+                    <h2 class="bol-title">Quotas</h2>
+                  </div>
+                  <div class="actionBox">
+                    <select class="select-box-class" (change)="changeTargetGrp(targetGrp);" [(ngModel)]="targetGrp"
+                      name="targetGrp">
+                      <option value="">Select Target Group</option>
+                      <option [ngValue]="quota" *ngFor="let quota of TgQuotasRes">{{quota?.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="t-table-box">
+                  <div class="myTable">
+                    <div class="myTableHead">
+                      <div class="row">
+                        <div class="col"><span>Quotas</span> </div>
+                        <div class="col"><span>Completes Required</span></div>
+                        <div class="col"><span>Completes Achieved</span></div>
+                      </div>
+                    </div>
+                    <div class="myTableBody bg-color-gry" *ngFor="let quota of quotas">
+                      <div class="row">
+                        <div class="col"><span>{{quota?.name}}</span></div>
+                        <div class="col"><span>{{quota?.total_completes_required}}</span></div>
+                        <div class="col"><span>{{quota?.total_completes_achieved}}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div class="profile-btn m-auto text-center">
+              <button class="button2" (click)="editOverview('overview');">Edit</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

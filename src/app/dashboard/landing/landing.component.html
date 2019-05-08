@@ -1,0 +1,413 @@
+<app-header></app-header>
+<div class="h-tab-content mt-10">
+  <div class="place-holder" *ngIf="widgets?.length == 0">
+    <div class="add-icon-plus" data-toggle="modal" data-target="#addwidget">
+      <img src="assets/img/plus.png" alt="" />
+    </div>
+    <h3>Add New Widget</h3>
+    <!-- <p>Lorem Ipsum is simply dummy text of the printing and typesetting indus Lorem Ipsum has </p> -->
+  </div>
+  <div class="dashboarddata">
+    <div class="text-right" *ngIf="widgets?.length > 0">
+      <button href="javascript:void(0)" data-toggle="modal" data-target="#addwidget" class="button1">
+        <i>+</i><span>Add Widget</span>
+      </button>
+    </div>
+    <div class="row">
+      <ng-container *ngFor="let widget of widgets">
+        <div class="col-md-6" *ngIf="widget?.is_visible && widget?.name == 'Widget 1'">
+          <div class="dashChartBox timeline-panel custom-height"
+            [ngClass]="(panelreq | json) != '{}' ? '' : 'not-found-height'">
+            <div class="t-head-box">
+              <div class="t-head-heading">
+                <h5>Panel Recruitment</h5>
+              </div>
+              <div class="t-head-action">
+                <ul>
+                  <li>
+                    <a href="javascript:void(0)" (click)="deleteWidget(widget)"><i
+                        class="ico-moon icon-trash orange"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="pos-center ng-star-inserted" *ngIf="(panelreq | json) == '{}'">
+              <p class="data-not-found">Data not found</p>
+            </div>
+            <div class="mt-2" *ngIf="(panelreq | json) != '{}'">
+              <div class="row">
+                <div class="col-md-6">
+                  <p class="topheader"><small>Today</small></p>
+                  <canvas id="bar-chart-horizontal4"></canvas>
+                </div>
+                <div class="col-md-6">
+                  <p class="topheader">
+                    <small>Last 7 days (Excluding Today)</small>
+                  </p>
+                  <canvas id="bar-chart-horizontal5"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="widget?.is_visible && widget?.name == 'Widget 2'">
+          <div class="dashChartBox timeline-panel custom-height"
+            [ngClass]="panelList.length == 0 ? 'not-found-height' : ''">
+            <div class="t-head-box">
+              <div class="t-head-heading">
+                <h5>List panels</h5>
+              </div>
+              <div class="t-head-action">
+                <ul>
+                  <li>
+                    <a href="javascript:void(0)" (click)="deleteWidget(widget)"><i
+                        class="ico-moon icon-trash orange"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="pos-center" *ngIf="panelList.length == 0">
+              <p class="data-not-found">Data not found</p>
+            </div>
+            <div class="t-table-box" *ngIf="panelList.length > 0">
+              <div class="myTable table-scheduling">
+                <table class="table customtable">
+                  <thead>
+                    <tr>
+                      <th>Panel</th>
+                      <th>Country</th>
+                      <th>Active Panelist</th>
+                      <th>Response Rate</th>
+                      <th>Avg. Profit Depth</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let panel of panelList">
+                      <td>{{ panel.panel_name }}</td>
+                      <td>{{ panel.country_name }}</td>
+                      <td>{{ panel.active_panelists }}</td>
+                      <td>{{ panel.response_rate }}</td>
+                      <td>{{ panel.avrg_profile_depth }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" *ngIf="widget?.is_visible && widget?.name == 'Widget 3'">
+          <div class="dashChartBox timeline-panel">
+            <div class="t-head-box">
+              <div class="t-head-heading">
+                <h5>Projects Summary</h5>
+              </div>
+              <div class="t-head-action">
+                <ul>
+                  <li>
+                    <a href="javascript:void(0)" (click)="deleteWidget(widget)">
+                      <i class="ico-moon icon-trash orange"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="t-head-heading mt-10">
+              <div class="row">
+                <div class="col-md-4">
+                  <p class="topheader"><small>Total</small></p>
+                  <canvas id="bar-chart-horizontal1"></canvas>
+                </div>
+                <div class="col-md-4">
+                  <p class="topheader"><small>Active</small></p>
+                  <canvas id="bar-chart-horizontal2"></canvas>
+                </div>
+                <div class="col-md-4">
+                  <p class="topheader"><small>Paused</small></p>
+                  <canvas id="bar-chart-horizontal3"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" *ngIf="widget?.is_visible && widget?.name == 'Widget 4'">
+          <div class="dashChartBox timeline-panel">
+            <div class="t-head-box">
+              <div class="t-head-heading">
+                <h5>Project Overdue</h5>
+              </div>
+              <div class="t-head-action">
+                <ul>
+                  <li>
+                    <a href="javascript:void(0)" (click)="deleteWidget(widget)">
+                      <i class="ico-moon icon-trash orange"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="t-head-heading mt-10">
+              <div class="row">
+                <div class="col-md-4">
+                  <p class="topheader"><small>Total</small></p>
+                  <canvas id="bar-chart-horizontal6"></canvas>
+                </div>
+                <div class="col-md-4">
+                  <p class="topheader"><small>Active</small></p>
+                  <canvas id="bar-chart-horizontal7"></canvas>
+                </div>
+                <div class="col-md-4">
+                  <p class="topheader"><small>Paused</small></p>
+                  <canvas id="bar-chart-horizontal8"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="widget?.is_visible && widget?.name == 'Widget 5'">
+          <div class="dashChartBox timeline-panel">
+            <div class="t-head-box">
+              <div class="t-head-heading">
+                <h5>Projects Deviation</h5>
+              </div>
+              <div class="t-head-action">
+                <ul>
+                  <li>
+                    <a href="javascript:void(0)" (click)="deleteWidget(widget)">
+                      <i class="ico-moon icon-trash orange"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="t-head-heading mt-10">
+              <div class="row">
+                <div class="col-md-12" *ngIf="(projectDeviation | json) == '{}'">
+                  <p class="data-not-found">Data not found</p>
+                </div>
+                <div class="col-md-12" *ngIf="(projectDeviation | json) != '{}'">
+                  <canvas id="projectdeviation"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" *ngIf="widget?.is_visible && widget?.name == 'Widget 7'">
+          <div class="dashChartBox timeline-panel"
+            [ngClass]="(projectCostData | json) != '{}' ? '' : 'not-found-height'">
+            <div class="t-head-box">
+              <div class="t-head-heading">
+                <h5>Project Cost Summary</h5>
+              </div>
+              <div class="t-head-action">
+                <ul>
+                  <li class="actionBox">
+                    <select class="select-box-class" (change)="onChange(prjcost, 0)" [(ngModel)]="prjcost"
+                      name="prjcost">
+                      <option value="m">INR</option>
+                      <option value="y">USD</option>
+                    </select>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)" (click)="deleteWidget(widget)"><i
+                        class="ico-moon icon-trash orange"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="t-head-heading mt-10">
+              <div class="row">
+                <div class="col-md-12">
+                  <div *ngIf="(projectCostData | json) == '{}'">
+                    <p class="data-not-found">Data not found</p>
+                  </div>
+                  <div *ngIf="(projectCostData | json) != '{}'">
+                    <div style="width: 850px;height:450px;margin: 0 auto;">
+                      <canvas id="projectcost"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" *ngIf="widget?.is_visible && widget?.name == 'Widget 8'">
+          <div class="dashChartBox timeline-panel" [ngClass]="
+            (projectRevenueData | json) != '{}' ? '' : 'not-found-height'
+          ">
+            <div class="t-head-box">
+              <div class="t-head-heading">
+                <h5>Project Revenue</h5>
+              </div>
+              <div class="t-head-action">
+                <ul>
+                  <li class="actionBox">
+                    <select class="select-box-class" (change)="onChange(prjrev, 1)" [(ngModel)]="prjrev" name="prjrev">
+                      <option value="m">Month</option>
+                      <option value="y">Year</option>
+                    </select>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)" (click)="deleteWidget(widget)"><i
+                        class="ico-moon icon-trash orange"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="t-head-heading mt-10">
+              <div class="row">
+                <div class="col-md-12">
+                  <div *ngIf="(projectRevenueData | json) == '{}'">
+                    <p class="data-not-found">Data not found</p>
+                  </div>
+                  <div *ngIf="(projectRevenueData | json) != '{}'">
+                    <div style="width: 850px;height:450px;margin: 0 auto;">
+                      <canvas id="projectrevenue"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" *ngIf="widget?.is_visible && widget?.name == 'Widget 9'">
+          <div class="dashChartBox timeline-panel"
+            [ngClass]="(projectRevenueTimeline | json) != '{}'? '': 'not-found-height'">
+            <div class="t-head-box">
+              <div class="t-head-heading">
+                <h5>Revenue Timeline</h5>
+              </div>
+              <div class="t-head-action">
+                <ul>
+                  <li class="actionBox">
+                    <select class="select-box-class" (change)="onChange(revtimeline, 2)" [(ngModel)]="revtimeline"
+                      name="revtimeline">
+                      <option value="m">INR</option>
+                      <option value="y">USD</option>
+                    </select>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)" (click)="deleteWidget(widget)"><i
+                        class="ico-moon icon-trash orange"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div *ngIf="(projectRevenueTimeline | json) == '{}'">
+              <p class="data-not-found">Data not found</p>
+            </div>
+            <div *ngIf="(projectRevenueTimeline | json) != '{}'">
+              <div style="width: 850px;height:450px;margin: 0 auto;">
+                <canvas id="myChart3"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" *ngIf="widget?.is_visible && widget?.name == 'Widget 10'">
+          <div class="dashChartBox timeline-panel"
+            [ngClass]="(projectcosttimelinewidget | json) != '{}' ? '' : 'not-found-height'">
+            <div class="t-head-box">
+              <div class="t-head-heading">
+                <h5>Project Cost Timeline</h5>
+              </div>
+              <div class="t-head-action">
+                <ul>
+                  <li class="actionBox">
+                    <select class="select-box-class" (change)="onChange(prjcosttimeline, 3)"
+                      [(ngModel)]="prjcosttimeline" name="prjcosttimeline">
+                      <option value="m">INR</option>
+                      <option value="y">USD</option>
+                    </select>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)" (click)="deleteWidget(widget)"><i
+                        class="ico-moon icon-trash orange"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div *ngIf="(projectcosttimelinewidget | json) == '{}'">
+              <p class="data-not-found">Data not found</p>
+            </div>
+            <div *ngIf="(projectcosttimelinewidget | json) != '{}'">
+              <div style="width: 850px;height:450px;margin: 0 auto;">
+                <canvas id="myChart4"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<!-- modalpopup -->
+<div class="modal fade" id="addwidget" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt="" /></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion y-scroll">
+        <h2>Add Widgets</h2>
+        <div>
+          <div class="disp-flex comn-box-shadow" *ngFor="let data of datas; let i = index;">
+            <div class="widget-img">
+              <img src="assets/img/w{{data?.widget_id}}.jpg" alt="" />
+            </div>
+            <div class="widget-text">
+              <h4>{{ data?.title }}</h4>
+              <span>{{ data?.description }}</span>
+              <!-- <p>Lorem ipsum dolor sit amet, consectetur.</p> -->
+            </div>
+            <div class="widget-btn">
+              <a href="javascript:void(0);" class="button1 nav-btn" (click)="toggle(data)">
+                <span class="p-0" *ngIf="!data.is_added">Add</span>
+                <span class="p-0" *ngIf="data.is_added"><i class="ico-moon icon-right custom-icon"></i></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="button1 nav-btn" (click)="addWidget('txtId', 'inlodImg')" type="submit">
+          <span id="txtId">Next</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg" />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt="" /></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p>Are you sure want to delete</p>
+        <button class="button2" (click)="deleteWidgets('confirmtxtid', 'confirmlodImg')">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg" />
+        </button>
+
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modalpopup -->

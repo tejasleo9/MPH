@@ -1,0 +1,930 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <ul class="nav nav-tabs h-tab-header">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/project">Projects</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/project/exclusion">Exclusion List</a>
+    </li>
+  </ul>
+  <div class="h-tab-content">
+    <!-- overview page-->
+    <div class="card ">
+      <ul class="overview-links">
+        <li><a routerLink="/project/overview" [queryParams]="{ action: lastAction}">Overview</a></li>
+        <li class="active">
+          <a routerLink="/project/target-groups">Target Groups <span>({{ proname }})</span></a>
+        </li>
+        <li *ngIf="project_status != '3'"><a routerLink="/project/scheduling"
+            [queryParams]="{ action: lastAction}">Scheduling</a></li>
+      </ul>
+      <div class="target-tab">
+        <div class="target-heading">
+          <h3 class="heading-1" routerLink="/project/target-groups" [queryParams]="{ action: lastAction}"><i
+              class="icon-arrow-left"></i>
+            target group</h3>
+        </div>
+        <div class="profile-left target-w100">
+          <div class="nav-pills">
+            <app-left-menu></app-left-menu>
+          </div>
+          <div class="tab-conten profiletab-content">
+            <div class="row">
+              <div class="col-12" *ngIf="qtype">
+                <div class="select-question sset">
+                  <div class="t-head-box sched-border">
+                    <div class="new-profile">
+                      <h3 class="inp-label">Setup Quota</h3>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam
+                        erat volutpat. Donecplacerat nisl magna, et faucibus arcu condimentum sed.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row quota-gender-box" *ngIf="gender != null">
+                  <div class="col-md-4" draggable droppable (onDrop)="onItemDrop($event,genderdata)"
+                    [dropEnabled]="gnonlock" [dragEnabled]="grtotal === reqcom && gnonlock" [dragData]="genderdata"
+                    [dragScope]="['agedata','regiondata','droppedData','this.propayload']" [dropScope]="['genderdata']">
+                    <div class="quota-box">
+                      <div class="quota-heading">
+                        <div class="custom-checkbox only-checkbox" *ngIf="gnonlockdrag">
+                          <input type="checkbox" class="gender-click" id="chk01"
+                            (change)="getFbyGender($event.target.checked)">
+                          <label for="chk01"></label>
+                        </div>
+                        <h2>Gender</h2>
+                      </div>
+                      <div class="quota-enable gender-show" *ngIf="gloaded === false">
+                        <div class="gender-table">
+                          <div class="table-scroll">
+                            <div class="table-heading">
+                              <div class="row">
+                                <div class="col">&nbsp;</div>
+                                <div class="col">Required</div>
+                                <div class="col">Feasibility</div>
+                              </div>
+                            </div>
+                            <div class="table-body">
+                              <div class="row" *ngFor="let item of nongender">
+                                <div class="col">{{item.quota_name}}</div>
+                                <div class="col"><span><input type="text" placeholder="50" class="gvalue"
+                                      value="{{item.required_completes}}"
+                                      (change)="feaByGender(item.quota_name,$event.target.value)"></span></div>
+                                <div class="col feaerror">
+                                  <img src="assets/img/loading.gif" alt="loderImg" *ngIf="gloader === false"
+                                    class="loderImg loaderImgShow">
+                                  <span *ngIf="gloader"
+                                    [class.error]="item.required_completes > item.feasible_completes">{{item.feasible_completes}}</span>
+                                </div>
+                              </div>
+                              <div class="row total-box">
+                                <div class="col">Total</div>
+                                <div class="col"><span>{{grtotal}}</span></div>
+                                <div class="col">
+                                  <img src="assets/img/loading.gif" alt="loderImg" *ngIf="!gloader"
+                                    class="loderImg loaderImgShow">
+                                  <span *ngIf="gloader">{{gftotal}}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <p *ngIf="grtotal === reqcom && gnonlock">
+                          Eligible for Interlock.
+                        </p>
+                        <!-- <p *ngIf="genderlock">Already Interlocked!</p> -->
+                        <p class="error" *ngIf="grtotal < reqcom || grtotal > reqcom">Required Completes Needs to be
+                          {{reqcom}}.</p>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4" draggable droppable (onDrop)="onItemDrop($event,agedata)"
+                    [dropEnabled]="agenonlock" [dragEnabled]="artotal === reqcom && agenonlock" [dragData]="agedata"
+                    *ngIf="age != null" [dragScope]="['genderdata','regiondata','droppedData','this.propayload']"
+                    [dropScope]="['agedata']">
+                    <div class="quota-box">
+                      <div class="quota-heading">
+                        <div class="custom-checkbox only-checkbox" *ngIf="anonlockdrag">
+                          <input type="checkbox" id="chk02" value="1" (change)="onagecheck($event.target.checked);">
+                          <label for="chk02"></label>
+                        </div>
+                        <h2>Age</h2>
+                      </div>
+                      <div class="quota-enable age-show" style="display:block" *ngIf="showagesrc">
+                        <div class="gender-table">
+                          <div class="table-scroll">
+                            <div class="table-heading">
+                              <div class="row">
+                                <div class="col">&nbsp;</div>
+                                <div class="col">Required</div>
+                                <div class="col">Feasibility</div>
+                              </div>
+                            </div>
+                            <div class="table-body">
+                              <div class="row" *ngFor="let item of nonage">
+                                <div class="col">{{item.quota_name}}</div>
+                                <div class="col"><span><input type="text" placeholder="50"
+                                      value="{{item.required_completes}}"
+                                      (change)="feaByAge(item.quota_name,$event.target.value)"></span></div>
+                                <div class="col feaerror"><img src="assets/img/loading.gif" alt="loderImg"
+                                    *ngIf="aloaded" class="loderImg loaderImgShow"><span *ngIf="!aloaded"
+                                    [class.error]="item.required_completes > item.feasible_completes">{{item.feasible_completes}}</span>
+                                </div>
+                              </div>
+                              <div class="row total-box">
+                                <div class="col">Total</div>
+                                <div class="col"><span>{{artotal}}</span></div>
+                                <div class="col"><img src="assets/img/loading.gif" alt="loderImg" *ngIf="aloaded"
+                                    class="loderImg loaderImgShow"><span *ngIf="!aloaded">{{aftotal}}</span></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <p *ngIf="artotal === reqcom && agenonlock">
+                          Eligible for Interlock.
+                        </p>
+                        <!-- <p *ngIf="agenonlock">Already Interlocked!</p> -->
+                        <p class="error" *ngIf="artotal < reqcom || artotal > reqcom">Required Completes Needs to be
+                          {{reqcom}}.</p>
+                      </div>
+                      <div class="quota-enable age-show" style="display:block" *ngIf="showagesrc == false">
+                        <div class="gender-table">
+                          <div class="table-body">
+                            <div class="row" *ngFor="let item of ageArray;let i = index;let last = last">
+                              <div class="col text-center"><span>{{item.minval}}</span></div>
+                              <div class="col"><span><input type="text" placeholder="{{maxvalue}}" id="maxval{{i}}"
+                                    [disabled]="item.is_disabled" (change)="getVal($event.target.value)"></span>
+                                    <!-- (input)="textValue = $event.target.value;" -->
+                              </div>
+                              <div class="col"><button class="button3 custom-padding" *ngIf="last"
+                                  (click)="addAge(textValue)">Add</button></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4" *ngIf="regions != null" draggable droppable
+                    (onDrop)="onItemDrop($event,regiondata)" [dragEnabled]="ctotal === reqcom && citynonlock"
+                    [dragData]="regiondata" [dropEnabled]="citynonlock" [dropScope]="['regiondata']"
+                    [dragScope]="['genderdata','agedata','droppedData','this.propayload']">
+                    <div class="quota-box">
+                      <div class="quota-heading">
+                        <div class="custom-checkbox only-checkbox" *ngIf="rnonlockdrag">
+                          <input type="checkbox" (click)="getFBbyRegion($event)" id="chk03">
+                          <label for="chk03"></label>
+                        </div>
+                        <h2>Region</h2>
+                      </div>
+                      <div class="quota-enable city-show" *ngIf="loloaded" style="display:block;">
+                        <div class="gender-table">
+                          <div class="table-scroll">
+                            <div class="table-heading">
+                              <div class="row">
+                                <div class="col">&nbsp;</div>
+                                <div class="col">Required</div>
+                                <div class="col">Feasibility</div>
+                              </div>
+                            </div>
+                            <div class="table-body">
+                              <div class="row" *ngFor="let item of nonregion">
+                                <div class="col">{{item.quota_name}}</div>
+                                <div class="col"><span><input type="text" placeholder="50"
+                                      value="{{item.required_completes}}"
+                                      (change)="feaByRegion(item.quota_name,$event.target.value)"></span></div>
+                                <div class="col feaerror">
+                                  <img src="assets/img/loading.gif" alt="loderImg" *ngIf="rloaded"
+                                    class="loderImg loaderImgShow">
+                                  <span *ngIf="!rloaded">{{item.feasible_completes}}</span></div>
+                              </div>
+                              <div class="row total-box">
+                                <div class="col">Total</div>
+                                <div class="col"><span>{{ctotal}}</span></div>
+                                <div class="col">
+                                  <img src="assets/img/loading.gif" alt="loderImg" *ngIf="rloaded"
+                                    class="loderImg loaderImgShow">
+                                  <span *ngIf="!rloaded">{{cftotal}}</span></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <p *ngIf="ctotal === reqcom && citynonlock">
+                          Eligible for Interlock.
+                        </p>
+                        <!-- <p *ngIf="citynonlock">Already Interlocked!</p> -->
+                        <p class="error" *ngIf="ctotal < reqcom || ctotal > reqcom">Required Completes Needs to be
+                          {{reqcom}}.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="row profile-box">
+                  <div class="col">
+                    <div class="quota-box">
+
+                      <div class="quota-heading">
+                        <div class="custom-checkbox only-checkbox">
+                          <input type="checkbox" (change)="showProfile()" [disabled]="queloaded" id="chk04">
+                          <label for="chk04"></label>
+                        </div>
+                        <h2>Show Profiling</h2>
+                      </div>
+
+                      <!-- <div class="quota-heading">
+                        <div class="custom-checkbox only-checkbox">
+                          <input type="checkbox" id="chk04" [disabled]="queloaded">
+                          <label for="chk04">
+                            <span>
+                              <h2>Show Profiling</h2>
+                            </span>
+                          </label>
+                        </div>
+                      </div> -->
+                      <div class="quota-enable profile-show inner-profile">
+                        <div class="row">
+
+                          <div class="col-6 quota-box" *ngFor="let item of nonques;let i = index;">
+                            <div draggable droppable (onDrop)="onItemDrop($event,item)"
+                              [dragEnabled]="item.total === reqcom" [dragData]="item"
+                              [dropEnabled]="item.total === reqcom" [dropScope]="['this.propayload']"
+                              [dragScope]="['genderdata','agedata','regiondata','droppedData']">
+                              <div class="custom-checkbox only-checkbox quescheckbox" id="chkdiv{{i}}"
+                                *ngIf="item?.inerlocked === false">
+                                <input type="checkbox" id="chk{{i}}"
+                                  (change)="getFBbyQues(item,'chkdiv'+i,$event.target.checked)"
+                                  [checked]="item?.is_checked"><label for="chk{{i}}"> </label>
+                              </div>
+                              <h3>{{item.question_text}}</h3>
+                              <div class="clear"></div>
+                              <div class="gender-table" *ngIf="item?.is_checked">
+                                <div class="table-scroll">
+                                  <div class="table-heading">
+                                    <div class="row">
+                                      <div class="col">&nbsp;</div>
+                                      <div class="col">Required</div>
+                                      <div class="col">Feasibility</div>
+                                    </div>
+                                  </div>
+                                  <div class="table-body">
+                                    <div class="row" *ngFor="let i of item.answers">
+                                      <div class="col">{{i.quota_name}}</div>
+                                      <div class="col">
+                                        <span>
+                                          <input type="text" placeholder="{{i.required_completes}}"
+                                            value="{{i.required_completes}}"
+                                            (change)="getFeabyQues(i.quota_name,$event.target.value,item)"></span></div>
+                                      <div class="col feaerror">
+                                        <img src="assets/img/loading.gif" alt="loderImg" *ngIf="item?.qloaded === false"
+                                          class="loderImg loaderImgShow">
+                                        <span *ngIf="item?.qloaded"
+                                          [class.error]="i.required_completes > i.feasible_completes">{{i.feasible_completes}}</span>
+                                      </div>
+                                    </div>
+                                    <div class="row total-box">
+                                      <div class="col">Total</div>
+                                      <div class="col"><span>{{item.total}}</span></div>
+                                      <div class="col">
+                                        <img src="assets/img/loading.gif" alt="loderImg" *ngIf="item?.qloaded === false"
+                                          class="loderImg loaderImgShow">
+                                        <span *ngIf="item?.qloaded">{{item.ftotal}}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <p *ngIf="item.total === reqcom && item.quesnonlock">
+                                  Eligible for Interlock.
+                                </p>
+                                <!-- <p *ngIf="citynonlock">Already Interlocked!</p> -->
+                                <p class="error" *ngIf="item.total < reqcom || item.total > reqcom">Required Completes
+                                  Needs to be
+                                  {{reqcom}}.</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row profile-box" *ngIf="droppedItems != ''">
+                  <div class="col" draggable droppable (onDrop)="onItemDrop($event,droppedData)"
+                    [dragEnabled]="gnonlockdrag" [dragData]="droppedData" [dropScope]="['droppedData']"
+                    [dragScope]="['genderdata','agedata','regiondata','this.propayload']">
+                    <div class="quota-box">
+                      <div class="quota-heading">
+                        <div class="custom-checkbox only-checkbox">
+                          <input type="checkbox" id="age-city">
+                          <label for="age-city" class="chekbox-none">
+                            <span>
+                              <h2>
+                                Interlocked Quotas
+                                <img src="assets/img/loading.gif" alt="loderImg" *ngIf="galoaded"
+                                  class="loderImg loaderImgShow">
+                              </h2>
+                            </span>
+                          </label>
+                        </div>
+                        <a class="remove-box" (click)="removeInterlock();"><i
+                            class="ico-moon icon-trash orange"></i></a>
+                      </div>
+                      <div class="quota-enable agecity-show">
+                        <div class="gender-table">
+                          <div class="table-scroll">
+                            <div class="table-heading">
+                              <div class="row">
+                                <div class="col-4">&nbsp;</div>
+                                <div class="col">Required</div>
+                                <div class="col">Feasibility</div>
+                              </div>
+                            </div>
+                            <div class="table-body">
+                              <div class="row" *ngFor="let item of droppedItems">
+                                <div class="col-4">{{item.quota_name}}</div>
+                                <div class="col"><span><input type="text" placeholder="50"
+                                      value="{{item.required_completes}}"
+                                      (change)="interChange(item.quota_name,$event.target.value);"></span></div>
+                                <div class="col feaerror">
+                                  <img src="assets/img/loading.gif" alt="loderImg" *ngIf="galoaded"
+                                    class="loderImg loaderImgShow">
+                                  <span *ngIf="!galoaded"
+                                    [class.error]="item.required_completes > item.feasible_completes">{{item.feasible_completes}}</span>
+                                  <!-- <span>{{item.feasible_completes}}</span> -->
+                                </div>
+                              </div>
+                              <div class="row total-box">
+                                <div class="col">Total</div>
+                                <div class="col"><span>{{intotal}}</span></div>
+                                <div class="col"><span>{{inftotal}}</span></div>
+                              </div>
+                            </div>
+                            <p class="error" *ngIf="intotal < reqcom || intotal > reqcom">Required Completes Needs to
+                              be {{reqcom}}.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Code after interlock  -->
+
+              <div class="col-12" *ngIf="!qtype">
+                <!-- <div class="h-tab-content notoppad">
+                  <div class="">
+                    <div class="myTable">
+                      <div class="mytablehead mytablehead-sched">
+                        <div class="row">
+                          <div class="col flx2"><span>Quotas</span></div>
+                          <div class="col flx2"><span>Achieved/Required</span></div>
+                          <div class="col"><span class="text-center" style="display:inline-block">Invited</span></div>
+                        </div>
+                      </div>
+                      <div class="myTableBody myTableBody-sched link-shed-span" *ngFor="let interlockquota of schList">
+                        <div class="row">
+                          <div class="col flx2"> <span>
+                              {{interlockquota.quota_name}}
+                            </span> </div>
+                          <div class="col flx2">
+                            <span class="req-num">
+                              <small>{{interlockquota.completes_achieved}}</small>/{{interlockquota.completes_required}}
+                            </span>
+                          </div>
+                          <div class="col"><span class="text-center">{{interlockquota.total_invited}}</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+                <div class="h-tab-content sched-content">
+                  <div class="t-head-action custom-header">
+                    <p class="float-left d-inline" style="font-size: 14px;color: red;" *ngIf="is_authorized == 0">
+                      Project
+                      is not Authorized</p>
+                    <ul>
+                      <li class="custom-width text-left">
+                        <ng-select name="industry" label="Source" placeholder="Select Option" [options]="sources"
+                          [(ngModel)]="srcId"></ng-select>
+                      </li>
+                      <li *ngIf="is_authorized == 0">
+                        <a href="javascript:void(0);" class="button1" (click)="authorizedTrgGrp();">
+                          <span>Authorize Project</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="javascript:void(0);" class="button1" (click)="addSupplier();f.reset();"
+                          [ngClass]="{'disableee': (selectedDatas.length == 0)}"
+                          [ngClass]="{'disableee': (is_authorized == 0)}">
+                          <i>+</i>
+                          <span>Add Supplier</span>
+                        </a>
+                      </li>
+                      <li><a href="javascript:void(0)" (click)="disablesRouting();" class="button2 btn-lgrn-red"
+                          [ngClass]="{'disableee': (selectedDatas.length == 0)}"
+                          [ngClass]="{'disableee': (is_authorized == 0)}">
+                          Disable Routing </a></li>
+                      <li><a href="javascript:void(0)" (click)="enableRouting();" class="button2 btn-lgrn"
+                          [ngClass]="{'disableee': (selectedDatas.length == 0)}"
+                          [ngClass]="{'disableee': (is_authorized == 0)}">
+                          <i class="icon-setting" style="font-size: 16px;vertical-align: middle;margin-right: 5px;"></i>
+                          <!-- <img src="assets/img/routing.png" alt=""> -->
+                          Enable Routing </a></li>
+                      <li><a href="javascript:void(0);" (click)="schduleQuota();f.reset();" class="button2 btn-ylw"
+                          [ngClass]="{'disableee': (selectedDatas.length == 0)}"
+                          [ngClass]="{'disableee': (is_authorized == 0)}"><i class="icon-user"></i>
+                          Schedule </a></li>
+                    </ul>
+                  </div>
+                  <div class="myTable table-scheduling">
+                    <div class="mytablehead mytablehead-sched">
+                      <div class="row quota-row">
+                        <div class="col more padd-r0"><span></span></div>
+                        <div class="col"><span></span></div>
+                        <div class="col"><span>Achieved/Required</span></div>
+                        <div class="col"><span>Total Invited </span></div>
+                        <!-- <div class="col more"></div> -->
+                      </div>
+                    </div>
+                    <div class="myTableBody myTableBody-sched mytablehead-sched link-shed-span"
+                      *ngFor="let interlockquota of schList">
+                      <div class="row">
+                        <div class="col more padd-r0">
+                          <span>
+                            <div class="custom-checkbox only-checkbox">
+                              <input type="checkbox" id="{{'chk1'+interlockquota.quota_id}}"
+                                (click)="selectData(interlockquota, $event.target.checked);">
+                              <label for="{{'chk1'+interlockquota.quota_id}}"></label>
+                            </div>
+                          </span>
+                        </div>
+                        <div class="col">
+                          <span class="supl-name">
+                            <strong> <img src="assets/img/routing.png" alt="mph_routing" class="mr-1"
+                                *ngIf="interlockquota?.routing_enabled == 1">
+                              {{interlockquota.quota_name}} </strong>
+                          </span>
+                        </div>
+                        <div class="col">
+                          <span class="color-black req-num">
+                            <small>{{interlockquota.completes_achieved}}</small>/<input type="number" placeholder="50"
+                              (change)="changeReq(interlockquota, $event.target.value,'list');"
+                              value="{{interlockquota.req}}" name="req">
+                          </span>
+                        </div>
+                        <div class="col"><span>{{interlockquota.total_invited}}</span></div>
+                        <!-- <div class="col more">
+                          <span><i class="ico-moon icon-more"></i></span>
+                          <ul class="action-popup">
+                            <li><a href="javascript:void(0);"><i class="ico-moon icon-pencil blue"></i> Edit</a></li>
+                            <li><a href="javascript:void(0);"><i class="ico-moon icon-right green"></i>
+                                Download</a></li>
+                            <li><a href="javascript:void(0);"><i class="ico-moon icon-trash orange"></i> Delete</a></li>
+                          </ul>
+                        </div> -->
+                      </div>
+                    </div>
+                    <div class="message error centererror" *ngIf="schList?.length == 0">No Quota Found</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="profile-btn">
+          <button class="button3" (click)="previous();">Previous</button>
+          <button class="button1 nav-btn" (click)="storeQuota('txtId', 'inlodImg');">
+            <img src="assets/img/loading.gif" alt="loderImg" id="inlodImg" class="loderImg">
+            <span id="txtId">Next</span>
+          </button>
+          <button class="button1 cancel-btn" routerLink="/project/target-groups"
+            [queryParams]="{ action: lastAction}">Cancel</button>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="modal fade" id="addSupplier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-custom modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="onSubmitAddSupplier(f, 'textId', 'loderId')" #f="ngForm">
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <h4>Add Supplier</h4>
+                <div class="col-6">
+                  <div class="input-box m-0">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Supplier Name" [(ngModel)]="supplier.name" placeholder=""
+                        class="inp-field" name="name" [ngClass]="{'on-error' : snamee.touched && !snamee.valid}"
+                        #snamee="ngModel" required>
+                      <span>Supplier Name</span>
+                    </label>
+                    <div *ngIf="snamee.touched && !snamee.valid">
+                      <div class="validation-message r-zero" *ngIf="snamee.errors.required">required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="URL Parameters" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.url_params" name="url_params" id="pname">
+                      <span>URL Parameters</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Complete URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.complete_url" name="complete_url" id="pname">
+                      <span>Complete URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Screenout URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.screenout_url" name="screenout_url" id="pname">
+                      <span>Screenout URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Quotafull URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.quotafull_url" name="quotafull_url" id="pname">
+                      <span>Quotafull URL</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <h4> Pixel Tracking </h4>
+                <div class="col-6  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="ttypes"
+                    [(ngModel)]="supplier.tracking_type" placeholder="Select Type" label="Tracking Type"
+                    name="tracking_type" id="ttpye">
+                  </ng-select>
+                </div>
+                <div class="col-6  shed-drop" *ngIf="supplier.tracking_type == 2">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="tmethods"
+                    [(ngModel)]="supplier.tracking_method" placeholder="Select Method" label="Tracking Method"
+                    name="tracking_method" id="tmethod">
+                  </ng-select>
+                </div>
+                <div class="col-12" *ngIf="supplier.tracking_method == 1">
+                  <div class="filter-heading m-0">
+                    <span style="font-size: 13px;font-weight: 500;">Tracking URL</span>
+                    <textarea name="post_params" [(ngModel)]="supplier.post_params" name="post_params" cols="20"
+                      rows="7"></textarea>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box mb-3">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Tracking URL" class="inp-field" placeholder="" name="tracking_url"
+                        id="pname" [(ngModel)]="supplier.tracking_url">
+                      <span>Tracking URL</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <h4> Quotas </h4>
+                <div class="q-box col-12" *ngIf="quotas?.length > 0">
+                  <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                    <div class="col-4">
+                      <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                    </div>
+                    <div class="col-4">
+                      <input type="text" [value]="quota?.req" name="quota_req"
+                        (change)="changeReq(quota, $event.target.value, 's');" required>
+                    </div>
+                    <div class="col-4">
+                      <small>Max: {{quota?.completes_required}}</small>
+                      <div (click)="remove(quota,i)" class="cross-class">
+                        <img src="assets/img/cross-red.png" alt="" class="w-100">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" [class.disable]="is_disabled" [disabled]="is_disabled">
+            <span id="textId">Add</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderId" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="modal fade" id="addSupplier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-custom modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeMd();">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="onSubmitAddSupplier(f, 'textId', 'loderId')" #f="ngForm" novalidate>
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <h4>Add Supplier</h4>
+                <!-- <div class="col-12"><input type="text" placeholder="Supplier Name"></div> -->
+                <div class="col-6">
+                  <div class="input-box m-0">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Supplier Name" [(ngModel)]="supplier.name" placeholder=""
+                        class="inp-field" name="name" #sname="ngModel" required />
+                      <span>Supplier Name</span>
+                    </label>
+                    <div *ngIf="is_req">
+                      <div class="validation-message r-zero">Required</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="URL Parameters" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.url_params" name="url_params" id="pname">
+                      <span>URL Parameters</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Complete URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.complete_url" name="complete_url" id="pname">
+                      <span>Complete URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Screenout URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.screenout_url" name="screenout_url" id="pname">
+                      <span>Screenout URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-box input-box-custom">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Quotafull URL" class="inp-field" placeholder=""
+                        [(ngModel)]="supplier.quotafull_url" name="quotafull_url" id="pname">
+                      <span>Quotafull URL</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <h4> Pixel Tracking </h4>
+                <div class="col-6  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="ttypes"
+                    [(ngModel)]="supplier.tracking_type" (selected)="supplier.post_params = null" placeholder="Select Type" label="Tracking Type"
+                    name="tracking_type" id="ttpye">
+                  </ng-select>
+                </div>
+                <div class="col-6  shed-drop" *ngIf="supplier.tracking_type == 2">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="tmethods"
+                    [(ngModel)]="supplier.tracking_method" placeholder="Select Method"
+                    (selected)="supplier.post_params = null" label="Tracking Method" name="tracking_method"
+                    id="tmethod">
+                  </ng-select>
+                </div>
+                <div class="col-12">
+                  <div class="input-box mb-3">
+                    <label class="inp-label has-float-label">
+                      <input type="text" placeholder="Tracking URL" class="inp-field" name="tracking_url" id="pname"
+                        [(ngModel)]="supplier.tracking_url">
+                      <span>Tracking URL</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="col-12" *ngIf="supplier.tracking_method == 1 && supplier.tracking_type == 2">
+                  <div class="filter-heading m-0">
+                    <label class="inp-label f-12">POST Parameters</label>
+                    <textarea name="post_params" class="textareaclass m-0" [(ngModel)]="supplier.post_params" cols="20"
+                      rows="3"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <h4> Quotas </h4>
+                <div class="q-box col-12" *ngIf="quotas?.length > 0">
+                  <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                    <div class="col-4">
+                      <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                    </div>
+                    <div class="col-4">
+                      <input type="text" [value]="quota?.req" name="quota_req"
+                        (change)="changeReq(quota, $event.target.value, 's');" required>
+                    </div>
+                    <div class="col-4">
+                      <small>Max: {{quota?.completes_required}}</small>
+                      <div (click)="remove(quota,i)" class="cross-class">
+                        <img src="assets/img/cross-red.png" alt="" class="w-100">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" type="submit" [class.disable]="is_disabled" [disabled]="is_disabled">
+            <span id="textId">Add</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderId" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="enableRoutings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-custom modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeMd();">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="enRouting(f, 'entextId', 'enloderId')" #f="ngForm">
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <h4>Enable Routing</h4>
+                <div class="col-4  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="schSource"
+                    [(ngModel)]="supplier.routing_type" placeholder="Select Type" label="Routing Type"
+                    name="tracking_type" id="ttpye">
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="row">
+                <h4> Quotas </h4>
+                <div class="q-box col-12" *ngIf="quotas?.length > 0">
+                  <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                    <div class="col-4">
+                      <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                    </div>
+                    <div class="col-4">
+                      <input type="text" [value]="quota?.req" name="reqcomp"
+                        (change)="changeReq(quota, $event.target.value, 'e');">
+                    </div>
+                    <div class="col-4">
+                      <small>Max: {{quota?.completes_required - quota?.completes_achieved}}</small>
+                      <div (click)="remove(quota,i)" class="cross-class">
+                        <img src="assets/img/cross-red.png" alt="" class="w-100">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" [class.disable]="is_disabled" [disabled]="is_disabled" type="submit">
+            <span id="entextId">Enable Routing</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="enloderId" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="scheduleModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeMd();" aria-label="Close">
+          <span aria-hidden="true"><img src="assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body schedul-modal">
+        <form (ngSubmit)="onSubmitSchedule('textIdd', 'loderIdd')" #f="ngForm" novalidate>
+          <div>
+            <div class="row">
+              <h4>Schedule Quota</h4>
+              <div class="col-12  shed-drop">
+                <div class="switch switch--horizontal switch--myRedio">
+                  <input id="radio-o" type="radio" name="tptSwitch" value="n" [(ngModel)]="tptSwitch" class="redio-four"
+                    (change)="tptCheck(tptSwitch)" />
+                  <label for="radio-o" class="first-lab">Now</label>
+                  <input id="radio-0f" type="radio" name="tptSwitch" value="f" [(ngModel)]="tptSwitch" class="redio-four"
+                    (change)="tptCheck(tptSwitch)" />
+                  <label for="radio-0f" class="off ">Future</label>
+                  <span class="toggle-outside redio-four"><span class="toggle-inside"></span></span>
+                </div>
+              </div>
+              <div class="col-12" [hidden]="!future">
+                <div class="input-box">
+                  <label class="inp-label has-float-label">
+                    <input type='text' class="inp-field" id='datetimepicker4' />
+                    <span>Schedule at</span>
+                  </label>
+                </div>
+              </div>
+              <!-- <div class="col-12  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="isnow" [(ngModel)]="supplier.is_now"
+                    placeholder="Is now" label="Is now" name="is_now" required id="ttpye">
+                  </ng-select>
+                </div> -->
+              <!-- <div class="col-12  shed-drop">
+                  <ng-select class="rch-ind drop-select" name="industry" [options]="sources" [(ngModel)]="supplier.source_id"
+                    placeholder="Select Source" label="Source" name="source_id" required id="tmethod">
+                  </ng-select>
+                </div> -->
+              <!-- (selected)="getCategory($event)" [options]="indOpt"  -->
+            </div>
+          </div>
+          <div class="row">
+            <h4> Quotas </h4>
+            <div class="q-box col-12" *ngIf="quotas?.length > 0">
+              <div class="row justify-content-center align-self-center" *ngFor="let quota of quotas;let i = index">
+                <div class="col-6">
+                  <label style="font-size: 14px;">{{quota?.quota_name}}</label>
+                </div>
+                <div class="col-2">
+                  <input type="text" [value]="quota?.req" name="reqcomp"
+                    (change)="changeReq(quota, $event.target.value, 'e');">
+                </div>
+                <div class="col-4">
+                  <small>Max: {{quota?.completes_required - quota?.completes_achieved}}</small>
+                  <div (click)="remove(quota,i)" class="cross-class">
+                    <img src="assets/img/cross-red.png" alt="" class="w-100">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="button2" [class.disable]="is_disabled" [disabled]="is_disabled" type="submit">
+            <span id="textIdd">Schedule</span>
+            <img src="assets/img/loading.gif" alt="loderImg" id="loderIdd" class="loderImg">
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeMd();">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p> {{popupMess}}</p>
+        <button class="button2" (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

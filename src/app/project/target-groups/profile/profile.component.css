@@ -1,0 +1,9 @@
+.loading {
+  font-size: 14px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.radio-box label{
+  margin: 20px 0px 0 !important;
+}

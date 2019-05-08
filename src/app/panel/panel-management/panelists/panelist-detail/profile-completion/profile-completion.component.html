@@ -1,0 +1,66 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <!-- overview page-->
+  <div class="card ">
+    <ul class="overview-links six-links">
+      <li><a routerLink="/panel/panel-management/panelists/overview">Overview</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/project-history">Project History</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/point-history">Point History</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/redemption-history">Redemption History</a></li>
+      <li><a routerLink="/panel/panel-management/panelists/referral-history">Referral History</a></li>
+      <li class="active"><a routerLink="/panel/panel-management/panelists/profile-completion">Profile Completion</a>
+      </li>
+    </ul>
+    <div class="target-tab">
+      <div class="profile-left" *ngIf="summaryData">
+        <h3 class="inp-label total-prof">Total Profile Depth - 0%</h3>
+        <div class="nav-pills">
+          <a class="nav-link curPOinter" *ngFor="let catg of catgList; let m = index"
+            [ngClass]="{'active': catgActive == m}" (click)="catgChange(m)">
+            {{catg?.category_name}} ({{catg?.completion}}%) <i class="icon-arrow-right"></i>
+          </a>
+        </div>
+        <div class="tab-content profiletab-content">
+          <div class="select-question prof-comp" *ngFor="let cat of catgList; let i = index" [hidden]="i != catgActive">
+            <a href="javascript:void(0);" (click)="fliterCategory('all', cat);" [ngStyle]="{'border-bottom': callFrom == 'all' ? '2px solid #666': 'none'}" class="inp-label">All</a>
+            <a href="javascript:void(0);" (click)="fliterCategory('a', cat);" [ngStyle]="{'border-bottom': callFrom == 'a' ? '2px solid #2bca97': 'none'}" class="inp-label green">Answered</a>
+            <a href="javascript:void(0);" (click)="fliterCategory('u', cat);" [ngStyle]="{'border-bottom': callFrom == 'u' ? '2px solid #ff5050': 'none'}" class="inp-label red">Unanswered</a>
+
+            <div class="clearfix"></div>
+            <div class="question-set">
+              <div class="accordion">
+                <div class="card">
+                  <div class="card-body border-top-0">
+                    <!-- Question box -->
+                    <div class="card-box" *ngFor="let qt of cat.filterqes; let j = index">
+                      <div class="custom-checkbox only-checkbox">
+                        <span class="prof-comp-nos" [ngClass]="qt.is_answered ? 'green' : 'red'">{{j+1}}</span>
+                        <span class="acc-heading" [ngClass]="qt.is_answered ? 'green' : 'red'">{{qt?.question}}</span>
+                      </div>
+                      <ul class="accordion-ul">
+                        <!-- Answers -->
+                        <li *ngFor="let ans of qt.answers; let k = index">
+                          <div class="custom-checkbox only-checkbox">
+                            <input type="checkbox" [attr.id]="'ansr'+i+j+k" [checked]="ans.is_answered">
+                            <label [attr.for]="'ans'+i+j+k"><span>{{ans?.answer_text}}</span></label>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="message error centererror" *ngIf="(cat.filterqes)?.length === 0">No Data Found</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

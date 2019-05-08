@@ -1,0 +1,50 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <acc-sub-header></acc-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2>List monthly invoice</h2>
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li>
+          <div class="searchAdv">
+            <input type="text" placeholder="Search" class="searchFld" name="invFilter"
+              [(ngModel)]="invoiceFilter.invoice_number">
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="t-table-box">
+    <div class="myTable ">
+      <div class="myTableHead">
+        <div class="row">
+          <div class="col"><span>Invoice Number<i class="ico-moon icon-sort"></i></span> </div>
+          <div class="col"><span>From Date<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span>To Date<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span>Download</span></div>
+        </div>
+      </div>
+      <div class="message error centererror" *ngIf="ifError || (invoiceList | filterBy: invoiceFilter)?.length === 0">No
+        Invoices Found</div>
+
+      <div *ngIf="invoiceList != ''">
+        <div class="myTableBody" *ngFor="let p of invoiceList | filterBy: invoiceFilter;">
+          <div class="row">
+            <div class="col"><span>{{p.invoice_number}}</span></div>
+            <div class="col"><span>{{p.from_date}}</span></div>
+            <div class="col"><span>{{p.to_date}}</span></div>
+            <div class="col"><a href="{{'http://m4-live.mysurveyhub.com/invoices/'+p.invoice_file}}" target="_blank" download><span>Download</span></a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Table Ends -->
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="login-box card">
+  <h3>Reset Password</h3>
+  <form #f="ngForm" (ngSubmit)="validateForm(f, 'confirmtxtid', 'confirmlodImg');">
+    <div class="input-box">
+      <!-- <i class="ico-moon icon-right green"></i> -->
+      <span class="log-img"><img src="assets/img/log02.png" alt=""></span>
+      <label for="" class="inp-label">New Password</label>
+      <input type="password" [disabled]="is_disable" placeholder="****************" name="password"
+        [(ngModel)]="password" #resetpass="ngModel" class="inp-field custom-input" autocomplete="off" required>
+      <div *ngIf="resetpass.touched && !resetpass.valid">
+        <div class="validation-message" *ngIf="resetpass.errors.required">Required</div>
+      </div>
+      <div id="password" class="display-none"></div>
+    </div>
+    <div class="input-box">
+      <span class="log-img"><img src="assets/img/log02.png" alt=""></span>
+      <label for="" class="inp-label">Confirm New Password</label>
+      <input type="password" [disabled]="is_disable" placeholder="****************" name="retype_password"
+        [(ngModel)]="retype_password" #resetrepass="ngModel" class="inp-field custom-input" autocomplete="off" required>
+      <div *ngIf="resetrepass.touched && !resetrepass.valid">
+        <div class="validation-message" *ngIf="resetrepass.errors.required">Required</div>
+      </div>
+      <div id="retype_password" class="display-none"></div>
+    </div>
+    <button href="javascript:void(0);" class="button2 nav-btn" [disabled]="is_disable">
+      <span id="confirmtxtid">Reset</span>
+      <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+    </button>
+    <a routerLink="/signin" class="forg-pass w-100 d-block text-center mt-3">Login</a>
+  </form>
+</div>
+<!-- Content Box -->

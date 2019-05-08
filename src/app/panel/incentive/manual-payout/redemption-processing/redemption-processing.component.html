@@ -1,0 +1,135 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+
+<div class="h-tab-content">
+  <div class="card ">
+    <ul class="overview-links">
+      <li><a routerLink="/panel/incentive/redeem-request">Redeem Request</a></li>
+      <li class="active"><a routerLink="/panel/incentive/redemption-processing">Redemption Processing</a></li>
+      <li><a routerLink="/panel/incentive/dispatched">Dispatched</a></li>
+    </ul>
+
+    <div class="t-head-action">
+      <ul class="pull-right margin-20">
+        <li>
+          <div class="searchAdv"><input type="text" placeholder="Search" class="searchFld"
+              [(ngModel)]="redeemFilter.payment_method_name">
+
+          </div>
+        </li>
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="target-tab">
+      <div class="profile-left target-w100">
+        <div class="t-table-box">
+          <div class="myTable">
+            <div class="myTableHead">
+              <div class="row">
+                <div class="col"><span (click)="sortData('payment_method_name')">Payment Method <i class="ico-moon icon-sort"></i></span> </div>
+                <div class="col"><span (click)="sortData('total_transactions')">Total Transaction <i class="ico-moon icon-sort"></i></span></div>
+                <div class="col"><span (click)="sortData('total_points')">Total Points <i class="ico-moon icon-sort"></i></span></div>
+                <div class="col more"><span>&nbsp;</span></div>
+              </div>
+            </div>
+            <div class="message error centererror"
+              *ngIf="(redeemlist | filterBy: redeemFilter)?.length === 0">No Redemption Processing Found
+            </div>
+            <div>
+              <div class="myTableBody" *ngFor="let rlist of redeemlist | orderBy: order : reverse : true | filterBy: redeemFilter;">
+                <div class="row">
+                  <div class="col"><span>{{rlist?.payment_method_name}}</span></div>
+                  <div class="col"><span>{{rlist?.total_transactions}}</span></div>
+                  <div class="col"><span>{{rlist?.total_points}}</span></div>
+                  <div class="col more">
+                    <span><i class="ico-moon icon-more"></i></span>
+                    <ul class="action-popup">
+                      <li><a href="javascript:void(0)" (click)="dispatchbatch(rlist.batch_id)"><i
+                            class="ico-moon icon-right green"></i>
+                          Dispatch</a></li>
+                      <li><a href="javascript:void(0)" (click)="downloadbatch(rlist.batch_id)"><i
+                            class="ico-moon icon-right green"></i>
+                          Download</a></li>
+                      <li><a href="javascript:void(0)" (click)="cancelbatch(rlist.batch_id)"><i
+                            class="ico-moon icon-stop red"></i>
+                          Cancel</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Table Ends -->
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Delete modalpopup -->
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p> {{popupMess}}</p>
+        <div class="row">
+          <div class="offset-md-3 col-6">
+            <div class="input-box">
+              <textarea rows="5" placeholder="Write your reason here..." class="inp-field" name="message"
+                [(ngModel)]="reason"></textarea>
+            </div>
+          </div>
+        </div>
+        <button class="button2" (click)="cancelBatchConfirm(reason,'confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+        </button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Delete modalpopup -->
+<div class="modal fade" id="downloadBox" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Dispatch</h2>
+        <p><a href="{{downloadredeemfile}}">Download</a> the redeem batch file.</p>
+
+        <h3 class="inp-label">Upload Reward Codes to distpatch this batch.</h3>
+        <label class="custom-file" id="customFile">
+          <input type="file" class="custom-file-input" id="exampleInputFile" (change)="getCsvFile($event);"
+            aria-describedby="fileHelp" required />
+          <span class="custom-file-control form-control-file">{{fileName}}</span>
+        </label>
+        <button class="button2" (click)="uploadBatchConfirm('dconfirmtxtid', 'dconfirmlodImg');">
+          <span id="dconfirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="dconfirmlodImg" class="loderImg">
+        </button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+        <div [innerHTML]="errmessage" style="margin-top: 20px;" class="error"></div>
+      </div>
+    </div>
+  </div>
+</div>

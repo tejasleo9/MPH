@@ -1,0 +1,82 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <div class="card ">
+    <ul class="overview-links">
+      <li><a routerLink="/panel/incentive/redeem-request">Redeem Request</a></li>
+      <li><a routerLink="/panel/incentive/redemption-processing">Redemption Processing</a></li>
+      <li class="active"><a routerLink="/panel/incentive/dispatched">Dispatched</a></li>
+    </ul>
+
+    <div class="t-head-action">
+      <ul class="pull-right margin-20">
+        <li>
+          <div class="searchAdv"><input type="text" placeholder="Search" class="searchFld"
+              [(ngModel)]="redeemFilter.payment_method_name">
+          </div>
+        </li>
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="target-tab">
+      <div class="profile-left target-w100">
+        <div class="t-table-box">
+          <div class="myTable">
+            <div class="myTableHead">
+              <div class="row">
+                <div class="col"><span>Payment Method</span> </div>
+                <div class="col"><span>Total Transaction</span></div>
+                <div class="col"><span>Total Points</span></div>
+                <div class="col more"><span>&nbsp;</span></div>
+              </div>
+            </div>
+            <div class="message error centererror"
+              *ngIf="(redeemlist | filterBy: redeemFilter)?.length === 0 || ifError">No Dispatched Redemption Found
+            </div>
+            <div>
+              <div class="myTableBody"
+                *ngFor="let rlist of redeemlist | paginate: { itemsPerPage: pageSize, currentPage: cPage, totalItems: total } | filterBy: redeemFilter;">
+                <div class="row">
+                  <div class="col"><span>{{rlist?.payment_method_name}}</span></div>
+                  <div class="col"><span>{{rlist?.total_transactions}}</span></div>
+                  <div class="col"><span>{{rlist?.total_points}}</span></div>
+                  <div class="col more">
+                    <span><i class="ico-moon icon-more"></i></span>
+                    <ul class="action-popup">
+                      <li><a href="javascript:void(0)" (click)="downloadbatch(rlist.batch_id)"><i
+                            class="ico-moon icon-right green"></i>
+                          Download</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Table Ends -->
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>
+<div class="paginationBox" *ngIf="(redeemlist | filterBy: redeemFilter)?.length != 0">
+  <div class="pagination justify-content-center">
+    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  </div>
+  <div class="rowsBox" *ngIf="(redeemlist | filterBy: redeemFilter)?.length != 0">
+    <div class="actionBox">
+      <!-- <div class="actionBtn">Rows</div> -->
+      <select class="select-box-class" (change)="perPage(perpage);" [(ngModel)]="perpage" name="perpage">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+</div>

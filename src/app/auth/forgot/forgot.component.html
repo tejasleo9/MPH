@@ -1,0 +1,21 @@
+<div class="login-box card">
+  <h3>Forgot Password</h3>
+  <form #f="ngForm" (ngSubmit)="validateForm(f, 'confirmtxtid', 'confirmlodImg');">
+    <div class="input-box">
+      <!-- <i class="ico-moon icon-right green"></i> -->
+      <span class="log-img"><img src="assets/img/log03.png" alt=""></span>
+      <label for="" class="inp-label">Email Id</label>
+      <input type="email" placeholder="eg. Jhondoe@mypanelhub.com" name="email" [(ngModel)]="email" class="inp-field custom-input" #emailid="ngModel" required>
+      <div *ngIf="emailid.touched && !emailid.valid">
+        <div class="validation-message" *ngIf="emailid.errors.required">Required</div>
+      </div>
+      <div id="email" class="display-none"></div>
+    </div>
+    <button href="javascript:void(0);" class="button2 nav-btn">
+      <span id="confirmtxtid">Send</span>
+      <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+    </button>
+    <a routerLink="/signin" class="forg-pass w-100 d-block text-center mt-3">Login</a>
+  </form>
+</div>
+<!-- Content Box -->

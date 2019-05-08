@@ -1,0 +1,14 @@
+.selected-cat{
+  height: 150px;
+  padding: 10px;
+  border: 1px solid #e5e6eb;
+  margin-top: 10px;
+}
+
+
+.switch--horizontall {
+    width: auto;
+    font-size: 0;
+    margin-bottom: 20px;
+    margin-top: 15px;
+}

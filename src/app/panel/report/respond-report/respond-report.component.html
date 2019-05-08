@@ -1,0 +1,72 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <div class="t-head-box">
+    <div class="t-head-heading panel-icon">
+      <h2>Respondant Report</h2>
+    </div>
+  </div>
+  <!-- overview page-->
+  <div class="overview-tab new-panel t-table-box">
+    <div class="row">
+      <div class="col-6">
+        <form (ngSubmit)= novalidate #uform="ngForm">
+          <div class="input-box info-select reportselect">
+            <ng-select class="rch-ind drop-select" placeholder="Select Option" [options]="projects"
+              label="Select Projects" id="panelists" name="projects" [(ngModel)]="panelsList">
+            </ng-select>
+            <div id="projectss" class="validation-message d-none">
+              <div>required</div>
+            </div>
+            <div id="project_id" class="display-none"></div>
+            <div class="clear"></div>
+          </div>
+          <div class="input-box info-select reportselect">
+            <ng-select class="rch-ind drop-select" multiple="true" placeholder="Select Option" [options]="statusOptions"
+              label="Select Respondant Status" name="respondent_status" id="status" [(ngModel)]="paneliststatus">
+            </ng-select>
+            <div id="respondent_statuss" class="validation-message d-none">
+              <div>required</div>
+            </div>
+            <div id="respondent_status" class="display-none"></div>
+            <div class="select-box">
+              <div class="custom-checkbox only-checkbox"><input type="checkbox" id="chk04"
+                  [checked]="paneliststatus.length === statusOptions.length"
+                  (click)="selectStatus($event.target.checked);"><label for="chk04"><span>Select All</span></label>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <button class="button1 nav-btn" (click)="onSubmitClik(uform, 'updatetxtid', 'updatetxtloader');" *ngIf="recordText == 0">
+            <span id="updatetxtid">Fetch Record</span>
+            <img src="assets/img/loading.gif" alt="addloderImg" id="updatetxtloader" class="loderImg">
+          </button>
+          <button class="button1 nav-btn" (click)="downloadReport('updatetxtid2', 'updatetxtloader2');" *ngIf="recordText > 0">
+            <span id="updatetxtid2">Download</span>
+            <img src="assets/img/loading.gif" alt="addloderImg" id="updatetxtloader2" class="loderImg">
+          </button>
+          <!-- <a href="{{downloadLink}}" class="button1 nav-btn" >
+            <span id="updatetxtid"></span>
+          </a> -->
+          <a class="button3 float-right m-0" (click)="reset();" *ngIf="recordFound">Reset</a>
+          <p class="records" *ngIf="recordFound">{{recordText}} Respondent Counts Found.</p>
+        </form>
+      </div>
+      <div class="col-6" *ngIf="downloadList?.length > 0">
+        <div class="right-side-report">
+          <h3>Last 10 Downloaded Files</h3>
+          <h4 class="inp-label">File Name</h4>
+          <ul>
+            <li *ngFor="let r of downloadList;">
+              <a href="{{r?.value}}" target="_blank" download>{{r?.label}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

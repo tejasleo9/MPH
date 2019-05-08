@@ -1,0 +1,111 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2>Templates</h2>
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li><a href="javascript:void(0);" class="button1" (click)="newAction();"><i>+</i><span>Add
+              New Template </span></a></li>
+        <li>
+          <div class="searchAdv">
+            <input type="text" placeholder="Search" class="searchFld" [(ngModel)]="tempFilter.name">
+          </div>
+        </li>
+        <li class="actionBox">
+          <button class="del-btn" appAppNoDblClick (click)="delete(null, 'a')" [class.disable]="disablelink==true"><i class="ico-moon icon-trash orange"></i>Delete</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="t-table-box">
+    <div class="myTable pl-center">
+      <div class="myTableHead">
+        <div class="row">
+          <div class="col more padd-r0">
+            <span>
+              <div class="custom-checkbox only-checkbox">
+                <input type="checkbox" id="chk0" (click)="selectAll($event.target.checked);" />
+                <label for="chk0"></label>
+              </div>
+            </span>
+          </div>
+          <div class="col flx2"> <span (click)="sortData('name')"> Name <i class="ico-moon icon-sort"></i></span> </div>
+          <div class="col"><span (click)="sortData('medium_type')">Medium<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('category_name')">Activity<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span>Status</span></div>
+          <div class="col more"><span>&nbsp;</span></div>
+        </div>
+      </div>
+      <div class="message error centererror" *ngIf="(getTemplateLists | filterBy: tempFilter)?.length === 0">No Template Found</div>
+      <div *ngIf="getTemplateLists != ''">
+        <div class="myTableBody" *ngFor="let p of getTemplateLists | orderBy: order | filterBy: tempFilter; let i = index;">
+          <div class="row">
+            <div class="col more padd-r0">
+              <span>
+                <div class="custom-checkbox only-checkbox">
+                  <input type="checkbox" type="checkbox" id="chk{{p.id}}" (click)="selectData(p, $event.target.checked);" />
+                  <label for="chk{{p.id}}"></label>
+                </div>
+              </span>
+            </div>
+            <div class="col flx2"> <span>
+              <a href="javascript:void(0);" (click)="edit(p)">{{p?.name}}</a></span> </div>
+            <div class="col">
+              <span>{{p?.medium_type}}</span>
+            </div>
+            <div class="col"><span>{{p?.category_name}}</span></div>
+            <div class="col">
+              <span *ngIf="p?.is_active === 1">Active</span>
+              <span *ngIf="p?.is_active === 0">Inactive</span>
+            </div>
+            <div class="col more c-pointer"> <span (click)="delete(p, 'i')"><i class="ico-moon icon-trash orange"></i></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modalpopup -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body new-exclusion">
+        <h2>Add Panel</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modalpopup -->
+<!-- Delete modalpopup -->
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p> {{popupMess}}</p>
+        <button class="button2" appAppNoDblClick (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

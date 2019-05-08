@@ -1,0 +1,119 @@
+<app-header></app-header>
+
+<!-- Content Box -->
+<div class="content-box">
+
+  <app-sub-header></app-sub-header>
+
+  <div class="h-tab-content">
+    <div class="t-head-box panel-heading">
+      <div class="t-head-heading">
+        <h2><span>{{panelDtl?.name}}</span> Copy Questions</h2>
+      </div>
+      <div class="t-head-action">
+        <ul>
+          <li>
+            <div class="searchAdv"><input type="text" placeholder="Search" class="searchFld shadow1" [(ngModel)]="seachQues.name">
+            </div>
+          </li>
+          <li><button class="copy-btn curPOinter" (click)="copy(qt, 'a')" [class.disable]="disablelink==true">copy <i
+                class="icon icon-copy"></i></button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="t-table-box">
+      <div class="myTable pl-center c-height">
+        <div class="myTableHead">
+          <div class="row">
+              <div class="col more padd-r0"></div>
+            <div class="col col-7"> <span (click)="sortData('name')"> Question <i class="ico-moon icon-sort"></i></span>
+            </div>
+            <div class="col"><span (click)="sortData('global_question_category_name')">Category <i class="ico-moon icon-sort"></i></span></div>
+            <div class="col"><span >Answer <i class="ico-moon icon-sort"></i></span></div>
+          </div>
+        </div>
+        <div *ngFor="let cat of questionList | orderBy: order : reverse : true  | filterBy: seachQues; let j = index;">
+          <div class="myTablet">
+            <div class="myTableBody">
+              <div class="row">
+                <div class="col more padd-r0">
+                  <span *ngIf="cat.is_copied == 0">
+                    <div class="custom-checkbox only-checkbox">
+                      <input type="checkbox" type="checkbox" [checked]="cat.is_copied == 1" id="chk{{cat.id}}"
+                        (click)="selectData(cat, $event.target.checked);" />
+                      <label for="chk{{cat.id}}"></label>
+                    </div>
+                  </span>
+                </div>
+                <div class="col col-7">
+                  <span class="text-left">{{cat.name}}</span>
+                </div>
+                <div class="col"><span>{{cat.global_question_category_name}}</span></div>
+                <div class="col">
+                  <span class="color-iceblue curPOinter" data-toggle="modal" data-target="#answerModal"
+                    (click)="questionDet(cat.name,cat)">Answers</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="message error centererror" *ngIf="(questionList | filterBy: seachQues)?.length === 0">No Question Found</div>
+        <!-- Table Ends -->
+      </div>
+    </div>
+    <!-- overview page-->
+  </div>
+</div>
+<div class="h-tab-content fixed-bottom">
+  <!-- <a href="#" class="button1 nav-btn">Complete</a>  -->
+  <button class="button1 nav-btn" (click)="submit();">Complete</button>
+  <button class="button3 trsp-btn" (click)="submit();">Skip</button>
+</div>
+
+<!-- Answer Modal -->
+<div class="modal fade" id="answerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body panel-popup">
+        <h2>{{qtName}}</h2>
+        <div class="v-scroll">
+          <div class="row">
+            <div class="col">
+              <p *ngFor="let ans of answers; let i = index">{{i+1}}) {{ans.text}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- // Answer Modal -->
+
+<!-- Copy Modal -->
+<div class="modal fade" id="copyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p>Are you sure want to Copy?</p>
+        <button class="button2" (click)="copyData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- // Copy Modal -->

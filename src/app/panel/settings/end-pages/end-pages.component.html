@@ -1,0 +1,61 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+<div class="h-tab-content">
+  <div class="card">
+    <ul class="overview-links endpage-navbar">
+      <li><a routerLink="/panel/settings/">Overview</a></li>
+      <li><a routerLink="/panel/settings/communication-template">Communication Templates</a></li>
+      <li><a routerLink="/panel/settings/incentive-model">Incentive Model </a></li>
+      <li class="active"><a routerLink="/panel/settings/endpage">End pages</a></li>
+    </ul>
+    <div class="target-tab" [hidden]="categories.length == 0">
+      <div class="profile-left target-w100">
+        <div class="nav-pills">
+          <a href="javascript:void(0);" class="nav-link" [ngClass]="{'active': catgActive == i}"
+            *ngFor="let cat of categories; let i = index" (click)="getCategoryDetails(cat, i);">{{cat?.name}} <i
+              class="icon-arrow-right"></i></a>
+          <!-- <a href="javascript:void(0);" class="nav-link ">Quotafull <i class="icon-arrow-right"></i></a>
+          <a href="javascript:void(0);" class="nav-link active">Screenout <i class="icon-arrow-right"></i></a>
+          <a href="javascript:void(0);" class="nav-link">Declined <i class="icon-arrow-right"></i></a>
+          <a href="javascript:void(0);" class="nav-link">Survey Paused <i class="icon-arrow-right"></i></a>
+          <a href="javascript:void(0);" class="nav-link">Confirmation Page <i class="icon-arrow-right"></i></a> -->
+        </div>
+        <div class="tab-conten profiletab-content">
+          <div class="row">
+            <div class="col-12">
+              <div class="select-question sset">
+                <div class="t-head-box sched-border">
+                  <div class="new-profile w-100">
+                    <h4 class="">{{addTemp?.page_category?.name}}</h4>
+                    <!-- <div id="editor">
+                      <p>Type Your Message Here !</p>
+                    </div> -->
+                    <div id="summernote2"></div>
+                    <div id="contentt" class="validation-message3 d-none">
+                      <div>required</div>
+                    </div>
+                    <div id="content" class="display-none"></div>
+                    <!-- <div ace-editor [(text)]="addTemp.content" [mode]="'sql'" [theme]="'eclipse'" [options]="options"
+                      [readOnly]="false" [autoUpdateContent]="true" [durationBeforeCallback]="1000"
+                      (textChanged)="onChange($event)" style="min-height: 200px; width:100%; overflow: auto;"></div> -->
+                    <button href="javascript:void(0);" (click)="onSubmitClik('confirmtxtid', 'confirmlodImg');"
+                      class="button1 nav-btn mt-3">
+                      <span id="confirmtxtid">Update</span>
+                      <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg">
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- col-8 -->
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="message error centererror" *ngIf="categories?.length === 0 && is_visible">No End Pages Found</div>
+  </div>
+</div>

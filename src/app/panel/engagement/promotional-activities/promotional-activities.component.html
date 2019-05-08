@@ -1,0 +1,123 @@
+<app-header></app-header>
+<!-- Content Box -->
+<div class="content-box">
+  <app-sub-header></app-sub-header>
+</div>
+
+<div class="h-tab-content">
+  <!-- <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/panel">Panel</a></li>
+      <li class="breadcrumb-item"><a routerLink="/panel/engagement">Engagement</a></li>
+      <li class="breadcrumb-item active">Promotional Activity</li>
+    </ol>
+  </nav> -->
+  <div class="t-head-box">
+    <div class="t-head-heading">
+      <h2>Promotional Activity</h2>
+    </div>
+    <div class="t-head-action">
+      <ul>
+        <li><a href="javascript:void(0);" class="button1" (click)="addNew();"><i>+</i><span>Add
+              Activity</span></a></li>
+        <li>
+          <div class="searchAdv"><input type="text" placeholder="Search" class="searchFld" #questionInput></div>
+        </li>
+        <!-- <li class="actionBox">
+          <button class="del-btn" (click)="delete(null, 'a')" [class.disable]="disablelink==true"><i
+              class="ico-moon icon-trash orange"></i>Delete</button>
+        </li> -->
+      </ul>
+    </div>
+  </div>
+  <div class="t-table-box">
+    <div class="myTable pl-center">
+      <div class="myTableHead">
+        <div class="row">
+          <div class="col"><span (click)="sortData('name')">Template<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span>Type<i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('start_date')">Launch Date <i class="ico-moon icon-sort"></i></span></div>
+          <div class="col"><span (click)="sortData('total_invited')">Invited <i class="ico-moon icon-sort"></i></span></div>
+          <div class="col more"><span>&nbsp;</span></div>
+          <div class="col more"><span>&nbsp;</span></div>
+        </div>
+      </div>
+
+      <div class="myTableBody" *ngFor="let p of activityLists | orderBy: order : reverse : true ; let i = index;">
+        <div class="row">
+          <div class="col"><span>{{p?.template_category?.name}}</span></div>
+          <div class="col"><span>Music</span></div>
+          <div class="col"><span>{{p?.start_date}}</span></div>
+          <div class="col"><span>{{p?.total_invited}}</span></div>
+          <div class="col more c-pointer" (click)="getStats(p);"> <img src="assets/img/dash4.png" alt=""></div>
+          <div class="col more c-pointer"> <span (click)="delete(p, 'i')"><i class="ico-moon icon-trash orange"></i></span></div>
+        </div>
+      </div>
+      <div class="message error centererror" *ngIf="activityLists?.length === 0">No activities found under this panel
+      </div>
+    </div>
+    <!-- Table Ends -->
+  </div>
+</div>
+<!-- modalpopup -->
+<div class="modal fade" id="statsModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="./assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body chart-section new-exclusion">
+        <h2>Add Panel</h2>
+        <ul class="nav nav-tabs promotn-tab" id="myTab" role="tablist">
+          <li class="nav-item" style="width: 50%;">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+              aria-selected="true">{{statsObj?.email?.Medium}}</a>
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+              aria-selected="false">Type</a>
+          </li> -->
+          <li class="nav-item" style="width: 50%;">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+              aria-selected="false">{{statsObj?.SMS?.Medium}}</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div id="test2"></div>
+          </div>
+          <!-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div id="chartContainer"></div>
+          </div> -->
+          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <div id="chartContainer2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modalpopup -->
+
+<div class="modal fade" id="confirmBox" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><img src="../../../assets/img/cross-red.png" alt=""></span>
+        </button>
+      </div>
+      <div class="modal-body confirm-box">
+        <h2>Confirm</h2>
+        <p> {{popupMess}}</p>
+        <button class="button2" appAppNoDblClick (click)="deleteData('confirmtxtid', 'confirmlodImg');">
+          <span id="confirmtxtid">Confirm</span>
+          <img src="assets/img/loading.gif" alt="loderImg" id="confirmlodImg" class="loderImg"></button>
+        <button class="button1 cancel-btn" data-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
